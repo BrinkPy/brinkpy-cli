@@ -62,4 +62,4 @@ If you encounter authentication issues:
 3. Verify your user account has proper permissions
 4. Try re-authenticating: `brinkpy user auth`
 
-For persistent issues, contact support at [reliafy.app@gmail.com](mailto:reliafy.app@gmail.com) or see the [Contact section](index.md#contact).
+For persistent issues, contact support at [brinkpy.app@gmail.com](mailto:brinkpy.app@gmail.com) or see the [Contact section](index.md#contact).

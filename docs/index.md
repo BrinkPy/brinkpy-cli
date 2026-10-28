@@ -132,4 +132,4 @@ Include the exact Brinkpy version used in your work. For version-specific DOI ci
 
 ## Contact
 
-For questions, feedback, or support, reach out at [reliafy.app@gmail.com](mailto:reliafy.app@gmail.com).
+For questions, feedback, or support, reach out at [brinkpy.app@gmail.com](mailto:brinkpy.app@gmail.com).
