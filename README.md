@@ -1,5 +1,7 @@
 # Brinkpy CLI
 
+*Find the brink. Measure your distance. Stay back from it.*
+
 Brinkpy CLI is a Python command-line tool for reliability analysis, reliability-based design optimization, and simulation workflows using profile-based configuration.
 
 It supports First-Order Reliability Method (FORM), Second-Order Reliability Method (SORM), Inverse FORM, Inverse SORM, Monte Carlo simulation, and Importance Sampling for rare-event probability estimation. Workflows cover forward reliability evaluation, reliability-constrained design, and post-design simulation with a consistent problem-module interface and support for correlated non-normal variables via Nataf transformation.
