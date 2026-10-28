@@ -126,7 +126,7 @@ For third-party Python library citation guidance, see [Software and Library Refe
 
 If you use Brinkpy in journal papers, reports, theses, or other scholarly work, cite Brinkpy itself. Additionally, cite the underlying reliability methods (FORM, SORM, Monte Carlo, etc.) based on relevant academic sources in your field.
 
-- Carrasco, C. (2026). *Brinkpy CLI*. Zenodo. <https://doi.org/10.5281/zenodo.19267557>
+- Carrasco, C. (2026). *Brinkpy CLI*. Zenodo. DOI coming soon.
 
 Include the exact Brinkpy version used in your work. For version-specific DOI citations, use the corresponding Zenodo release record.
 

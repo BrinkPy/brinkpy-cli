@@ -29,9 +29,9 @@ dependencies = [
 brinkpy = "brinkpy.brinkpy:app"
 
 [project.urls]
-Homepage = "https://reliafy.pages.dev"
-Documentation = "https://reliafy.pages.dev"
-Repository = "https://github.com/CarrascoCesar/Reliafy-CLI"
+Homepage = "https://brinkpy.app"
+Documentation = "https://brinkpy.app"
+Repository = "https://github.com/BrinkPy/brinkpy-cli"
 
 [tool.hatch.build.targets.wheel]
 packages = ["brinkpy"]

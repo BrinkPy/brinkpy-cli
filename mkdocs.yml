@@ -1,6 +1,6 @@
 site_name: Brinkpy CLI
-site_url: !ENV [SITE_URL, https://reliafy.app]
-repo_url: https://github.com/CarrascoCesar/Reliafy-CLI
+site_url: !ENV [SITE_URL, https://brinkpy.app]
+repo_url: https://github.com/BrinkPy/brinkpy-cli
 repo_name: !ENV [BRINKPY_DOCS_REPO_NAME, GitHub]
 hooks:
   - docs/hooks.py
@@ -8,8 +8,8 @@ copyright: Copyright &copy; 2026 Brinkpy. All rights reserved. Copyright registr
 theme:
   name: material
   custom_dir: overrides
-  logo: Brinkpy logo.png
-  favicon: brinkpy-favicon-32x32-orange-v2.png
+  logo: logo-white-192.png
+  favicon: favicon-32.png
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
