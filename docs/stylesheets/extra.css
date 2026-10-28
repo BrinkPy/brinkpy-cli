@@ -13,3 +13,16 @@
   --md-accent-fg-color: #C2410C;
   --md-typeset-a-color: #C2410C;
 }
+/* Highlight the words that make up the Brinkpy name ("brink" and "py") in
+   teal, distinct from the orange used for links so they don't look clickable.
+   Darker teal on the light scheme and lighter teal on the dark scheme keep
+   text contrast readable in both. */
+[data-md-color-scheme="default"] {
+  --brand-word-color: #0E7490;
+}
+[data-md-color-scheme="slate"] {
+  --brand-word-color: #22D3EE;
+}
+.md-typeset .brand-word {
+  color: var(--brand-word-color);
+}
