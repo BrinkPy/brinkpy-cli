@@ -1,0 +1,15 @@
+/* Keep parameter-name columns readable on desktop/tablet by preventing wraps
+   in the first table column while preserving mobile responsiveness. */
+@media screen and (min-width: 76.25em) {
+  .md-typeset table:not([class]) th:first-child,
+  .md-typeset table:not([class]) td:first-child {
+    white-space: nowrap;
+  }
+}
+/* Set primary and accent colors for the default color scheme to darker
+   orange to improve contrast */
+[data-md-color-scheme="default"] {
+  --md-primary-fg-color: #C2410C;
+  --md-accent-fg-color: #C2410C;
+  --md-typeset-a-color: #C2410C;
+}
