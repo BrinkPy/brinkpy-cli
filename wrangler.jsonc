@@ -1,0 +1,10 @@
+{
+  // Cloudflare Workers static-assets config for the MkDocs docs site.
+  // "name" must match the project name entered in the Cloudflare dashboard.
+  "name": "brinkpy",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./site",
+    "not_found_handling": "404-page"
+  }
+}
