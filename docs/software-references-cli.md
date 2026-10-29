@@ -2,7 +2,7 @@
 
 This page lists the top-level Python packages that Brinkpy CLI depends on. Use it if you need dependency-level software attribution in papers, reports, or technical notes.
 
-If you are citing Brinkpy itself, cite the Zenodo software record: Carrasco, C. (2026). *Brinkpy CLI*. Zenodo. DOI coming soon. If you need a fixed-version citation, use the version-specific Zenodo DOI for that release.
+If you are citing Brinkpy itself, cite the Zenodo software record: Carrasco, C. (2026). *Brinkpy CLI*. Zenodo. <https://doi.org/10.5281/zenodo.23752820>. If you need a fixed-version citation, use the version-specific Zenodo DOI for that release.
 
 Only direct, top-level dependencies are listed — transitive packages installed automatically as dependencies of these libraries are not included.
 
