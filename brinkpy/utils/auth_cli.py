@@ -20,9 +20,9 @@ from brinkpy.utils.utilities import safe_write_json
 
 console = Console()
 
-AUTH0_DOMAIN = os.getenv("AUTH0_DOMAIN", "auth.reliafy.app")
-AUTH0_CLIENT_ID = os.getenv("AUTH0_CLIENT_ID", "V3SC7HrE6Auw40Rn2iiMqAJayM3wQg7P")
-AUTH0_AUDIENCE = os.getenv("AUTH0_AUDIENCE", "https://reliafy.up.railway.app")
+AUTH0_DOMAIN = os.getenv("AUTH0_DOMAIN", "auth.brinkpy.app")
+AUTH0_CLIENT_ID = os.getenv("AUTH0_CLIENT_ID", "irJKsVNtXuzW94R8aOWIzje1hb9mpRR3")
+AUTH0_AUDIENCE = os.getenv("AUTH0_AUDIENCE", "https://brinkpy.up.railway.app")
 
 APP_NAME = "Brinkpy"
 TOKEN_FILE = Path(user_config_dir(APP_NAME)) / "auth_tokens.json"

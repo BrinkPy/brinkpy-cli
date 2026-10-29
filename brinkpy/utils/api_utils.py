@@ -98,7 +98,7 @@ def setup_paths():
     Returns:
         tuple: (url, results_path, problems_path)
     """
-    url = os.getenv("AUTH0_AUDIENCE", "https://reliafy.up.railway.app")
+    url = os.getenv("AUTH0_AUDIENCE", "https://brinkpy.up.railway.app")
     # url = "http://localhost:8080"
 
     # Create the directory to store the results if it doesn't exist

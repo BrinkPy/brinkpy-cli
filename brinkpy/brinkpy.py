@@ -782,7 +782,7 @@ def subscribe(
         console.print()
         raise typer.Exit(code=1)
 
-    api_base = os.getenv("AUTH0_AUDIENCE", "https://reliafy.up.railway.app").rstrip("/")
+    api_base = os.getenv("AUTH0_AUDIENCE", "https://brinkpy.up.railway.app").rstrip("/")
     endpoint = f"{api_base}/billing/checkout-session"
 
     try:
