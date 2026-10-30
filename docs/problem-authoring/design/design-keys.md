@@ -62,7 +62,7 @@ Rules:
 
 - `fractiles` length must match the number of stochastic variables.
 - Cases do not list variable names. Each array in a case follows the variable order of `StochasticVariables.name`.
-- Each case defines `mean` and either `std` or `cv` (coefficient of variation) for every variable, with arrays of consistent length.
+- Each case defines `mean` and the same spread parameter as the top-level `StochasticVariables`: `std` if the top level uses `std`, or `cv` (coefficient of variation) if it uses `cv`. Arrays must have consistent lengths.
 - If `cases` is not provided, a `default` case is created from `StochasticVariables`.
 
 ## Objective Optimization Pattern
@@ -216,7 +216,7 @@ See [Objective Optimization Example](optimization.md) for a worked example and c
 1. `DesignProblem` exists when running `brinkpy design ...`.
 2. Exactly one of `TargetBeta` or `TargetPf` is provided.
 3. If `fractiles` is provided, its length matches the number of stochastic variables. It is required for Inverse FORM and optional for objective optimization.
-4. If `cases` are provided, each case defines `mean` and `std` (or `cv`) arrays in the same variable order as `StochasticVariables.name`.
+4. If `cases` are provided, each case defines `mean` and the same spread parameter (`std` or `cv`) as the top-level `StochasticVariables`, in the same variable order as `StochasticVariables.name`.
 5. If `cases` are omitted, confirm the implicit `default` case from `StochasticVariables` is the intended scenario.
 6. If analytic derivatives are advertised (`LSFreturnsGradient`/`LSFreturnsHessian`), `LSF` actually returns valid derivatives in single-point mode.
 7. For objective optimization, `DesignObjectiveFunction` accepts `(d, D)`, with `d` in `DesignVariables` order and `D` holding the remaining deterministic variables in `DeterministicVariables.name` order.

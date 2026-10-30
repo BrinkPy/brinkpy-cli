@@ -2,8 +2,9 @@
 
 This page documents two inverse reliability design examples based on saved `design` runs.
 
-Note: Table values are rounded to 4 significant figures for readability. Very small/large values use scientific notation. Refer to the Excel/JSON result files for full precision.
-Note: Advanced solver diagnostics (for example `bsr_mult` and `bnds_mult` Lagrange multipliers) are included in the Excel/JSON result files and are not shown in the tables below.
+!!! note "About the tables on this page"
+    - Table values are rounded to 4 significant figures for readability. Very small/large values use scientific notation. Refer to the Excel/JSON result files for full precision.
+    - Advanced solver diagnostics (for example `bsr_mult` and `bnds_mult` Lagrange multipliers) are included in the Excel/JSON result files and are not shown in the tables below.
 
 **Inverse SORM:** Pass `--use-sorm` (or `-s`) to the `design` command to switch the solution algorithm from Inverse FORM to Inverse SORM. All examples on this page were run without this flag (Inverse FORM). The problem file structure is identical for both methods.
 
@@ -14,15 +15,9 @@ This keeps outputs manageable when multiple design cases are included in one run
 
 If you need plots, use the resulting design parameters in a follow-up `analyze` or `simulate` run and enable plot/report options there.
 
-In the Excel `Results` sheet, these details appear under each case as `Design point stochastic variables result:` and, when available, `Load and resistance partial factors:`.
-
 ## Profile Customization
 
-These inverse FORM examples use the `default` profile, but solver behavior is configurable. See [Profile Options Reference](../../profiles/profile-reference.md).
-
-- Inverse/design solver controls: `reliability_options.design_xtol`, `design_gtol`, `design_maxiter`, `design_random_start`.
-- FORM controls used inside inverse iterations: `reliability_options.form_xtol`, `form_gtol`, `form_maxiter`, `alpha_direction`.
-- Correlation handling and derivative checks: `reliability_options.use_nearest_correlation`, `check_lsf_diffs_wrtx`, `check_lsf_diffs_wrtu`.
+These examples use the `default` profile. Inverse FORM behavior can be adjusted in a custom profile through `reliability_options.form_xtol`, `form_gtol`, `form_maxiter`, and `form_random_start`. See [FORM and Inverse FORM Settings](../../profiles/profile-reference.md#form-and-inverse-form-settings). When using Inverse SORM (`--use-sorm`), the [SORM Settings](../../profiles/profile-reference.md#sorm-settings) also apply.
 
 ## Example A: `AT625Problem.py` (Single Default Case)
 
@@ -48,10 +43,10 @@ Profile and run mode from saved profile:
 
 For results-folder and filename conventions, see [CLI Result Files](../../cli/results-files.md).
 
-Equivalent command shape:
+Equivalent command:
 
 ```bash
-brinkpy design <profile>
+brinkpy design
 ```
 
 ### Problem File Used
@@ -59,6 +54,8 @@ brinkpy design <profile>
 **Source:** Ang, A. H-S. and Tang, W. H., *Probability Concepts in Engineering Planning and Design, Vol. II*, Wiley, 1990, p. 431, Problem 6.25.
 
 ### Extracted Results Worksheet Tables
+
+For the meaning of each column, see [Results Tables Reference](../results-tables.md#design).
 
 Run summary:
 
@@ -119,10 +116,10 @@ Profile and run mode from saved profile:
 
 For results-folder and filename conventions, see [CLI Result Files](../../cli/results-files.md).
 
-Equivalent command shape:
+Equivalent command:
 
 ```bash
-brinkpy design <profile>
+brinkpy design
 ```
 
 ### Problem File Used
@@ -130,6 +127,8 @@ brinkpy design <profile>
 **Source:** Ang, A. H-S. and Tang, W. H., *Probability Concepts in Engineering Planning and Design, Vol. II*, Wiley, 1990, p. 428, Problem 6.24.
 
 ### Extracted Results Worksheet Tables
+
+For the meaning of each column, see [Results Tables Reference](../results-tables.md#design).
 
 Run summary:
 
@@ -173,10 +172,9 @@ Load and resistance partial factors:
 Notes:
 
 - This example demonstrates the `DesignProblem.cases` structure for running multiple reliability design scenarios in one command.
-- All cases converge close to the same target reliability while using different case-level input statistics.
+- In this example, every case reaches the target reliability exactly (β = 2.0), using different case-level input statistics.
 
 ## Recommended Authoring Pattern
 
 1. Start with a single-case definition (`default`) to validate setup and derivatives.
 2. Add `cases` when you need scenario sweeps under a common target reliability.
-3. Keep one summary table per run, then add per-case details (partial factors, design points, failure-point statistics) as needed.

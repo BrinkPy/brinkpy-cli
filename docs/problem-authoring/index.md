@@ -220,7 +220,8 @@ Core keys used in all example problems:
 | `name` | Yes | `list[str]` | Random variable names (defines variable order in `X`) |
 | `type` | Yes | `list[str]` | Distribution per variable, e.g. `normal`, `lognormal`, `gumbelmax` |
 | `mean` | Yes | `list[float]` | Mean values |
-| `std` | Yes | `list[float]` | Standard deviations |
+| `std` | Yes, unless `cv` is given | `list[float]` | Standard deviations |
+| `cv` | Instead of `std` | `list[float]` | Coefficients of variation (standard deviation divided by mean) |
 | `cor_list` | No | `list[list]` | Pairwise correlation entries `[var_i, var_j, rho]` |
 | `cor` | No | `list[list]` | Full correlation matrix in variable order |
 
@@ -235,7 +236,7 @@ Advanced/optional fields can also be used depending on model needs:
 
 Rules:
 
-- All lists must have the same length `n` (`name`, `type`, `mean`, `std`).
+- All lists must have the same length `n` (`name`, `type`, `mean`, and `std` or `cv`).
 - Variable order in `name` must match `X` unpacking in `LSF`.
 - If neither `cor_list` nor `cor` is provided, Brinkpy assumes zero correlation between all variables.
 - `cor_list` references variable names from `name`.
@@ -260,7 +261,7 @@ The table below lists all supported `StochasticVariables.type` values with their
 
 For each stochastic variable, you can define the distribution either with:
 
-- `mean` and `std`, or
+- `mean` and `std` (or `mean` and `cv`), or
 - `param1` and `param2` (natural distribution parameters shown below, when applicable).
 
 Per-variable input rule:

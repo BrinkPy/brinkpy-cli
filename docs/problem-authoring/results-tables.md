@@ -76,3 +76,60 @@ For where result files are saved and what each file contains, see [Result Files]
 | `cycles` | Number of sampling cycles |
 | `auto_size` | Whether the sample size was chosen automatically (profile option `mc_n` is `null`) |
 | `mc_with_is` | Whether importance sampling was used |
+
+## Design
+
+### Design Case Results
+
+| Column | Meaning |
+|---|---|
+| `case` | Design case name (`default` when `DesignProblem` defines no `cases`) |
+| `beta`, `pf` | Reliability index (β) and probability of failure reached at the design point |
+| `lsf_count`, `glsf_count`, `hlsf_count`, `nit` | Same as in [FORM Results](#form-results) |
+
+### Design Point Stochastic Variables
+
+| Column | Meaning |
+|---|---|
+| `case` | Design case name (shown when the problem defines several cases) |
+| `var_name` | Stochastic variable name |
+| `x` | Design point value |
+| `fractile` | Fractile used for the characteristic value (from `fractiles`) |
+| `char_value` | Characteristic value, the variable's value at that fractile |
+| `partial_factor` | Partial factor: `x` divided by `char_value` |
+
+!!! note "Partial factor convention"
+    Brinkpy computes every partial factor as the design point value divided by the characteristic value, for loads and resistances alike. Some textbooks (for example, Sørensen) divide the characteristic value by the design value for resistance variables, so a resistance factor reported by Brinkpy is the reciprocal of the textbook value.
+
+### Load and Resistance Partial Factors
+
+This table appears only when the limit state function returns load and resistance values (`LSFreturnsLandR = True`). Brinkpy evaluates the load and resistance at the design point values and at the characteristic values.
+
+| Column | Meaning |
+|---|---|
+| `Load` | Load at the design point divided by load at the characteristic values |
+| `Resistance` | Resistance at the design point divided by resistance at the characteristic values |
+
+### Objective Optimization: Design Data
+
+These tables appear when `DesignProblem` defines a `DesignObjectiveFunction`.
+
+| Column | Meaning |
+|---|---|
+| `obj_value` | Value of the design objective function at the optimum |
+| `target_beta`, `target_pf` | The reliability target (`TargetBeta` or `TargetPf`) |
+| `actual_beta`, `actual_pf` | The reliability reached at the optimum |
+| `use_sorm` | Whether SORM was used for the reliability constraint (`--use-sorm`) |
+| `dof_count` | Number of design objective function calls |
+| `beta_count`, `nit`, `min_tries`, `min_method` | Same as in [FORM Results](#form-results) |
+| `br_mult` | Lagrange multiplier for the beta residual constraint. The optimizer requires the reliability index to match the target by driving the squared residual, `(beta - target_beta)^2`, to zero. |
+
+### Objective Optimization: Design Variables Result
+
+| Column | Meaning |
+|---|---|
+| `var_name` | Design variable name (from `DesignVariables`) |
+| `opt_value` | Optimal value of the design variable |
+| `lb`, `ub` | Lower and upper bounds of the design variable (from `DesignProblem`) |
+
+The **FORM Results (At Optimum)** table uses the same columns as [FORM Results](#form-results), evaluated at the optimal design.

@@ -2,8 +2,9 @@
 
 This page documents a full `design` run where the objective function is minimized subject to a target reliability constraint.
 
-Note: Table values are rounded to 4 significant figures for readability. Very small/large values use scientific notation. Refer to the Excel/JSON result files for full precision.
-Note: Advanced solver diagnostics (for example `br_mult`, `lsf_mult`, and `bnds_mult` Lagrange multipliers) are included in the Excel/JSON result files and are not shown in the tables below.
+!!! note "About the tables on this page"
+    - Table values are rounded to 4 significant figures for readability. Very small/large values use scientific notation. Refer to the Excel/JSON result files for full precision.
+    - Advanced solver diagnostics (for example `br_mult`, `lsf_mult`, and `bnds_mult` Lagrange multipliers) are included in the Excel/JSON result files and are not shown in the tables below.
 
 **SORM-based reliability constraint:** Pass `--use-sorm` (or `-s`) to the `design` command to use SORM-based reliability instead of FORM-based reliability when matching the optimization result to the target reliability. The problem file structure is identical for both methods.
 
@@ -29,10 +30,10 @@ Profile and run mode from saved profile:
 
 For results-folder and filename conventions, see [CLI Result Files](../../cli/results-files.md).
 
-Equivalent command shape:
+Equivalent command:
 
 ```bash
-brinkpy design <profile>
+brinkpy design
 ```
 
 ## Plot Behavior For `design` Runs
@@ -44,31 +45,34 @@ If plots are needed, run `analyze` or `simulate` afterward using the optimized d
 
 ## Profile Customization
 
-This optimization example uses the `default` profile, but optimization and reliability settings are configurable. See [Profile Options Reference](../../profiles/profile-reference.md).
-
-- Optimization controls: `reliability_options.design_xtol`, `design_gtol`, `design_maxiter`, `design_random_start`.
-- Reliability constraint controls: `reliability_options.form_xtol`, `form_gtol`, `form_maxiter`, `alpha_direction`.
-- Optional method/report toggles: `run_configuration.include_sorm`, `include_mc`, plus `reporting_options.*`.
+This example uses the `default` profile. Objective optimization can be adjusted in a custom profile through `reliability_options.design_xtol`, `design_gtol`, `design_maxiter`, and `design_random_start`. See [Design Optimization Settings](../../profiles/profile-reference.md#design-optimization-settings). The reliability constraint uses the [FORM and Inverse FORM Settings](../../profiles/profile-reference.md#form-and-inverse-form-settings), and the [SORM Settings](../../profiles/profile-reference.md#sorm-settings) also apply when using `--use-sorm`.
 
 ## Problem File Used
 
 **Source:** Sørensen, J. D., *Notes in Structural Reliability Theory and Risk Analysis*, Aalborg University, ch. 8, p. 141, Problem 8.1. [→](https://filelist.tudelft.nl/TBM/Over%20faculteit/Afdelingen/Values%2C%20Technology%20and%20Innovation/People/Full%20Professors/Pieter%20van%20Gelder/Citations/citatie215.pdf)
 
-### Additional `DesignProblem` Keys Used By Optimization
+### `DesignProblem` Keys Used in This Example
 
-`Sorensen81Problem.py` extends `DesignProblem` beyond Inverse FORM keys by adding a design objective function contract and design-variable bounds:
+Keys specific to objective optimization (the design objective function, the design variables, and their bounds):
 
-- `DesignObjectiveFunction: DOF`
-- `DOFisVectorized: true`
-- `DOFisSmooth: true`
-- `DOFreturnsGradient: true`
-- `DOFreturnsHessian: true`
-- `DesignVariables: ["z"]`
-- `InitialGuess: [1]`
-- `lb: [0.0]`
-- `ub: [np.inf]`
-- `TargetBeta: 3.8`
-- `fractiles: [0.05, 0.5, 0.98]`
+```python
+"DesignObjectiveFunction": DOF,
+"DOFisVectorized": True,
+"DOFisSmooth": True,
+"DOFreturnsGradient": True,
+"DOFreturnsHessian": True,
+"DesignVariables": ["z"],
+"InitialGuess": [1],
+"lb": [0.0],
+"ub": [np.inf],
+```
+
+Keys shared with Inverse FORM (the reliability target and the fractiles for characteristic values, which are optional in objective optimization):
+
+```python
+"TargetBeta": 3.8,
+"fractiles": [0.05, 0.5, 0.98],
+```
 
 In this example, the objective function is `DOF(d, D) = z`, so the solver seeks the minimum feasible value of `z` while satisfying the reliability target.
 
@@ -76,7 +80,7 @@ In this example, the objective function is `DOF(d, D) = z`, so the solver seeks 
 
 ## Extracted Results Worksheet Tables
 
-The tables below are transcribed from the `Results` worksheet in `Sorensen 8.1-010a8.xlsx`.
+The tables below are transcribed from the `Results` worksheet in `Sorensen 8.1-010a8.xlsx`. For the meaning of each column, see [Results Tables Reference](../results-tables.md#design).
 
 ### Header Information
 
@@ -121,7 +125,7 @@ The tables below are transcribed from the `Results` worksheet in `Sorensen 8.1-0
 ### Notes Reported by Brinkpy
 
 1. Validation: Stochastic variables definition and limit state function validation required 2 function calls.
-2. Validation: Design problem validation required 2 calls to the design objection function.
+2. Validation: Design problem validation required 2 calls to the design objective function.
 3. Validation: Validation of the limit state function's analytic gradient and hessian required 37 function calls.
 4. Validation: Validation of the design objective function's analytic gradient and hessian required 12 function calls.
 5. FORM case (`default`): Active bound multipliers reported for `R`, `G`, and `Q`.
