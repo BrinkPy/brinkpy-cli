@@ -44,12 +44,10 @@ def Problem():
         },
         "LSFplot": {
             "x_var": "R",
-            "x_param": "value",
             "x_lim": [0.8, 1.2],
             "x_func": lambda S, D: S[0],
             "x_label": "Resistance: R",
             "y_var": "G",
-            "y_param": "value",
             "y_lim": [1.5, 2.5],
             "y_func": lambda S, D: S[1] + S[2],
             "y_label": "Load: G + Q",

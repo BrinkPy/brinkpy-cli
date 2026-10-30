@@ -35,12 +35,10 @@ def Problem():
         },
         "LSFplot": {
             "x_var": "Pv",
-            "x_param": "value",
             "x_lim": [600.0, 950],
             "x_func": lambda S, D: S[4],
             "x_label": "Pv",
             "y_var": "cp",
-            "y_param": "value",
             "y_lim": [6.0, 18.0],
             "y_func": lambda S, D: S[0],
             "y_label": "cp",

@@ -40,12 +40,10 @@ def Problem():
         },
         "LSFplot": {
             "x_var": "x1",
-            "x_param": "value",
             "x_lim": [30.0, 50.0],
             "x_func": lambda S, D: S[0],
             "x_label": "Time: (x1)",
             "y_var": "x2",
-            "y_param": "value",
             "y_lim": [10.0, 20.0],
             "y_func": lambda S, D: S[1],
             "y_label": "Time: (x2)",

@@ -51,12 +51,10 @@ def Problem():
         },
         "LSFplot": {
             "x_var": "N",
-            "x_param": "value",
             "x_lim": [0.5, 1.5],
             "x_func": lambda S, D: S[0],
             "x_label": "Correction: N",
             "y_var": "M",
-            "y_param": "value",
             "y_lim": [0.01, 0.1],
             "y_func": lambda S, D: S[1],
             "y_label": "Pressure Ratio: M",

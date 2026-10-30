@@ -31,10 +31,8 @@ def Problem():
         },
         "LSFplot": {
             "x_var": "Qv",
-            "x_param": "value",
             "x_lim": [390.0, 400.0],
             "y_var": "cp",
-            "y_param": "value",
             "y_lim": [30.0, 40.0],
             "z_var": "cs",
         },

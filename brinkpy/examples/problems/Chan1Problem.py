@@ -27,12 +27,10 @@ def Problem():
         },
         "LSFplot": {
             "x_var": "q",
-            # "x_param": "value",
             "x_lim": [240.0, 380.0],
             # "x_func": lambda S, D: S[0],
             # "x_label": "q",
             "y_var": "v",
-            # "y_param": "value",
             "y_lim": [0.10, 0.35],
             # "y_func": lambda S, D: S[1],
             # "y_label": "v",

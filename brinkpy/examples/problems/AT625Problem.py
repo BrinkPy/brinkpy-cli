@@ -30,12 +30,10 @@ def Problem():
         },
         "LSFplot": {
             "x_var": "f",
-            "x_param": "value",
             "x_lim": [0.023 * 100, 0.026 * 100],
             "x_func": lambda S, D: S[0],
             "x_label": "Friction: (f)",
             "y_var": "N",
-            "y_param": "value",
             "y_lim": [1.0 * 10, 1.2 * 10],
             "y_func": lambda S, D: S[1],
             "y_label": "Correction: (N)",
