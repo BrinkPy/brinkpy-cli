@@ -42,23 +42,9 @@ def LSF(X, D):
     return g, gg, gh, L, R
 ```
 
-## Module Self-Containment
-
-Problem modules may define additional variables, arrays, dictionaries, helper functions, and preprocessing logic beyond the required contracts such as `LimitStateFunction` and (for design runs) `DesignObjectiveFunction`.
-
-All data structures and helper logic used by the problem must be defined inside the same problem module (`*.py`). External data files are not supported for problem execution.
-
-## Submission Safety Validation
-
-For platform safety, submitted problem modules are validated and may be rejected if they contain unsafe execution patterns.
-
-When a module is rejected, the API returns a validation error describing the disallowed category.
-
 ## Top-Level Problem Keys
 
-For full return-signature details for `LimitStateFunction` and related `LSFreturns*` flags, see [Limit State Function Contract](#limit-state-function-contract).
-
-For detailed key-by-key guidance beyond this summary table, see the sections below: [StochasticVariables Keys](#stochasticvariables-keys), [Plot Definition Keys (`LSFplot`, `RFADplot`, `ISplot`)](#plot-definition-keys-lsfplot-rfadplot-isplot), [Limit State Function Contract](#limit-state-function-contract), and the design-focused pages linked in [Next Pages](#next-pages).
+The sections below describe each key in detail.
 
 | Key | Required | Type | Purpose | Example (`AT610`) |
 |---|---|---|---|---|
@@ -72,10 +58,146 @@ For detailed key-by-key guidance beyond this summary table, see the sections bel
 | `LSFreturnsLandR` | Yes | `bool` | If `True`, `LSF` should return non-empty load/resistance values `(L, R)` for reporting and plots; otherwise return placeholders such as `[]`, `[]` | `True` |
 | `DeterministicVariables` | Yes | `dict` | Deterministic variables and fixed values | empty in `AT610` |
 | `StochasticVariables` | Yes | `dict` | Random variable definition (names, distributions, moments, correlations) | `Y,Z,M` |
-| `LSFplot` | Optional | `dict` | Axis mapping and limits for LSF plots | present in `AT610` |
-| `RFADplot` | Optional | `dict` | Axis mapping and limits for RFAD plots | present in `AT610` |
-| `ISplot` | Optional | `dict` | Axis mapping for importance-sampling diagnostic plots | present in `AT610` |
+| `LSFplot` | Optional | `dict` | Axis mapping and limits for limit state function (LSF) plots | present in `AT610` |
+| `RFADplot` | Optional | `dict` | Axis mapping and limits for reliability-based failure assessment diagram (RFAD) plots | present in `AT610` |
+| `ISplot` | Optional | `dict` | Axis mapping for importance sampling (IS) diagnostic plots | present in `AT610` |
 | `DesignProblem` | Required for `design` runs | `dict` | Design-specific definitions (objective, constraints, variables) | not used in `AT610` |
+
+## Limit State Function Contract
+
+Your `LSF` must accept:
+
+- `X`: stochastic variables
+- `D`: deterministic variables
+
+Expected argument order:
+
+- `X` follows the order of `StochasticVariables.name`.
+- `D` follows the order of `DeterministicVariables.name`.
+
+This means `X` is the stochastic-variable vector (or batch of vectors), while `D` is the deterministic state used by the problem definition.
+
+Expected shape behavior:
+
+- With `LSFisVectorized=True`, Brinkpy evaluates many points in a single call whenever it can (for example, all Monte Carlo samples at once). `X` then has shape `(n_var, n_samples)`, and each row corresponds to one variable in `StochasticVariables.name` order.
+- Your function must still accept a single point, `X` with shape `(n_var,)`, because some steps evaluate one point at a time even with `LSFisVectorized=True`. This is why the worked example below checks `X.ndim == 1`.
+- With `LSFisVectorized=False`, Brinkpy evaluates one point at a time, so `X` always has shape `(n_var,)`.
+- `D` follows the deterministic-variable ordering from `DeterministicVariables.name`.
+
+### Required return values
+
+Always return:
+
+- `g`: limit state value(s), with failure when `g <= 0`.
+- `gg`: gradient placeholder (`[]` when `LSFreturnsGradient=False`).
+- `gh`: Hessian placeholder (`[]` when `LSFreturnsHessian=False`).
+- `L`: load placeholder/value (`[]` when `LSFreturnsLandR=False`).
+- `R`: resistance placeholder/value (`[]` when `LSFreturnsLandR=False`).
+
+The `LSFreturnsGradient`, `LSFreturnsHessian`, and `LSFreturnsLandR` flags change whether `gg`, `gh`, `L`, and `R` contain meaningful values or placeholders, but the return signature remains:
+
+- `return g, gg, gh, L, R`
+
+Typical patterns are:
+
+- Without load/resistance reporting: `return g, gg, gh, [], []`
+- With load/resistance reporting: `return g, gg, gh, L, R`
+
+### Gradient (`gg`) definition
+
+For a single point (`X.ndim == 1`):
+
+- `gg` is the derivative vector `dg/dx_i` in the same variable order as `name`.
+- Shape should be `(n_var,)`.
+
+For vectorized evaluations, many examples return `[]` and only compute derivatives in single-point mode.
+
+### Hessian (`gh`) definition
+
+For a single point (`X.ndim == 1`):
+
+- `gh` is the matrix of second derivatives `d2g/(dx_i dx_j)`.
+- Shape should be `(n_var, n_var)`.
+- Keep symmetry when mathematically expected.
+
+As with the gradient, `gh` is typically only returned for single-point evaluations in the standard Brinkpy authoring pattern.
+
+## LSF Derivative Return Modes
+
+Use the flags to match what your function returns:
+
+| `LSFreturnsGradient` | `LSFreturnsHessian` | `LSF` expectation |
+|---|---|---|
+| `False` | `False` | Return placeholders for `gg`, `gh` (often empty lists), plus `L`, `R` placeholders or values |
+| `True` | `False` | Return valid `gg`; `gh` can be placeholder; still return `L`, `R` |
+| `True` | `True` | Return valid `gg` and `gh`; still return `L`, `R` |
+
+There is no mode that returns the Hessian without the gradient. A user-provided Hessian is defined in real space, and Brinkpy needs the gradient to transform it into the standard normal space used by FORM and SORM. In practice, if you can derive the Hessian analytically, the gradient is usually straightforward.
+
+## Worked LSF Example (`AT610Problem.py`)
+
+In `AT610Problem.py`, the stochastic variables are `Y`, `Z`, and `M`, and there are no deterministic variables:
+
+- `StochasticVariables.name = ["Y", "Z", "M"]`
+- `DeterministicVariables.name = []`
+
+The limit state function is:
+
+```python
+def LSF(X, D):
+    Y, Z, M = X
+
+    L = M  # Load
+    R = Y * Z  # Resistance
+
+    g = R - L
+
+    gg = []
+    gh = []
+    if X.ndim == 1:
+        gg = np.array([Z, Y, -1.0])
+        gh = np.array([
+            [0.0, 1.0, 0.0],
+            [1.0, 0.0, 0.0],
+            [0.0, 0.0, 0.0],
+        ])
+
+    return g, gg, gh, L, R
+```
+
+For that example:
+
+- `R = Y * Z`
+- `L = M`
+- `g = R - L = YZ - M`
+
+Analytical gradient:
+
+- `dg/dY = Z`
+- `dg/dZ = Y`
+- `dg/dM = -1`
+
+So:
+
+```python
+gg = np.array([Z, Y, -1.0])
+```
+
+Analytical Hessian:
+
+- `d2g/dYdZ = 1`
+- `d2g/dZdY = 1`
+- all other second derivatives are zero
+
+```python
+gh = np.array([
+    [0.0, 1.0, 0.0],
+    [1.0, 0.0, 0.0],
+    [0.0, 0.0, 0.0],
+])
+```
+
+`AT610` sets both derivative flags to `True`, so Brinkpy uses the analytic gradient and Hessian during FORM convergence and SORM curvature fitting.
 
 ## `DeterministicVariables` Keys
 
@@ -162,10 +284,10 @@ Example pattern (`None` marks the unused pair for that variable):
 }
 ```
 
-| Brinkpy `type` | `scipy.stats` equivalent | Mean | Std | `param1` | `param2` | `lb`/`ub` |
+| Brinkpy `type` | `scipy.stats` equivalent | `mean` | `std` | `param1` | `param2` | `lb`/`ub` |
 |---|---|---|---|---|---|---|
 | `normal` | `norm` | Yes | Yes | `μ` | `σ` | Optional |
-| `lognormal` | `lognormal` (`lognorm`) | Yes | Yes | `μ_ln` | `σ_ln` | Optional |
+| `lognormal` | `lognorm` | Yes | Yes | `μ_ln` | `σ_ln` | Optional |
 | `gumbelmax` | `gumbel_r` | Yes | Yes | `μ` | `β` | Optional |
 | `gumbelmin` | `gumbel_l` | Yes | Yes | `μ` | `β` | Optional |
 | `exponential` | `expon` | Yes | No | `λ` | `None` | Optional |
@@ -178,10 +300,13 @@ Example pattern (`None` marks the unused pair for that variable):
 | `pareto` | `pareto` | Yes | Yes | `xm` | `α` | Optional |
 | `rayleigh` | `rayleigh` | Yes | No | `σ` | `None` | Optional |
 
-`*` Uniform distribution guidance:
+The `mean` and `std` columns show whether the distribution requires that value when it is defined by moments. The exponential, triangular, and Rayleigh distributions are fully defined by their mean, so they do not take `std`.
 
-- When `mean` and `std` are specified, set both `lb` and `ub` to `None`.
-- When using distribution parameters (`lb`, `ub`), set `param1` and `param2` to `None`.
+`*` A uniform distribution can be defined in any of three ways:
+
+- By `mean` and `std`. Set `lb` and `ub` to `None`.
+- By `param1` and `param2`, which are the lower and upper limits of the distribution. Set `lb` and `ub` to `None`.
+- By `lb` and `ub`, which are then the lower and upper limits. Set `param1` and `param2` to `None`.
 
 Greek symbols shown for `param1` and `param2` follow the standard notation used in the linked Wikipedia references (where applicable).
 
@@ -189,7 +314,7 @@ Parameterizations can differ across sources; Brinkpy follows the parameter defin
 
 For correlated non-normal variables, Brinkpy uses an isoprobabilistic transformation (Nataf) to map variables into standard normal space during reliability computations.
 
-Reference links (from source doc):
+Reference links:
 
 - `normal`: [Wikipedia](https://en.wikipedia.org/wiki/Normal_distribution), [SciPy `norm`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.norm.html)
 - `lognormal`: [Wikipedia](https://en.wikipedia.org/wiki/Log-normal_distribution), [SciPy `lognorm`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.lognorm.html)
@@ -213,7 +338,7 @@ These blocks are optional for computation but needed for plot commands and riche
 
 ### `LSFplot`
 
-`LSFplot` defines a 2D plot showing the limit state function contour and the mean-point location. It is used when running `brinkpy analyze -l`.
+`LSFplot` defines a 3D plot of the limit state function (LSF) over two stochastic variables on the x and y axes. It is used when running `brinkpy analyze -l` or `brinkpy simulate -l`. The plot style (surface or contour) and whether the mean point and design point are shown are set in the profile (see [LSF Plot Options](../profiles/profile-reference.md#lsf-plot-options)).
 
 **Required and optional keys:**
 
@@ -227,7 +352,12 @@ These blocks are optional for computation but needed for plot commands and riche
 | `y_func` | `callable` or omitted | No | Transformation function `lambda S, D: ...` for y axis. If omitted, y axis displays `y_var` directly. |
 | `x_label` | `str` or omitted | No | Custom label for x axis (can include LaTeX). If omitted, defaults to variable name. |
 | `y_label` | `str` or omitted | No | Custom label for y axis (can include LaTeX). If omitted, defaults to variable name. |
-| `z_var` | `str` | Optional | Third variable held fixed/parameterized for advanced 3D layout choices. |
+| `z_var` | `str` | No | Stochastic variable for the z axis. If omitted, the z axis shows the limit state function value (see below). |
+
+**The z axis:**
+
+- If `z_var` is omitted, the z axis shows the value of the limit state function, `g`.
+- If `z_var` is defined, the z axis shows that variable. For each `(x, y)` point, Brinkpy finds the value of `z_var` that makes `g = 0`, so the plot shows the limit state surface. No `z_lim` is needed.
 
 **Transformation function signature:**
 
@@ -252,7 +382,7 @@ These blocks are optional for computation but needed for plot commands and riche
 }
 ```
 
-Here, stochastic variables are indexed as `S[0]` for Y, `S[1]` for Z, and `S[2]` for M (in `StochasticVariables.name` order). The Plot shows a 2D contour where failure occurs when resistance ≤ load. Pages 2–3 of the run PDF display the LSF visualization with the mean point overlaid.
+Here, stochastic variables are indexed as `S[0]` for Y, `S[1]` for Z, and `S[2]` for M (in `StochasticVariables.name` order). Because `z_var` is omitted, the z axis shows the limit state function value, and failure occurs where `g ≤ 0`, that is, where resistance ≤ load.
 
 ### `RFADplot`
 
@@ -296,7 +426,7 @@ Here `S[0]` is Y, `S[1]` is Z, and `S[2]` is M. As Brinkpy sweeps `mean(Y)` and 
 
 ### `ISplot`
 
-`ISplot` defines the axis variables and plot extents used for importance-sampling proposal diagnostics when running `brinkpy simulate -i`. If `ISplot` is omitted, IS proposal diagnostic figures are not generated. If sampled points fall outside the specified limits, Brinkpy automatically expands the displayed axis ranges.
+`ISplot` defines the axis variables and plot extents used for importance sampling (IS) proposal diagnostics when running `brinkpy simulate -i` or `brinkpy analyze -i` (in `analyze`, `-i` automatically enables Monte Carlo). If `ISplot` is omitted, IS proposal diagnostic figures are not generated. If sampled points fall outside the specified limits, Brinkpy automatically expands the displayed axis ranges.
 
 | Key | Required if `ISplot` exists | Meaning |
 |---|---|---|
@@ -305,141 +435,17 @@ Here `S[0]` is Y, `S[1]` is Z, and `S[2]` is M. As Brinkpy sweeps `mean(Y)` and 
 | `y_var` | Yes | Stochastic variable name used on the y axis for IS proposal diagnostics |
 | `y_lim` | Yes | Plot range `[min, max]` for the y axis |
 
-## Limit State Function Contract
+## Module Self-Containment
 
-Your `LSF` must accept:
+Problem modules may define additional variables, arrays, dictionaries, helper functions, and preprocessing logic beyond the required contracts such as `LimitStateFunction` and (for design runs) `DesignObjectiveFunction`.
 
-- `X`: stochastic variables
-- `D`: deterministic variables
+All data structures and helper logic used by the problem must be defined inside the same problem module (`*.py`). External data files are not supported for problem execution.
 
-Expected argument order:
+## Submission Safety Validation
 
-- `X` follows the order of `StochasticVariables.name`.
-- `D` follows the order of `DeterministicVariables.name`.
+For platform safety, submitted problem modules are validated and may be rejected if they contain unsafe execution patterns.
 
-This means `X` is the stochastic-variable vector (or batch of vectors), while `D` is the deterministic state used by the problem definition.
-
-Expected shape behavior:
-
-- Vectorized mode (`LSFisVectorized=True`):
-  - `X` can be `(n_var, n_samples)`
-  - each row corresponds to one variable in `StochasticVariables.name` order.
-- Single-point mode:
-  - `X` can be `(n_var,)`.
-- `D` follows the deterministic-variable ordering from `DeterministicVariables.name`.
-
-### Required return values
-
-Always return:
-
-- `g`: limit state value(s), with failure when `g <= 0`.
-- `gg`: gradient placeholder (`[]` when `LSFreturnsGradient=False`).
-- `gh`: Hessian placeholder (`[]` when `LSFreturnsHessian=False`).
-- `L`: load placeholder/value (`[]` when `LSFreturnsLandR=False`).
-- `R`: resistance placeholder/value (`[]` when `LSFreturnsLandR=False`).
-
-The `LSFreturnsGradient`, `LSFreturnsHessian`, and `LSFreturnsLandR` flags change whether `gg`, `gh`, `L`, and `R` contain meaningful values or placeholders, but the return signature remains:
-
-- `return g, gg, gh, L, R`
-
-Typical patterns are:
-
-- Without load/resistance reporting: `return g, gg, gh, [], []`
-- With load/resistance reporting: `return g, gg, gh, L, R`
-
-### Gradient (`gg`) definition
-
-For a single point (`X.ndim == 1`):
-
-- `gg` is the derivative vector `dg/dx_i` in the same variable order as `name`.
-- Shape should be `(n_var,)`.
-
-For vectorized evaluations, many examples return `[]` and only compute derivatives in single-point mode.
-
-### Hessian (`gh`) definition
-
-For a single point (`X.ndim == 1`):
-
-- `gh` is the matrix of second derivatives `d2g/(dx_i dx_j)`.
-- Shape should be `(n_var, n_var)`.
-- Keep symmetry when mathematically expected.
-
-As with the gradient, `gh` is typically only returned for single-point evaluations in the standard Brinkpy authoring pattern.
-
-## LSF Derivative Return Modes
-
-Use the flags to match what your function returns:
-
-| `LSFreturnsGradient` | `LSFreturnsHessian` | `LSF` expectation |
-|---|---|---|
-| `False` | `False` | Return placeholders for `gg`, `gh` (often empty lists), plus `L`, `R` placeholders or values |
-| `True` | `False` | Return valid `gg`; `gh` can be placeholder; still return `L`, `R` |
-| `True` | `True` | Return valid `gg` and `gh`; still return `L`, `R` |
-
-## Worked LSF Example (`AT610Problem.py`)
-
-In `AT610Problem.py`, the stochastic variables are `Y`, `Z`, and `M`, and there are no deterministic variables:
-
-- `StochasticVariables.name = ["Y", "Z", "M"]`
-- `DeterministicVariables.name = []`
-
-The limit state function is:
-
-```python
-def LSF(X, D):
-    Y, Z, M = X
-
-    L = M  # Load
-    R = Y * Z  # Resistance
-
-    g = R - L
-
-    gg = []
-    gh = []
-    if X.ndim == 1:
-        gg = np.array([Z, Y, -1.0])
-        gh = np.array([
-            [0.0, 1.0, 0.0],
-            [1.0, 0.0, 0.0],
-            [0.0, 0.0, 0.0],
-        ])
-
-    return g, gg, gh, L, R
-```
-
-For that example:
-
-- `R = Y * Z`
-- `L = M`
-- `g = R - L = YZ - M`
-
-Analytical gradient:
-
-- `dg/dY = Z`
-- `dg/dZ = Y`
-- `dg/dM = -1`
-
-So:
-
-```python
-gg = np.array([Z, Y, -1.0])
-```
-
-Analytical Hessian:
-
-- `d2g/dYdZ = 1`
-- `d2g/dZdY = 1`
-- all other second derivatives are zero
-
-```python
-gh = np.array([
-    [0.0, 1.0, 0.0],
-    [1.0, 0.0, 0.0],
-    [0.0, 0.0, 0.0],
-])
-```
-
-`AT610` sets both derivative flags to `True`, so Brinkpy uses the analytic gradient and Hessian during FORM convergence and SORM curvature fitting.
+When a module is rejected, the API returns a validation error describing the disallowed category.
 
 ## Common Authoring Pitfalls
 
