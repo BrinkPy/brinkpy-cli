@@ -1,5 +1,5 @@
 # Author: Cesar Carrasco
-# Description: Chan and Low 2011 problem 1 page 1392
+# Description: Chan and Low 2012 problem 1 page 1392
 # https://onlinelibrary.wiley.com/doi/full/10.1002/nag.1057
 
 import numpy as np

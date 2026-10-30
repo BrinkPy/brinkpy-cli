@@ -1,4 +1,4 @@
-# Description: Chan and Low 2011 problem 3 page 1399
+# Description: Chan and Low 2012 problem 3 page 1399
 # https://onlinelibrary.wiley.com/doi/full/10.1002/nag.1057
 
 import math

@@ -50,7 +50,7 @@ This example uses the `default` profile. SORM and Monte Carlo behavior can be ad
 
 ## Problem File Used
 
-**Source:** Chan, C. L. and Low, B. K., "Practical second-order reliability analysis applied to foundation engineering," *International Journal for Numerical and Analytical Methods in Geomechanics*, first published: 05 July 2011. [→](https://doi.org/10.1002/nag.1057)
+**Source:** Chan, C. L. and Low, B. K., "Practical second-order reliability analysis applied to foundation engineering," *International Journal for Numerical and Analytical Methods in Geomechanics*, 2012, vol. 36, no. 11, p. 1387–1409, Problem 3, p. 1399. [→](https://doi.org/10.1002/nag.1057)
 
 `Chan3Problem.py` defines:
 

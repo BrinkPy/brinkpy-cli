@@ -14,7 +14,7 @@ These references are cited in worked examples, method notes, and profile options
 ### Analysis and Simulation Examples
 
 - Au, S. K., and Beck, J. L. (1999). *A new adaptive importance sampling scheme for reliability calculations*. [->](https://people.duke.edu/~hpgavin/risk/Au-1999.pdf)
-- Chan, C. L., and Low, B. K. (2011/2012). *Practical second-order reliability analysis applied to foundation engineering*. [->](https://doi.org/10.1002/nag.1057)
+- Chan, C. L., and Low, B. K. (2012). *Practical second-order reliability analysis applied to foundation engineering*. [->](https://doi.org/10.1002/nag.1057)
 
 ### Reliability-Based Design
 

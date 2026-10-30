@@ -9,7 +9,7 @@ def Problem():
         "Name": "AU2",
         "LimitStateFunction": LSF,
         "LSFisVectorized": True,
-        "LSFisSmooth": True,
+        "LSFisSmooth": False,
         "LSFisParallelizable": True,
         "LSFreturnsGradient": False,
         "LSFreturnsHessian": False,

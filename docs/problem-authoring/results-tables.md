@@ -72,10 +72,37 @@ For where result files are saved and what each file contains, see [Result Files]
 | `cv` | Coefficient of variation of the estimated probability of failure |
 | `max_cv` | Target coefficient of variation (profile option `mc_max_cv`) |
 | `size` | Total number of samples |
-| `%_removed` | Percentage of samples removed as out of bounds (profile option `mc_remove_oob`) |
+| `%_removed` | Percentage of samples removed because the limit state function returned NaN or Inf. This can happen when a sampled variable becomes NaN or Inf during the transformation from standard normal space to real space. |
 | `cycles` | Number of sampling cycles |
 | `auto_size` | Whether the sample size was chosen automatically (profile option `mc_n` is `null`) |
 | `mc_with_is` | Whether importance sampling was used |
+
+With importance sampling, three more columns appear:
+
+| Column | Meaning |
+|---|---|
+| `method` | Importance sampling proposal method (profile option `is_method`) |
+| `bandwidth` | Kernel density estimation (KDE) bandwidth used for the proposal distribution, when `method` is `kde` |
+| `fit_samples` | Number of samples used to fit the proposal distribution (profile option `is_fit_samples`) |
+
+### Stochastic Variables Definition
+
+| Column | Meaning |
+|---|---|
+| `var_name`, `var_type` | Stochastic variable name and distribution type |
+| `mean`, `std` | Mean and standard deviation of the distribution |
+| `param1`, `param2` | Natural parameters of the distribution, shown even when the variable was defined by `mean` and `std` |
+
+### Monte Carlo Variable Statistics and Correlations
+
+| Column | Meaning |
+|---|---|
+| `var_name` | Stochastic variable name |
+| `mean`, `std` | Mean and standard deviation of the samples |
+| `%_oob` | Percentage of that variable's samples outside its bounds |
+| `cor(...)` | Sample correlation between this variable and the variable named in the column |
+
+With importance sampling, these statistics describe the samples drawn from the proposal distribution, so they do not match the original input distributions.
 
 ## Design
 

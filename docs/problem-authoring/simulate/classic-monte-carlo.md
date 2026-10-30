@@ -2,13 +2,14 @@
 
 This page documents a simulate run in plain Monte Carlo mode (without importance sampling).
 
-Note: Table values are rounded to 4 significant figures for readability. Very small/large values use scientific notation. Refer to the Excel/JSON result files for full precision.
+!!! note "About the tables on this page"
+    - Table values are rounded to 4 significant figures for readability. Very small/large values use scientific notation. Refer to the Excel/JSON result files for full precision.
 
 ## Run Context
 
 Problem module:
 
-- `problems/problems2/Chan2Problem.py`
+- `problems/Chan2Problem.py`
 
 Recorded result set:
 
@@ -28,20 +29,17 @@ Profile and run mode from saved profile:
 
 For results-folder and filename conventions, see [CLI Result Files](../../cli/results-files.md).
 
-Equivalent command shape:
+Equivalent command:
 
 ```bash
-brinkpy simulate <profile>
+brinkpy simulate
 ```
 
 The `simulate` command without `-i` runs plain (crude) Monte Carlo only.
 
 ## Profile Customization
 
-This example uses the `default` profile, but simulate behavior is configurable. See [Profile Options Reference](../../profiles/profile-reference.md).
-
-- Monte Carlo controls: `reliability_options.mc_n`, `mc_max_cv`, `mc_seed`, `mc_remove_oob`.
-- Report toggles: `reporting_options.save_plots_to_pdf`, `save_plots_to_pickle`, `save_excel_summary`.
+This example uses the `default` profile. Monte Carlo behavior can be adjusted in a custom profile through `reliability_options.mc_n`, `mc_max_cv`, `mc_seed`, and `mc_remove_oob`. See [Monte Carlo Settings](../../profiles/profile-reference.md#monte-carlo-settings).
 
 ## Problem File Used
 
@@ -57,7 +55,7 @@ This example uses the `default` profile, but simulate behavior is configurable. 
 
 !!! note "Using `cor` vs `cor_list`"
     `Chan2Problem.py` specifies the correlation matrix as a full **n × n list of lists** under the `cor` key.
-    This is an alternative to `cor_list`, which accepts a flat list of `[var1, var2, value]` pairs.
+    This is an alternative to `cor_list`, which accepts a list of `[var1, var2, value]` entries.
     If neither `cor` nor `cor_list` is supplied, Brinkpy assumes zero correlation for all variables.
     Either key may be used; the full matrix form is convenient when many off-diagonal correlations are non-zero.
 
@@ -77,13 +75,13 @@ This example uses the `default` profile, but simulate behavior is configurable. 
 },
 ```
 
-Because `LSFreturnsLandR: True`, the CLI generates a **Load and Resistance Histogram** in addition to the per-variable and LSF histograms.
+Because `LSFreturnsLandR: True`, Brinkpy generates a **Load and Resistance Histogram** in addition to the per-variable and LSF histograms.
 
 ## Extracted Results Worksheet Tables
 
-The tables below are transcribed from the `Results` worksheet in `Chan2-a1af3.xlsx`.
+The tables below are transcribed from the `Results` worksheet in `Chan2-a1af3.xlsx`. For the meaning of each column, see [Results Tables Reference](../results-tables.md#monte-carlo).
 
-#### Header Information
+### Header Information
 
 | Field | Value |
 |---|---|
@@ -91,7 +89,7 @@ The tables below are transcribed from the `Results` worksheet in `Chan2-a1af3.xl
 | Request ID | `c89975be9921407491d307b104ea1af3` |
 | Run time | `00 min 03.51 sec` |
 
-#### Deterministic Variables
+### Deterministic Variables
 
 | var_name | value |
 |---|---:|
@@ -100,7 +98,7 @@ The tables below are transcribed from the `Results` worksheet in `Chan2-a1af3.xl
 | D | 1.8 |
 | h | 2.5 |
 
-#### Stochastic Variables Definition
+### Stochastic Variables Definition
 
 | var_name | var_type | mean | std | param1 | param2 |
 |---|---|---:|---:|---:|---:|
@@ -110,13 +108,13 @@ The tables below are transcribed from the `Results` worksheet in `Chan2-a1af3.xl
 | Ph | Normal | 400 | 40 | 400 | 40 |
 | Pv | Normal | 800 | 80 | 800 | 80 |
 
-#### Monte Carlo Results
+### Monte Carlo Results
 
 | beta | pf | cv | max_cv | size | %_removed | cycles | auto_size | mc_with_is |
 |---:|---:|---:|---:|---:|---:|---:|---|---|
 | 1.5408 | 0.06169 | 0.002252 | 0.05 | 3,000,000 | 0.0007 | 3 | True | False |
 
-#### Monte Carlo Variable Statistics and Correlations
+### Monte Carlo Variable Statistics and Correlations
 
 The sampled statistics confirm the input distributions and correlation structure.
 
@@ -128,51 +126,50 @@ The sampled statistics confirm the input distributions and correlation structure
 | Ph | 399.944 | 39.978 | 0 | −0.0007 | 0.0000 | −0.0005 | 1.0000 | 0.4998 |
 | Pv | 799.836 | 79.992 | 0 | −0.0004 | 0.0002 | 0.0001 | 0.4998 | 1.0000 |
 
-#### Notes Reported by Brinkpy
+### Notes Reported by Brinkpy
 
 1. Validation: Stochastic variables definition and limit state function validation required 1 function call.
 2. Monte Carlo: Completed 3 cycles with `1.00e+06` samples per cycle.
 3. Monte Carlo: Detected 21 NaN values in the limit state function out of `3.00e+06` samples. Review the list of code warnings and update the limit state function to address their source.
 4. Monte Carlo: If a large fraction of values are invalid, consider adjusting the statistical distributions of the variables, truncating them to finite lower (`lb`) and upper (`ub`) bounds, and defining constraints on the variables to avoid invalid results.
 
-### Interpretation Snapshot
+## Interpretation Snapshot
 
 - `beta = 1.541`, `pf = 6.17%` — a relatively low reliability index for a bearing-capacity problem with correlated soil parameters.
-- The coefficient of variation (`cv = 0.00225`) is well below `max_cv = 0.05`, indicating high MC precision with 3 million samples.
-- The sampled correlation matrix closely matches the targets: `cor(cp, fp) ≈ −0.500`, `cor(fp, g) ≈ 0.500`, `cor(Ph, Pv) ≈ 0.501`.
-- A small number of NaN results (21 out of 3,000,000) were detected. These typically arise from geometric degeneration in the bearing-capacity formula (e.g., `B' ≤ 0` due to large eccentricity). They do not invalidate the result at this sample size.
+- The coefficient of variation (`cv = 0.00225`) is well below `max_cv = 0.05`, indicating high Monte Carlo precision with 3 million samples.
+- The sampled correlation matrix closely matches the targets: `cor(cp, fp) ≈ −0.500`, `cor(fp, g) ≈ 0.500`, `cor(Ph, Pv) ≈ 0.500`.
+- A small number of NaN results (21 out of 3,000,000) were detected. These come from the inclination factors. When `1 - Ph / (Pv + B'L'cp / tan(fp))` is not positive, the limit state function returns NaN by design. They do not invalidate the result at this sample size.
 - Brinkpy also reported that if invalid values become more frequent, finite `lb` and `ub` bounds or explicit variable constraints are the first things to revisit.
 
-### Generated Figures
+## Generated Figures
 
 The PDF result file for this run is saved as `results/2026-04-02/20-31-44/Chan2-a1af3.pdf`.
-The PNGs below were regenerated from the saved Matplotlib pickle in the same result set so they match the current histogram bin capping used by the API.
 
-#### Figure 1: MC Histogram — `cp`
+### Figure 1: Monte Carlo Histogram — `cp`
 
-![Chan2 MC histogram for cp](../images/chan2-a1af3-01-cp-histogram.png)
+![Chan2 Monte Carlo histogram for cp](../images/chan2-a1af3-01-cp-histogram.png)
 
-#### Figure 2: MC Histogram — `fp`
+### Figure 2: Monte Carlo Histogram — `fp`
 
-![Chan2 MC histogram for fp](../images/chan2-a1af3-02-fp-histogram.png)
+![Chan2 Monte Carlo histogram for fp](../images/chan2-a1af3-02-fp-histogram.png)
 
-#### Figure 3: MC Histogram — `g`
+### Figure 3: Monte Carlo Histogram — `g`
 
-![Chan2 MC histogram for g](../images/chan2-a1af3-03-g-histogram.png)
+![Chan2 Monte Carlo histogram for g](../images/chan2-a1af3-03-g-histogram.png)
 
-#### Figure 4: MC Histogram — `Ph`
+### Figure 4: Monte Carlo Histogram — `Ph`
 
-![Chan2 MC histogram for Ph](../images/chan2-a1af3-04-Ph-histogram.png)
+![Chan2 Monte Carlo histogram for Ph](../images/chan2-a1af3-04-Ph-histogram.png)
 
-#### Figure 5: MC Histogram — `Pv`
+### Figure 5: Monte Carlo Histogram — `Pv`
 
-![Chan2 MC histogram for Pv](../images/chan2-a1af3-05-Pv-histogram.png)
+![Chan2 Monte Carlo histogram for Pv](../images/chan2-a1af3-05-Pv-histogram.png)
 
-#### Figure 6: Histogram of Limit State Function Values
+### Figure 6: Histogram of Limit State Function Values
 
 ![Chan2 limit state function histogram](../images/chan2-a1af3-06-lsf-histogram.png)
 
-#### Figure 7: Load and Resistance Histogram
+### Figure 7: Load and Resistance Histogram
 
 Generated because `LSFreturnsLandR: True` in the problem file.
 

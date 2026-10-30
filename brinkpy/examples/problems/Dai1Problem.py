@@ -9,7 +9,7 @@ def Problem():
         "Name": "Dai 1",
         "LimitStateFunction": LSF,
         "LSFisVectorized": True,
-        "LSFisSmooth": True,
+        "LSFisSmooth": False,
         "LSFisParallelizable": True,
         "LSFreturnsGradient": False,
         "LSFreturnsHessian": False,

@@ -436,7 +436,7 @@ Here `S[0]` is Y, `S[1]` is Z, and `S[2]` is M. As Brinkpy sweeps `mean(Y)` and 
 | `y_var` | Yes | Stochastic variable name used on the y axis for IS proposal diagnostics |
 | `y_lim` | No | Plot range `[min, max]` for the y axis |
 
-If `x_lim` and `y_lim` are omitted, the axis limits are set automatically to show all sampled points. If they are defined, they override the automatic limits and the plot shows only the area you specify.
+If `x_lim` and `y_lim` are omitted, the axis limits are set automatically to show all sampled points. If they are defined, they set the initial plot range, and Brinkpy expands it automatically when sampled points fall outside it.
 
 ## Module Self-Containment
 

@@ -58,9 +58,9 @@ Every example works with `analyze` and `simulate`. Examples marked in the **Desi
 | `AU1dProblem` | [Au and Beck (1999)](https://people.duke.edu/~hpgavin/risk/Au-1999.pdf), Example 1 | | |
 | `AU2Problem` | [Au and Beck (1999)](https://people.duke.edu/~hpgavin/risk/Au-1999.pdf), Example 2 | | [Importance Sampling](problem-authoring/simulate/importance-sampling.md) |
 | `AU3Problem` | [Au and Beck (1999)](https://people.duke.edu/~hpgavin/risk/Au-1999.pdf), Example 3 | | |
-| `Chan1Problem` | [Chan and Low (2011)](https://onlinelibrary.wiley.com/doi/full/10.1002/nag.1057), Problem 1 | | |
-| `Chan2Problem` | [Chan and Low (2011)](https://onlinelibrary.wiley.com/doi/full/10.1002/nag.1057), Problem 2 | | [Classic Monte Carlo](problem-authoring/simulate/classic-monte-carlo.md) |
-| `Chan3Problem` | [Chan and Low (2011)](https://onlinelibrary.wiley.com/doi/full/10.1002/nag.1057), Problem 3 | | [SORM + Monte Carlo](problem-authoring/analyze/sorm-monte-carlo.md) |
+| `Chan1Problem` | [Chan and Low (2012)](https://onlinelibrary.wiley.com/doi/full/10.1002/nag.1057), Problem 1 | | |
+| `Chan2Problem` | [Chan and Low (2012)](https://onlinelibrary.wiley.com/doi/full/10.1002/nag.1057), Problem 2 | | [Classic Monte Carlo](problem-authoring/simulate/classic-monte-carlo.md) |
+| `Chan3Problem` | [Chan and Low (2012)](https://onlinelibrary.wiley.com/doi/full/10.1002/nag.1057), Problem 3 | | [SORM + Monte Carlo](problem-authoring/analyze/sorm-monte-carlo.md) |
 | `Dai1Problem` | [Dai et al. (2014)](https://www.sciencedirect.com/science/article/pii/S0167473014000162), Example 1 | | |
 | `Ji1Problem` | [Ji et al. (2024)](https://onlinelibrary.wiley.com/doi/10.1002/nag.3524), Problem 1 | ✓ | |
 | `Ji2Problem` | [Ji et al. (2024)](https://onlinelibrary.wiley.com/doi/10.1002/nag.3524), Problem 2 | ✓ | |
