@@ -2,7 +2,8 @@
 
 This page documents an `analyze` run with both SORM and Monte Carlo enabled (`-s -m`).
 
-Note: Table values are rounded to 4 significant figures for readability. Very small/large values use scientific notation. Refer to the Excel/JSON result files for full precision.
+!!! note "About the tables on this page"
+    - Table values are rounded to 4 significant figures for readability. Very small/large values use scientific notation. Refer to the Excel/JSON result files for full precision.
 
 ## Run Context
 
@@ -29,10 +30,10 @@ Profile and run mode from saved profile:
 
 For results-folder and filename conventions, see [CLI Result Files](../../cli/results-files.md).
 
-Equivalent command shape:
+Equivalent command:
 
 ```bash
-brinkpy analyze <profile> -s -m
+brinkpy analyze -s -m
 ```
 
 Option meaning in this command:
@@ -42,11 +43,10 @@ Option meaning in this command:
 
 ## Profile Customization
 
-This example uses the `default` profile, but these options are configurable. See [Profile Options Reference](../../profiles/profile-reference.md).
+This example uses the `default` profile. SORM and Monte Carlo behavior can be adjusted in a custom profile:
 
-- SORM behavior: `reliability_options.sor_method`, `sor_approximation`, `sor_fit_method`, `sor_fdm`.
-- Monte Carlo behavior: `reliability_options.mc_n`, `mc_max_cv`, `mc_seed`, `mc_remove_oob`.
-- Analyze toggles: `run_configuration.include_sorm`, `include_mc`, `mc_with_is`.
+- SORM behavior: `reliability_options.sor_method`, `sor_approximation`, `sor_fit_method`, `sor_fdm`. See [SORM Settings](../../profiles/profile-reference.md#sorm-settings).
+- Monte Carlo behavior: `reliability_options.mc_n`, `mc_max_cv`, `mc_seed`, `mc_remove_oob`. See [Monte Carlo Settings](../../profiles/profile-reference.md#monte-carlo-settings).
 
 ## Problem File Used
 
@@ -61,7 +61,7 @@ This example uses the `default` profile, but these options are configurable. See
 
 ## Extracted Results Worksheet Tables
 
-The tables below are transcribed from the `Results` worksheet in `Chan3-55cde.xlsx`.
+The tables below are transcribed from the `Results` worksheet in `Chan3-55cde.xlsx`. For the meaning of each column, see [Results Tables Reference](../results-tables.md).
 
 ### Header Information
 
@@ -115,8 +115,8 @@ The tables below are transcribed from the `Results` worksheet in `Chan3-55cde.xl
 
 ## Interpretation Snapshot
 
-- FORM gives `beta = 0.9543` (`pf ≈ 0.1700`), while SORM and Monte Carlo indicate a slightly less severe reliability level (`beta ≈ 1.16`).
-- SORM and Monte Carlo are closely aligned (`pf ≈ 0.1216` vs `0.1232`), which supports consistency of the higher-order/empirical estimate.
+- FORM gives `beta = 0.9543` (`pf ≈ 0.1700`). SORM and Monte Carlo give a larger reliability index (`beta ≈ 1.16`) and therefore a smaller probability of failure (`pf ≈ 0.12`). A larger β always means a smaller probability of failure, since `pf = Φ(-β)`.
+- SORM and Monte Carlo are closely aligned (`pf ≈ 0.1216` vs `0.1232`), suggesting that the SORM estimate is more accurate than FORM for this problem.
 - Monte Carlo precision is acceptable for this run (`cv = 0.02436 < 0.05`).
 
 ## Generated Figures

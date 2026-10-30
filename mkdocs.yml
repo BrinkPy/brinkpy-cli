@@ -52,6 +52,7 @@ nav:
     - Profile Options Reference: profiles/profile-reference.md
   - Problem Definition:
     - Overview: problem-authoring/index.md
+    - Results Tables Reference: problem-authoring/results-tables.md
     - Analyze:
       - FORM Only: problem-authoring/analyze/form-only.md
       - SORM and Monte Carlo: problem-authoring/analyze/sorm-monte-carlo.md

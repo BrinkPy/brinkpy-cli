@@ -52,7 +52,7 @@ The sections below describe each key in detail.
 | `LimitStateFunction` | Yes | callable | Function implementing `g(X, D)` with return contract `g, gg, gh, L, R` (placeholders allowed; see Limit State Function Contract) | `LSF` |
 | `LSFisVectorized` | Yes | `bool` | Whether `LSF` can process batched samples (`X` with shape `(n_var, n_samples)`) | `True` |
 | `LSFisSmooth` | Yes | `bool` | Signals smoothness for derivative-based reliability methods | `True` |
-| `LSFisParallelizable` | Yes | `bool` | Signals that evaluations are safe for parallel execution | `True` |
+| `LSFisParallelizable` | No (default `False`) | `bool` | Signals that evaluations are safe for parallel execution | `True` |
 | `LSFreturnsGradient` | Yes | `bool` | If `True`, `LSF` should return gradient `gg` for 1-point evaluation; otherwise return placeholder `[]` | `True` |
 | `LSFreturnsHessian` | Yes | `bool` | If `True`, `LSF` should return Hessian `gh` for 1-point evaluation; otherwise return placeholder `[]` | `True` |
 | `LSFreturnsLandR` | Yes | `bool` | If `True`, `LSF` should return non-empty load/resistance values `(L, R)` for reporting and plots; otherwise return placeholders such as `[]`, `[]` | `True` |
@@ -426,14 +426,16 @@ Here `S[0]` is Y, `S[1]` is Z, and `S[2]` is M. As Brinkpy sweeps `mean(Y)` and 
 
 ### `ISplot`
 
-`ISplot` defines the axis variables and plot extents used for importance sampling (IS) proposal diagnostics when running `brinkpy simulate -i` or `brinkpy analyze -i` (in `analyze`, `-i` automatically enables Monte Carlo). If `ISplot` is omitted, IS proposal diagnostic figures are not generated. If sampled points fall outside the specified limits, Brinkpy automatically expands the displayed axis ranges.
+`ISplot` defines the axis variables and plot extents used for importance sampling (IS) proposal diagnostics when running `brinkpy simulate -i` or `brinkpy analyze -i` (in `analyze`, `-i` automatically enables Monte Carlo). If `ISplot` is omitted, IS proposal diagnostic figures are not generated.
 
 | Key | Required if `ISplot` exists | Meaning |
 |---|---|---|
 | `x_var` | Yes | Stochastic variable name used on the x axis for IS proposal diagnostics |
-| `x_lim` | Yes | Plot range `[min, max]` for the x axis |
+| `x_lim` | No | Plot range `[min, max]` for the x axis |
 | `y_var` | Yes | Stochastic variable name used on the y axis for IS proposal diagnostics |
-| `y_lim` | Yes | Plot range `[min, max]` for the y axis |
+| `y_lim` | No | Plot range `[min, max]` for the y axis |
+
+If `x_lim` and `y_lim` are omitted, the axis limits are set automatically to show all sampled points. If they are defined, they override the automatic limits and the plot shows only the area you specify.
 
 ## Module Self-Containment
 

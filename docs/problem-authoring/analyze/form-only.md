@@ -2,8 +2,9 @@
 
 This page documents a basic `analyze` run without SORM or Monte Carlo.
 
-Note: Table values are rounded to 4 significant figures for readability. Very small/large values use scientific notation. Refer to the Excel/JSON result files for full precision.
-Note: Advanced solver diagnostics (for example `lsf_mult` and bound multipliers) are included in the Excel/JSON outputs.
+!!! note "About the tables on this page"
+    - Table values are rounded to 4 significant figures for readability. Very small/large values use scientific notation. Refer to the Excel/JSON result files for full precision.
+    - Advanced solver diagnostics (for example `lsf_mult` and bound multipliers) are included in the Excel/JSON outputs.
 
 ## Run Context
 
@@ -30,18 +31,15 @@ Profile and run mode from saved profile:
 
 For results-folder and filename conventions, see [CLI Result Files](../../cli/results-files.md).
 
-Equivalent command shape:
+Equivalent command:
 
 ```bash
-brinkpy analyze <profile>
+brinkpy analyze
 ```
 
 ## Profile Customization
 
-This example uses the `default` profile, but analyze behavior is configurable. See [Profile Options Reference](../../profiles/profile-reference.md).
-
-- FORM behavior: `reliability_options.form_xtol`, `form_gtol`, `form_maxiter`, `form_random_start`.
-- Analyze toggles: `run_configuration.include_sorm`, `include_mc`, `mc_with_is`.
+This example uses the `default` profile. FORM behavior can be adjusted in a custom profile through `reliability_options.form_xtol`, `form_gtol`, `form_maxiter`, and `form_random_start`. See [FORM and Inverse FORM Settings](../../profiles/profile-reference.md#form-and-inverse-form-settings).
 
 ## Problem File Used
 
@@ -59,7 +57,7 @@ This example uses the `default` profile, but analyze behavior is configurable. S
 
 ## Extracted Results Worksheet Tables
 
-The tables below are transcribed from the `Results` worksheet in `AT610-16541.xlsx`.
+The tables below are transcribed from the `Results` worksheet in `AT610-16541.xlsx`. For the meaning of each column, see [Results Tables Reference](../results-tables.md#form).
 
 ### Header Information
 
