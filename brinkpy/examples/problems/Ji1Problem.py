@@ -45,7 +45,7 @@ def Problem():
 def DOF(d, D):
     # Objective function returns the function value, gradient and hessian
     # d is a (n,) array where n is the number of design variables
-    # D is a (m,) array where m is the number of deterministic variables exluding the design variables
+    # D is a (m,) array where m is the number of deterministic variables excluding the design variables
 
     Lambda = d
     f = Lambda

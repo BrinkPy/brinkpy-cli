@@ -43,7 +43,6 @@ def Problem():
             "lb": [0.0],
             "ub": [10.0],
             "TargetBeta": 2.47,
-            "useSORM": False,
             "fractiles": [0.05, 0.05, 0.5, 0.5, 0.5, 0.5, 0.95],
             "cases": {
                 "Low Grade": {
