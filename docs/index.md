@@ -28,7 +28,7 @@ Brinkpy CLI provides five core reliability workflows:
 
 - **FORM**: Fast baseline reliability assessment.  
     → [Analyze Command](cli/analyze.md) | [FORM Example](problem-authoring/analyze/form-only.md)
-- **SORM**: Curvature-aware reliability refinement at the MPP.  
+- **SORM**: Curvature-aware reliability refinement at the most probable point (MPP).  
     → [SORM + Monte Carlo Example](problem-authoring/analyze/sorm-monte-carlo.md)
 - **Inverse FORM / Inverse SORM**: Reliability-targeted factor calibration and design-point back-calculation.  
     → [Design Command](cli/design.md) | [Inverse FORM Examples](problem-authoring/design/inverse-form.md)
@@ -106,7 +106,7 @@ brinkpy profile --help
 
 ## Configuration
 
-Brinkpy CLI uses YAML profile files to configure run parameters across `analyze`, `design`, and `simulate`, including reliability methods, plotting options (LSF/RFAD), and reporting outputs.
+Brinkpy CLI uses YAML profile files to configure run parameters across `analyze`, `design`, and `simulate`, including reliability methods, plotting options for the limit state function (LSF) and the reliability-based failure assessment diagram (RFAD), and reporting outputs.
 
 For profile workflows and command usage, see [Profiles](profiles/index.md).
 For complete option keys and defaults, see [Profile Options Reference](profiles/profile-reference.md).

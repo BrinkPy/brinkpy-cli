@@ -76,19 +76,21 @@ When you run analysis, design, or simulation, Brinkpy opens a file-selection dia
 Analysis:
 
 ```bash
-brinkpy analyze default --include-sorm --plot-rfad
+brinkpy analyze
 ```
 
-Design optimization (choose an example marked in the **Design** column):
+Design (choose an example marked in the **Design** column):
 
 ```bash
-brinkpy design default --use-sorm
+brinkpy design
 ```
 
 Monte Carlo simulation:
 
 ```bash
-brinkpy simulate default --plot-pdfs
+brinkpy simulate
 ```
+
+Each command runs with its default options and the built-in `default` profile. To learn what each command does and how to change its options, see [Command Overview](cli/command-overview.md).
 
 Brinkpy asks which problem file to use each time you run a command. The choice is not saved in your profile.
