@@ -1,13 +1,13 @@
-# Simulate: Monte Carlo Simulation with Importance Sampling
+# Simulate: Monte Carlo Simulation
 
-Run Monte Carlo simulation with optional importance sampling for rare-event failure probability estimation. Optionally include FORM and SORM analysis alongside the simulation for comparative results.
+Run Monte Carlo simulation to estimate the failure probability, including rare events. Importance sampling is optional, and the First-Order and Second-Order Reliability Methods (FORM and SORM) can be included for comparison.
 
 !!! info "Before your first run"
 	If you want to test this command with packaged sample problems, first run:
 	```bash
 	brinkpy examples copy
 	```
-	Then select a problem file from `./problems/` when the file picker opens.
+	Then select a problem file from the `problems/` folder in your project folder when the file picker opens.
 
 ## Basic Usage
 
@@ -26,8 +26,8 @@ Usage: `brinkpy simulate <profile> [OPTIONS]`
 
 ### Plotting Options
 
-- `--plot-lsf`, `-l`: Generate limit state function plot
-- `--plot-pdfs`, `-p`: Generate probability density function plots
+- `--plot-lsf`, `-l`: Plot the limit state function (LSF)
+- `--plot-pdfs`, `-p`: Plot the probability density functions (PDFs) of the random variables
 
 ### General Options
 
@@ -40,25 +40,27 @@ Usage: `brinkpy simulate <profile> [OPTIONS]`
 brinkpy simulate default
 ```
 
-### MC with Importance Sampling
+### Monte Carlo with Importance Sampling
 ```bash
 brinkpy simulate default --mc-with-is
 ```
 
-### MC with FORM/SORM and Plots
+### Monte Carlo with FORM, SORM, and Plots
 ```bash
 brinkpy simulate default -f -s -l -p
 ```
 
-### Complete Simulation with IS
+### Importance Sampling with SORM and PDF Plots
 ```bash
 brinkpy simulate default -i -s -p
 ```
 
-### Using Custom Profile
+### Using a Custom Profile
 ```bash
 brinkpy simulate myprofile --include-form --plot-pdfs
 ```
+
+Replace `myprofile` with the name of a profile you created. See [Profile Management](../profiles/index.md).
 
 !!! tip "Combining short flags"
 	Short flags can be merged into a single argument. For example:
@@ -69,13 +71,14 @@ brinkpy simulate myprofile --include-form --plot-pdfs
 	```bash
 	brinkpy simulate default -fslp
 	```
-	Both forms are valid. The expanded form is easier to read; the combined form is faster to type.
+	Both forms are valid. The expanded form is easier to read, and the combined form is faster to type.
 
 ## Notes
 
 - If `--include-sorm` is specified without `--include-form`, FORM is automatically enabled
-- If importance sampling method is set to `mpp_normal` in the profile, FORM is automatically enabled
-- Monte Carlo sample size is configured in the profile file
+- If the importance sampling method is set to `mpp_normal` in the profile, FORM is automatically enabled. See [Importance Sampling Settings](../profiles/profile-reference.md#importance-sampling-settings).
+- If `--plot-lsf` is specified and `plot_failure_point` is enabled in the profile (the default), FORM is automatically enabled to locate the failure point. See [LSF Plot Options](../profiles/profile-reference.md#lsf-plot-options).
+- Monte Carlo sample size is configured in the profile. See [Monte Carlo Settings](../profiles/profile-reference.md#monte-carlo-settings).
 
 ## Aliases
 

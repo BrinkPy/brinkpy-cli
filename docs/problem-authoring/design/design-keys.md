@@ -22,7 +22,7 @@ When `design_type` is objective optimization (as in `Sorensen81Problem.py`), the
 
 | Key | Required | Type | Meaning |
 |---|---|---|---|
-| `DesignObjectiveFunction` | Yes | callable | Objective function used by the design optimizer |
+| `DesignObjectiveFunction` | Yes | callable | Objective function that the design optimizer minimizes (see [Design Objective Function Contract](#design-objective-function-contract)) |
 | `DOFisVectorized` | Yes | `bool` | Whether objective can process vectorized design inputs |
 | `DOFisSmooth` | Yes | `bool` | Signals smooth objective behavior for derivative-based optimization |
 | `DOFreturnsGradient` | Yes | `bool` | If `True`, objective must return gradient in single-point mode |
@@ -93,6 +93,13 @@ Rules:
 
 ## Design Objective Function Contract
 
+!!! warning "Brinkpy always minimizes the objective function"
+    Brinkpy searches for the design that makes `DesignObjectiveFunction` as **small** as possible, because it uses SciPy's [`minimize`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html) function. Write your objective so that a smaller value means a better design.
+
+    To **maximize** a quantity, such as capacity or stiffness, return its negative. For example, return `-capacity` instead of `capacity`. If your function also returns derivatives, negate them too.
+
+    The results report the value your function returns. If your function returned the negative of the capacity (`-capacity`), change the sign of the reported objective value to obtain the maximized capacity.
+
 Your `DesignObjectiveFunction` must accept:
 
 - `d`: the subset of deterministic-variable values being optimized
@@ -118,7 +125,7 @@ Expected shape behavior:
 
 Always return:
 
-- `f`: objective-function value(s)
+- `f`: objective-function value(s) to be minimized
 - `g`: gradient placeholder (`[]` when `DOFreturnsGradient=False` or not evaluated)
 - `h`: Hessian placeholder (`[]` when `DOFreturnsHessian=False` or not evaluated)
 

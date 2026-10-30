@@ -1,13 +1,13 @@
 # Analyze: Forward Reliability Assessment
 
-Run forward reliability analysis using the First-Order Reliability Method (FORM), Second-Order Reliability Method (SORM), and Monte Carlo simulation to estimate failure probability, reliability index (β), and most probable point (MPP).
+Run forward reliability analysis to estimate the failure probability, the reliability index (β), and the most probable point (MPP). The First-Order Reliability Method (FORM) always runs. The Second-Order Reliability Method (SORM) and Monte Carlo simulation are optional.
 
 !!! info "Before your first run"
 	If you want to test this command with packaged sample problems, first run:
 	```bash
 	brinkpy examples copy
 	```
-	Then select a problem file from `./problems/` when the file picker opens.
+	Then select a problem file from the `problems/` folder in your project folder when the file picker opens.
 
 ## Basic Usage
 
@@ -22,13 +22,13 @@ Usage: `brinkpy analyze <profile> [OPTIONS]`
 ### Monte Carlo Options
 
 - `--include-mc`, `-m`: Include Monte Carlo simulation
-- `--mc-with-is`, `-i`: Use importance sampling with Monte Carlo (automatically enables `--include-mc`)
+- `--mc-with-is`, `-i`: Use importance sampling with Monte Carlo simulation (automatically enables `--include-mc`)
 
 ### Plotting Options
 
-- `--plot-rfad`, `-r`: Generate reliability-based failure assessment diagram plots
-- `--plot-lsf`, `-l`: Generate limit state function plots
-- `--plot-pdfs`, `-p`: Generate probability density function plots
+- `--plot-rfad`, `-r`: Plot the reliability-based failure assessment diagram (RFAD)
+- `--plot-lsf`, `-l`: Plot the limit state function (LSF)
+- `--plot-pdfs`, `-p`: Plot the probability density functions (PDFs) of the random variables
 
 ### General Options
 
@@ -46,15 +46,17 @@ brinkpy analyze default
 brinkpy analyze default --include-sorm --plot-rfad --plot-lsf
 ```
 
-### Complete Analysis with MC
+### Complete Analysis with Monte Carlo and Importance Sampling
 ```bash
 brinkpy analyze default -s -m -i -r -l -p
 ```
 
-### Using Custom Profile
+### Using a Custom Profile
 ```bash
 brinkpy analyze myprofile --include-sorm --plot-rfad
 ```
+
+Replace `myprofile` with the name of a profile you created. See [Profile Management](../profiles/index.md).
 
 !!! tip "Combining short flags"
 	Short flags can be merged into a single argument. For example:
@@ -65,7 +67,11 @@ brinkpy analyze myprofile --include-sorm --plot-rfad
 	```bash
 	brinkpy analyze default -smirlp
 	```
-	Both forms are valid. The expanded form is easier to read; the combined form is faster to type.
+	Both forms are valid. The expanded form is easier to read, and the combined form is faster to type.
+
+## Notes
+
+- Monte Carlo sample size is configured in the profile. See [Monte Carlo Settings](../profiles/profile-reference.md#monte-carlo-settings).
 
 ## Aliases
 

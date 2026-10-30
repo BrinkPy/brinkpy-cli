@@ -9,7 +9,7 @@ It supports First-Order Reliability Method (FORM), Second-Order Reliability Meth
 
 Run outputs include reliability metrics and design points, tabulated summaries (Excel/JSON), plot reports (PDF), and pickled Matplotlib figure objects for post-processing.
 
-The documentation is written for practical use. Method descriptions are intentionally concise, and method-specific references are consolidated in the [Profile Options Reference](profiles/profile-reference.md).
+This documentation focuses on how to use Brinkpy, not on theory. Method descriptions are kept brief and cite the original sources where relevant. For a full treatment of the theory, see [Recommended Texts and References](problem-authoring/recommended-texts.md), which lists textbooks and papers that cover each method in depth.
 
 ## Who This Tool Is For
 

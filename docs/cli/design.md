@@ -1,13 +1,13 @@
 # Design: Factor Calibration and Reliability-Based Design Optimization
 
-Run design workflows that support two distinct modes depending on the problem definition: code calibration and partial factor derivation using Inverse FORM or Inverse SORM when no objective function is defined, or reliability-based design optimization (RBDO) when an objective function is defined to minimize cost, weight, or performance while satisfying reliability constraints.
+Run design workflows that support two distinct modes depending on the problem definition: code calibration and partial factor derivation using Inverse FORM or Inverse SORM when no objective function is defined, or reliability-based design optimization (RBDO) when an objective function is defined to minimize cost, weight, or another performance metric while satisfying reliability constraints.
 
 !!! info "Before your first run"
 	If you want to test this command with packaged sample problems, first run:
 	```bash
 	brinkpy examples copy
 	```
-	Then select a problem file from `./problems/` when the file picker opens.
+	Then select a problem file from the `problems/` folder in your project folder when the file picker opens. Choose an example that supports `design` (see [Available Examples](../examples.md#available-examples)).
 
 ## Basic Usage
 
@@ -17,7 +17,7 @@ Usage: `brinkpy design <profile> [OPTIONS]`
 
 ### Reliability Methods
 
-- `--use-sorm`, `-s`: Use second-order reliability method (SORM) for design optimization
+- `--use-sorm`, `-s`: Use the second-order reliability method (SORM) instead of FORM, in both calibration (Inverse SORM) and design optimization
 
 ### General Options
 
@@ -35,10 +35,12 @@ brinkpy design default
 brinkpy design default --use-sorm
 ```
 
-### Using Custom Profile
+### Using a Custom Profile
 ```bash
 brinkpy design myprofile -s
 ```
+
+Replace `myprofile` with the name of a profile you created. See [Profile Management](../profiles/index.md).
 
 !!! tip "Combining short flags"
 	Short flags can be merged into a single argument. For example:
@@ -49,7 +51,7 @@ brinkpy design myprofile -s
 	```bash
 	brinkpy design default -so
 	```
-	Both forms are valid. The expanded form is easier to read; the combined form is faster to type.
+	Both forms are valid. The expanded form is easier to read, and the combined form is faster to type.
 
 ## Design Problem Requirements
 

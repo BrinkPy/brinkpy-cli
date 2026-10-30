@@ -8,7 +8,7 @@ This section covers problem definition for the `design` command. Design problems
 ## When To Use Which Design Type
 
 - Use Inverse FORM when code calibration, load/resistance factor calibration, or characteristic-value back-calculation is the goal.
-- Use objective optimization when cost/weight/performance minimization is the goal and reliability is one of the constraints.
+- Use objective optimization when the goal is to minimize cost, weight, or another performance metric and reliability is one of the constraints.
 
 ## Design Documentation Layout
 
