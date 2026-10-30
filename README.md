@@ -30,7 +30,7 @@ brinkpy --help
 brinkpy examples copy
 
 # Run an analysis with the default profile
-brinkpy analyze default --include-sorm --plot-rfad
+brinkpy analyze
 ```
 
 ## Profile Management

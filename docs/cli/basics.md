@@ -55,7 +55,7 @@ brinkpy analyze default --include-sorm --plot-rfad
 5. Run a first analysis and select one of the example problems from the file picker:
 
     ```bash
-    brinkpy analyze default --include-sorm --plot-rfad
+    brinkpy analyze
     ```
 
     The first time you run an analysis, Brinkpy asks you to sign in through your browser.

@@ -73,7 +73,7 @@ If you are new to terminal-based tools, start with [CLI Basics for Brinkpy Users
 4. Run an analysis with the default profile:
 
     ```bash
-    brinkpy analyze default --include-sorm --plot-rfad
+    brinkpy analyze
     ```
 
 ## Execution Model
