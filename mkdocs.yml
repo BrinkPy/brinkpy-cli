@@ -41,7 +41,7 @@ nav:
   - Home: index.md
   - Packaged Examples: examples.md
   - CLI Commands:
-    - CLI Basics for Brinkpy Users: cli/basics.md
+    - CLI Basics for Brinkpy Users: cli/index.md
     - Command Overview: cli/command-overview.md
     - Analyze: cli/analyze.md
     - Design: cli/design.md

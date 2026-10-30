@@ -6,7 +6,7 @@ The examples are meant to be opened and modified. Use them as templates for your
 
 ## Copying Examples to Your Project Folder
 
-First, copy the packaged example problems into your project folder (see [CLI Basics](cli/basics.md) if you have not set one up yet):
+First, copy the packaged example problems into your project folder (see [CLI Basics](cli/index.md) if you have not set one up yet):
 
 ```bash
 brinkpy examples copy

@@ -1,21 +1,25 @@
-# Profile Configuration Reference
+# Profile Options Reference
 
 This page provides a complete reference for all options available in YAML profile files. Profiles control configuration for analysis, design, and simulation runs, including plotting options and reporting settings.
 
 ## Profile Structure
 
-A profile YAML file contains four main sections:
+A profile YAML file starts with two identifying fields, followed by four option sections:
 
-- reporting_options: Report generation settings
-- rfad_plot_options: Reliability-based Failure Assessment Diagram settings
-- lsf_plot_options: Limit State Function plot settings
-- reliability_options: Reliability analysis, SORM, Monte Carlo, Importance Sampling, and optimization settings
+- `name`: The profile name
+- `description`: A short description of the profile
+- `reporting_options`: Report generation settings
+- `rfad_plot_options`: Reliability-based failure assessment diagram (RFAD) settings
+- `lsf_plot_options`: Limit state function (LSF) plot settings
+- `reliability_options`: Reliability analysis, SORM, Monte Carlo, importance sampling, and optimization settings
 
 ---
 
 ## Reporting Options
 
 Options for saving analysis results and visualizations.
+
+Used by: all commands. See [Result Files](../cli/results-files.md) for what each file contains.
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
@@ -35,13 +39,15 @@ reporting_options:
 
 ## RFAD Plot Options
 
-Options for Reliability-based Failure Assessment Diagram (RFAD) visualization.
+Options for reliability-based failure assessment diagram (RFAD) visualization.
+
+Used by: `analyze --plot-rfad`.
 
 | Option | Type | Default | Range/Values | Description |
 |--------|------|---------|--------------|-------------|
 | `n_x_points` | int | `30` | [5, 60] | Number of grid points along the first variable axis |
 | `n_y_points` | int | `29` | [5, 60] | Number of grid points along the second variable axis |
-| `plot_beta` | bool | `true` | - | Whether to plot the safety index (reliability index beta) contours |
+| `plot_beta` | bool | `true` | - | Whether to plot the reliability index (β) contours |
 | `plot_alphas` | bool | `true` | - | Whether to plot alpha values (normalized sensitivity factors) for each variable |
 | `plot_base_point` | bool | `true` | - | Whether to plot the base point (mean of input variables) on the diagram |
 | `with_labels` | bool | `true` | - | Whether to add text labels to the base point on the diagram |
@@ -69,7 +75,9 @@ rfad_plot_options:
 
 ## LSF Plot Options
 
-Options for Limit State Function (LSF) 3D visualization.
+Options for limit state function (LSF) 3D visualization.
+
+Used by: `analyze --plot-lsf` and `simulate --plot-lsf`.
 
 | Option | Type | Default | Range/Values | Description |
 |--------|------|---------|--------------|-------------|
@@ -107,6 +115,8 @@ Options for reliability calculations and related numerical settings. This sectio
 
 These settings apply to both FORM and Inverse FORM.
 
+Used by: `analyze`, `design`, and `simulate` when FORM runs.
+
 !!! info "Optimization algorithm"
     Brinkpy CLI does not use the traditional Hasofer-Lind Rackwitz-Fiessler (HL-RF) algorithm found in many reliability textbooks and commercial tools. Instead, FORM and Inverse FORM rely on [`scipy.optimize.minimize`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html) as the optimizer, using the `method` parameter set to `"trust-constr"` for smooth limit-state functions and `"COBYQA"` for non-smooth ones. This provides access to the full scipy minimizer feature set, including variable bounds and general constraints, which the classical HL-RF cannot handle.
 
@@ -119,6 +129,8 @@ These settings apply to both FORM and Inverse FORM.
 | `form_seed` | int or null | `null` | - | Random seed for FORM/Inverse FORM random starts |
 
 ### Design Optimization Settings
+
+Used by: `design` when the problem defines an objective function.
 
 | Option | Type | Default | Range | Description |
 |--------|------|---------|-------|-------------|
@@ -137,6 +149,8 @@ These settings apply to both FORM and Inverse FORM.
 | `qn_epsilon` | float | `1e-8` | [1e-8, 1e-2] | Tolerance used by the quasi-Newton SR1 (Symmetric Rank 1) update when `sor_fit_method` is set to `SR1` |
 
 ### SORM Settings
+
+Used by: `analyze --include-sorm`, `simulate --include-sorm`, and `design --use-sorm`.
 
 | Option | Type | Default | Values | Description |
 |--------|------|---------|--------|-------------|
@@ -189,6 +203,8 @@ Use these references as starting points for method details and derivation nuance
 
 ### IFFT Settings (for IFFT-based SORM)
 
+Used by: SORM runs with `sor_method: "IFFT"`.
+
 | Option | Type | Default | Range | Description |
 |--------|------|---------|-------|-------------|
 | `ifft_std_domain` | float | `16.0` | [2, 24] | Standard deviations covered when computing IFFT of characteristic functions |
@@ -197,6 +213,8 @@ Use these references as starting points for method details and derivation nuance
 
 ### SOSPA Settings (for SOSPA-based SORM)
 
+Used by: SORM runs with `sor_method: "SOSPA_L"` or `"SOSPA_H"`.
+
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `plot_sospa_funcs` | bool | `true` | Generate diagnostic plots for SOSPA characteristic functions and derivatives |
@@ -204,6 +222,8 @@ Use these references as starting points for method details and derivation nuance
 ### Derivative Checking
 
 These options validate user-provided derivatives against numerical finite differences.
+
+Used by: any run where the problem file provides analytic derivatives.
 
 | Option | Type | Default | Values | Description |
 |--------|------|---------|--------|-------------|
@@ -220,34 +240,40 @@ These options validate user-provided derivatives against numerical finite differ
 
 ### Monte Carlo Settings
 
+Used by: `analyze --include-mc` and `simulate`.
+
 | Option | Type | Default | Range | Description |
 |--------|------|---------|-------|-------------|
 | `mc_n` | float or null | `null` | [1e3, 1e8] or `null` (auto) | Monte Carlo sample size (null means automatic) |
-| `mc_max_cv` | float | `0.05` | [0.01, 1.0] | If `mc_n` is `null`, MC runs in cycles until the estimated failure-probability CV is <= `mc_max_cv` |
-| `mc_seed` | int or null | `null` | - | Random seed for Monte Carlo simulations; set a value for repeatable results, or leave as `null` to allow small run-to-run differences |
-| `mc_remove_oob` | bool | `true` | - | Remove out-of-bounds samples during MC simulation (bounds or constraint violations) |
+| `mc_max_cv` | float | `0.05` | [0.01, 1.0] | If `mc_n` is `null`, Monte Carlo runs in cycles until the coefficient of variation (CV) of the estimated failure probability is <= `mc_max_cv` |
+| `mc_seed` | int or null | `null` | - | Random seed for Monte Carlo simulations. Set a value for repeatable results, or leave as `null` to allow small run-to-run differences |
+| `mc_remove_oob` | bool | `true` | - | Remove out-of-bounds samples during Monte Carlo simulation (bounds or constraint violations) |
 
 ### Importance Sampling Settings
 
+Used by: `analyze --mc-with-is` and `simulate --mc-with-is`.
+
 | Option | Type | Default | Values/Range | Description |
 |--------|------|---------|--------------|-------------|
-| `is_method` | str | `"kde"` | `"kde"`, `"mixture"`, `"mcmc"`, `"mpp_normal"` | Importance sampling proposal method |
+| `is_method` | str | `"kde"` | `"kde"`, `"mixture"`, `"mcmc"`, `"mpp_normal"` | Importance sampling proposal method: kernel density estimation (`kde`), Gaussian mixture (`mixture`), Markov chain Monte Carlo (`mcmc`), or a normal distribution centered at the most probable point (`mpp_normal`) |
 | `is_kde_bandwidth` | str or float | `"scott"` | `"scott"`, `"silverman"` or positive float | Bandwidth selection method for KDE or numeric value |
-| `is_mixture_components` | int | `6` | [1, 16] | Number of mixture components for mixture IS methods |
-| `is_mixture_cov_type` | str | `"full"` | `"full"`, `"tied"`, `"diag"`, `"spherical"` | Covariance type for mixture IS methods |
-| `is_fit_samples` | int | `2000` | [100, 100000] | Number of samples to collect for fitting the proposal distribution (for KDE and mixture IS) |
+| `is_mixture_components` | int | `6` | [1, 16] | Number of mixture components for mixture importance sampling methods |
+| `is_mixture_cov_type` | str | `"full"` | `"full"`, `"tied"`, `"diag"`, `"spherical"` | Covariance type for mixture importance sampling methods |
+| `is_fit_samples` | int | `2000` | [100, 100000] | Number of samples to collect for fitting the proposal distribution (for KDE and mixture importance sampling) |
 
 ### MCMC Importance Sampling Settings
 
+Used by: importance sampling runs with `is_method: "mcmc"`.
+
 | Option | Type | Default | Range | Description |
 |--------|------|---------|-------|-------------|
-| `is_mcmc_chains` | int | `5` | [1, 100] | Number of parallel Metropolis chains to run during MCMC proposal fitting; a practical starting point is about 2 times the number of stochastic variables |
+| `is_mcmc_chains` | int | `5` | [1, 100] | Number of parallel Metropolis chains to run during MCMC proposal fitting. A practical starting point is about 2 times the number of stochastic variables |
 | `is_mcmc_chain_length` | int | `500` | [100, 10000] | Length of each MCMC chain during proposal fitting |
 | `is_mcmc_thinning` | int | `3` | [1, 100] | Number of samples skipped between retained samples in each MCMC chain during proposal fitting |
 | `is_mcmc_burnin` | int | `200` | [100, 1000] | Number of samples to discard as burn-in during MCMC proposal fitting |
 | `is_mcmc_fit_method` | str | `"kde"` | `"kde"`, `"mixture"` | Method used to fit the MCMC proposal distribution |
 
-#### IS References
+#### Importance Sampling References
 
 Use these references as starting points for method details and implementation background. Keep in mind that explanations on this page are intentionally brief and implementation-focused.
 

@@ -43,7 +43,7 @@ A CLI (command-line interface) is a way to run tools by typing commands in a ter
 
 Brinkpy CLI uses this workflow because it reduces custom scripting for routine workflows, supports reproducible runs, and enables easy automation.
 
-If you are new to terminal-based tools, start with [CLI Basics for Brinkpy Users](cli/basics.md) for a short orientation and first-run checklist.
+If you are new to terminal-based tools, start with [CLI Basics for Brinkpy Users](cli/index.md) for a short orientation and first-run checklist.
 
 ## Requirements
 
