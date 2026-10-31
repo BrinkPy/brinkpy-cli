@@ -1,0 +1,4 @@
+# Cloudflare Pages redirects for docs pages that moved.
+/cli/basics/                /cli/                       301
+/software-references-cli/   /software-references/cli/   301
+/software-references-api/   /software-references/api/   301
