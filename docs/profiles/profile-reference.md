@@ -268,9 +268,9 @@ Used by: importance sampling runs with `is_method: "mcmc"`.
 | Option | Type | Default | Range | Description |
 |--------|------|---------|-------|-------------|
 | `is_mcmc_chains` | int | `5` | [1, 100] | Number of parallel Metropolis chains to run during MCMC proposal fitting. A practical starting point is about 2 times the number of stochastic variables |
-| `is_mcmc_chain_length` | int | `500` | [100, 10000] | Length of each MCMC chain during proposal fitting |
-| `is_mcmc_thinning` | int | `3` | [1, 100] | Number of samples skipped between retained samples in each MCMC chain during proposal fitting |
-| `is_mcmc_burnin` | int | `200` | [100, 1000] | Number of samples to discard as burn-in during MCMC proposal fitting |
+| `is_mcmc_chain_length` | int | `500` | [100, 10000] | Number of samples kept from each MCMC chain after burn-in and thinning. Each chain runs `is_mcmc_burnin + is_mcmc_chain_length × is_mcmc_thinning` steps |
+| `is_mcmc_thinning` | int | `3` | [1, 100] | Thinning interval: after burn-in, every `is_mcmc_thinning`-th step of each chain is kept. `1` keeps every step |
+| `is_mcmc_burnin` | int | `200` | [100, 1000] | Number of initial steps discarded from each MCMC chain as burn-in |
 | `is_mcmc_fit_method` | str | `"kde"` | `"kde"`, `"mixture"` | Method used to fit the MCMC proposal distribution |
 
 #### Importance Sampling References
@@ -294,6 +294,9 @@ Use these references as starting points for method details and implementation ba
 **`is_method: "mpp_normal"`**
 
 - Centers the importance sampling proposal distribution on the Most Probable Point (MPP), also called the design point or failure point. The MPP is the point on the limit-state surface closest to the origin in standard normal space, found by FORM. A Gaussian proposal centered there concentrates samples near the dominant failure region. See the FORM method and the references listed on [Recommended Texts and References](../problem-authoring/recommended-texts.md).
+
+!!! warning "Limitation: one most probable point"
+    FORM finds a single MPP, so `mpp_normal` covers only the failure region around it. When the failure region has several separate parts, such as in series systems built with `numpy.minimum()`, the proposal distribution misses the other parts and the probability of failure is underestimated. For the series problem `AU2Problem`, `mpp_normal` gave β = 4.839, while `kde`, `mixture`, and `mcmc` all gave β ≈ 4.78. It also needed 1,264,000 samples to reach the target coefficient of variation, compared with 6,000 to 8,000 for the other methods. For such problems, use `kde`, `mixture`, or `mcmc`.
 
 **Example:**
 

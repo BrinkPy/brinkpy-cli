@@ -64,6 +64,7 @@ nav:
     - Simulate:
       - Classic Monte Carlo: problem-authoring/simulate/classic-monte-carlo.md
       - Importance Sampling: problem-authoring/simulate/importance-sampling.md
+      - MCMC Importance Sampling: problem-authoring/simulate/importance-sampling-mcmc.md
     - Recommended Texts and References: problem-authoring/recommended-texts.md
   - Software References:
     - Overview: software-references/index.md

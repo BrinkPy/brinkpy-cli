@@ -56,7 +56,7 @@ Every example works with `analyze` and `simulate`. Examples marked in the **Desi
 | `AT625Problem` | Ang and Tang (1990), Vol. II, Problem 6.25 | ✓ | [Inverse FORM](problem-authoring/design/inverse-form.md) |
 | `AT68Problem` | Ang and Tang (1990), Vol. II, Problem 6.8 | | |
 | `AU1dProblem` | [Au and Beck (1999)](https://people.duke.edu/~hpgavin/risk/Au-1999.pdf), Example 1 | | |
-| `AU2Problem` | [Au and Beck (1999)](https://people.duke.edu/~hpgavin/risk/Au-1999.pdf), Example 2 | | [Importance Sampling](problem-authoring/simulate/importance-sampling.md) |
+| `AU2Problem` | [Au and Beck (1999)](https://people.duke.edu/~hpgavin/risk/Au-1999.pdf), Example 2 | | [Importance Sampling](problem-authoring/simulate/importance-sampling.md), [MCMC Importance Sampling](problem-authoring/simulate/importance-sampling-mcmc.md) |
 | `AU3Problem` | [Au and Beck (1999)](https://people.duke.edu/~hpgavin/risk/Au-1999.pdf), Example 3 | | |
 | `Chan1Problem` | [Chan and Low (2012)](https://onlinelibrary.wiley.com/doi/full/10.1002/nag.1057), Problem 1 | | |
 | `Chan2Problem` | [Chan and Low (2012)](https://onlinelibrary.wiley.com/doi/full/10.1002/nag.1057), Problem 2 | | [Classic Monte Carlo](problem-authoring/simulate/classic-monte-carlo.md) |

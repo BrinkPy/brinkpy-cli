@@ -470,3 +470,4 @@ When a module is rejected, the API returns a validation error describing the dis
 - [Objective Optimization](design/optimization.md): objective optimization example and checklist.
 - [Classic Monte Carlo](simulate/classic-monte-carlo.md): simulation example using plain Monte Carlo (Chan2).
 - [Importance Sampling](simulate/importance-sampling.md): simulation example using importance sampling (AU2).
+- [MCMC Importance Sampling](simulate/importance-sampling-mcmc.md): the same problem with a Markov chain Monte Carlo (MCMC) proposal distribution (AU2).

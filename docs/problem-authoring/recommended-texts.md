@@ -39,6 +39,7 @@ These references are cited in worked examples, method notes, and profile options
 - Cotter, S. L., Roberts, G. O., Stuart, A. M., and White, D. (2013). MCMC methods for functions: Modifying old algorithms to make them faster. *Statistical Science*, 28(3), 424–446. [→](https://doi.org/10.1214/13-STS421)
 - Kim, T., and Song, J. (2018). Generalized reliability importance measure (GRIM) using Gaussian mixture. *Reliability Engineering & System Safety*, 173, 105–115. [→](https://doi.org/10.1016/j.ress.2018.01.005)
 - Roberts, G. O., and Rosenthal, J. S. (2007). Coupling and ergodicity of adaptive Markov chain Monte Carlo algorithms. *Journal of Applied Probability*, 44(2), 458–475. [→](https://www.jstor.org/stable/27595854)
+- Vehtari, A., Gelman, A., Simpson, D., Carpenter, B., and Bürkner, P.-C. (2021). Rank-normalization, folding, and localization: An improved R̂ for assessing convergence of MCMC (with discussion). *Bayesian Analysis*, 16(2), 667–718. [→](https://doi.org/10.1214/20-BA1221)
 - Xiao, S., and Nowak, W. (2022). Reliability sensitivity analysis based on a two-stage Markov chain Monte Carlo simulation. *Aerospace Science and Technology*, 130, 107938. [→](https://doi.org/10.1016/j.ast.2022.107938)
 
 ### Correlation Matrix Conditioning

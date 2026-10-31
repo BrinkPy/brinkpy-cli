@@ -35,7 +35,7 @@ Brinkpy CLI provides five core reliability workflows:
 - **RBDO**: Optimization under reliability constraints.  
     → [Design Command](cli/design.md) | [Optimization Examples](problem-authoring/design/optimization.md)
 - **Monte Carlo + Importance Sampling**: Distribution-level failure-probability validation and tail exploration.  
-    → [Simulate Command](cli/simulate.md) | [Classic Monte Carlo](problem-authoring/simulate/classic-monte-carlo.md) | [Importance Sampling](problem-authoring/simulate/importance-sampling.md)
+    → [Simulate Command](cli/simulate.md) | [Classic Monte Carlo](problem-authoring/simulate/classic-monte-carlo.md) | [Importance Sampling](problem-authoring/simulate/importance-sampling.md) | [MCMC Importance Sampling](problem-authoring/simulate/importance-sampling-mcmc.md)
 
 ## New to CLI?
 
