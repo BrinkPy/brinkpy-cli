@@ -45,17 +45,23 @@ At this time, external code contributions are not accepted directly. If you find
 
 ## Local Development
 
-To set up a development environment:
+To recreate the development environment with the exact pinned versions:
 
 ```zsh
 # Create and activate a virtual environment
 python -m venv venv
 source venv/bin/activate
 
-# Install in editable mode with test dependencies
-pip install -e .
-pip install pytest unittest
+# Install the pinned packages, then Brinkpy in editable mode
+pip install -r requirements.txt
+pip install -e . --no-deps
 
 # Run tests
 python -m unittest discover tests -p 'test_*.py' -v
+```
+
+Dependencies are defined in `pyproject.toml`: `dependencies` for what the CLI needs at runtime, and the `dev` extra for build, release, and docs tools. After changing them, regenerate `requirements.txt`:
+
+```zsh
+scripts/update_requirements.sh python3.14
 ```

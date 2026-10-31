@@ -9,7 +9,7 @@ from pathlib import Path
 
 import typer
 import yaml
-from pydantic_core import ValidationError
+from pydantic import ValidationError
 from rich.columns import Columns
 from rich.console import Console
 from rich.panel import Panel
