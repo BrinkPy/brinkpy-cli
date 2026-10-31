@@ -91,6 +91,19 @@ def cleanup_old_results(base_results_path: Path, days: int = 30) -> None:
         console.print(f"{ICON_INFO} No old results to clean up (keeping last {days} days)")
 
 
+def get_api_url() -> str:
+    """
+    Return the base URL of the Brinkpy API.
+
+    Set BRINKPY_API_URL (for example in .env.local) to use a local API
+    during development.
+
+    Returns:
+        str: API base URL without a trailing slash.
+    """
+    return os.getenv("BRINKPY_API_URL", "https://brinkpy.up.railway.app").rstrip("/")
+
+
 def setup_paths():
     """
     Set up the paths for running Brinkpy application.
@@ -98,8 +111,7 @@ def setup_paths():
     Returns:
         tuple: (url, results_path, problems_path)
     """
-    url = os.getenv("AUTH0_AUDIENCE", "https://brinkpy.up.railway.app")
-    # url = "http://localhost:8080"
+    url = get_api_url()
 
     # Create the directory to store the results if it doesn't exist
     results_path = get_results_dir().resolve()

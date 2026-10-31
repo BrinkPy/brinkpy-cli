@@ -44,3 +44,5 @@ results/
 /brinkpy/examples/problems/__pycache__/
 problems2/
 profiles/*.yaml
+
+.env.local

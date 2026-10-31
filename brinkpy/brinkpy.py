@@ -11,8 +11,13 @@ Usage:
     python -m brinkpy --help
 """
 
-from dotenv import load_dotenv
+from dotenv import find_dotenv, load_dotenv
 
+# .env.local holds local-only overrides (it is not committed) and is loaded
+# first, so its values take precedence over .env.
+local_env = find_dotenv(".env.local")
+if local_env:
+    load_dotenv(local_env)
 load_dotenv()
 import os
 import subprocess
@@ -28,7 +33,7 @@ from rich.table import Table
 from typing_extensions import Annotated
 
 from brinkpy.config.data_models import IsMethodEnum, RunTypeEnum
-from brinkpy.utils.api_utils import run_app
+from brinkpy.utils.api_utils import get_api_url, run_app
 from brinkpy.utils.auth_cli import get_token, get_user_id
 from brinkpy.utils.icons import ICON_ASK, ICON_ERR, ICON_INFO, ICON_OK, ICON_RUN, ICON_WARN
 from brinkpy.utils.path_helpers import (
@@ -782,7 +787,7 @@ def subscribe(
         console.print()
         raise typer.Exit(code=1)
 
-    api_base = os.getenv("AUTH0_AUDIENCE", "https://brinkpy.up.railway.app").rstrip("/")
+    api_base = get_api_url()
     endpoint = f"{api_base}/billing/checkout-session"
 
     try:

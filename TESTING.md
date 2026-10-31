@@ -65,3 +65,13 @@ Dependencies are defined in `pyproject.toml`: `dependencies` for what the CLI ne
 ```zsh
 scripts/update_requirements.sh python3.14
 ```
+
+### Testing Against a Local API
+
+The CLI sends requests to `https://brinkpy.up.railway.app` unless `BRINKPY_API_URL` is set. To use a local API, create a `.env.local` file in the project folder. Git ignores this file, so the local address is never committed:
+
+```
+BRINKPY_API_URL=http://localhost:8080
+```
+
+Comment out the line or delete the file to return to the production API.
