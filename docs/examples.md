@@ -62,10 +62,10 @@ Every example works with `analyze` and `simulate`. Examples marked in the **Desi
 | `Chan2Problem` | [Chan and Low (2012)](https://onlinelibrary.wiley.com/doi/full/10.1002/nag.1057), Problem 2 | | [Classic Monte Carlo](problem-authoring/simulate/classic-monte-carlo.md) |
 | `Chan3Problem` | [Chan and Low (2012)](https://onlinelibrary.wiley.com/doi/full/10.1002/nag.1057), Problem 3 | | [SORM + Monte Carlo](problem-authoring/analyze/sorm-monte-carlo.md) |
 | `Dai1Problem` | [Dai et al. (2014)](https://www.sciencedirect.com/science/article/pii/S0167473014000162), Example 1 | | |
-| `Ji1Problem` | [Ji et al. (2024)](https://onlinelibrary.wiley.com/doi/10.1002/nag.3524), Problem 1 | ✓ | |
-| `Ji2Problem` | [Ji et al. (2024)](https://onlinelibrary.wiley.com/doi/10.1002/nag.3524), Problem 2 | ✓ | |
+| `Ji1Problem` | [Ji et al. (2023)](https://onlinelibrary.wiley.com/doi/10.1002/nag.3524), Problem 1 | ✓ | |
+| `Ji2Problem` | [Ji et al. (2023)](https://onlinelibrary.wiley.com/doi/10.1002/nag.3524), Problem 2 | ✓ | |
 | `PipecorrProblem` | [Netto et al. (2005)](https://www.sciencedirect.com/science/article/pii/S0143974X05000453) | ✓ | |
-| `Sorensen81Problem` | [Sorensen (2004)](https://filelist.tudelft.nl/TBM/Over%20faculteit/Afdelingen/Values%2C%20Technology%20and%20Innovation/People/Full%20Professors/Pieter%20van%20Gelder/Citations/citatie215.pdf), Chapter 8, Problem 1 | ✓ | [Optimization](problem-authoring/design/optimization.md) |
+| `Sorensen81Problem` | [Sørensen (2004)](https://filelist.tudelft.nl/TBM/Over%20faculteit/Afdelingen/Values%2C%20Technology%20and%20Innovation/People/Full%20Professors/Pieter%20van%20Gelder/Citations/citatie215.pdf), Chapter 8, Problem 1 | ✓ | [Optimization](problem-authoring/design/optimization.md) |
 
 Each example file also lists its source at the top.
 

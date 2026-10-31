@@ -15,9 +15,7 @@ If you need to cite a dependency, use the preferred references below:
 - Typer: Ramírez, S. *Typer* (software). Citation metadata: <https://github.com/fastapi/typer/blob/master/CITATION.cff>
 - Pydantic: Colvin, S., et al. *Pydantic Validation* (software). Citation metadata: <https://github.com/pydantic/pydantic/blob/main/CITATION.cff>
 
-For MkDocs Material, Requests, and Rich, the project pages are listed below.
-
-For the remaining packages, the project pages are listed below.
+For the remaining packages, see the project pages below.
 
 ## Main CLI Libraries (Top-Level)
 
@@ -27,15 +25,18 @@ For the remaining packages, the project pages are listed below.
 - `numpy`: https://numpy.org/citing-numpy/
 - `matplotlib`: https://matplotlib.org/stable/users/project/citing.html
 - `pydantic`: https://docs.pydantic.dev/
+- `pydantic-core`: https://pypi.org/project/pydantic-core/
 - `typing_extensions`: https://pypi.org/project/typing_extensions/
 - `filedialpy`: https://pypi.org/project/filedialpy/
 - `platformdirs`: https://pypi.org/project/platformdirs/
 - `python-dotenv`: https://pypi.org/project/python-dotenv/
+- `PyJWT`: https://pyjwt.readthedocs.io/
 - `pyyaml`: https://pyyaml.org/
 
-## Documentation Tooling (Main)
+## Tools Used to Build This Documentation
+
+These packages build the Brinkpy documentation website. They are not installed with Brinkpy.
 
 - `mkdocs`: https://www.mkdocs.org/
 - `mkdocs-material`: https://squidfunk.github.io/mkdocs-material/
-
-
+- `pymdown-extensions`: https://facelessuser.github.io/pymdown-extensions/

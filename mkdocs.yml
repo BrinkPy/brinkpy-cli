@@ -66,9 +66,9 @@ nav:
       - Importance Sampling: problem-authoring/simulate/importance-sampling.md
     - Recommended Texts and References: problem-authoring/recommended-texts.md
   - Software References:
-    - Overview: software-references.md
-    - CLI Dependencies and Citations: software-references-cli.md
-    - API Library Credits: software-references-api.md
+    - Overview: software-references/index.md
+    - CLI Dependencies and Citations: software-references/cli.md
+    - API Library Credits: software-references/api.md
   - User Authentication: auth.md
 markdown_extensions:
   - admonition

@@ -128,7 +128,7 @@ Include the exact Brinkpy version used in your work. For version-specific DOI ci
 
 ## Software References
 
-For third-party Python library citation guidance, see [Software and Library References](software-references.md). That section separates:
+For third-party Python library citation guidance, see [Software and Library References](software-references/index.md). That section separates:
 
 - CLI dependencies users install in their environment
 - API dependencies documented for attribution/credit only
