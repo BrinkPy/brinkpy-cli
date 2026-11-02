@@ -245,8 +245,7 @@ Rules:
 - If defined, `lb`, `ub`, and `truncated` must each have length `n`.
 - You can set individual bounds to `-np.inf` and `np.inf` to indicate no lower/upper bound for that variable.
 - If `lb`, `ub`, and/or `truncated` are omitted, defaults are used: no bounds and `truncated=False` for all variables.
-- In FORM, Inverse FORM, and `design` runs, `lb`/`ub` are applied as constraints in the underlying minimization problems.
-- If `truncated[i]` is `True`, the corresponding variable's distribution is truncated to `[lb[i], ub[i]]`.
+- Bounds and truncation have different effects. See [Bounds and Truncation](#bounds-and-truncation).
 - `constraints`, when provided, follows a dictionary format similar to SciPy `optimize.minimize` constraints (Brinkpy uses SciPy optimization internally).
 - Constraint callables are defined on the stochastic-variable vector and may optionally include Jacobians.
 
@@ -254,6 +253,28 @@ Example definition reference:
 
 - `problems/PipecorrProblem.py` shows `constraints` entries under `StochasticVariables` (for example `d_over_t` and `l_over_Do` bounds).
 - This is a key-format reference only; it is not used as a worked run in the `analyze`, `design`, or `simulate` documentation pages.
+
+### Bounds and Truncation
+
+Setting `lb` and `ub` does not by itself change a variable's distribution. Whether it does depends on `truncated`:
+
+| | `truncated[i] = False` (default) | `truncated[i] = True` |
+|---|---|---|
+| Distribution | Unchanged. Values outside `[lb[i], ub[i]]` keep their probability. | Replaced by the truncated distribution: values outside `[lb[i], ub[i]]` have zero probability, and the density inside is scaled up so the total probability is still 1. |
+| FORM, Inverse FORM, and `design` | The search for the most probable point (MPP) is restricted to `[lb[i], ub[i]]`. The bounds are passed as constraints to SciPy's `minimize`. | The bounds are still passed as constraints, and the search uses the truncated distribution. |
+| Monte Carlo | Samples are drawn from the full distribution. Samples outside the bounds are reported in `%_oob` and removed when the profile option `mc_remove_oob` is `true`. | Samples are drawn from the truncated distribution, so none fall outside the bounds. |
+
+SORM uses the MPP found by FORM, so the bounds affect SORM results in the same way.
+
+Bounds without truncation are useful to keep the search for the MPP away from values where the limit state function is not defined, such as negative values inside a square root or logarithm, without changing the probability model.
+
+!!! warning "When the MPP lies on a bound"
+    With `truncated[i] = False`, the bounds restrict only where FORM and Inverse FORM search. If the MPP ends up on a bound, the result describes the constrained search, not the full distribution, so the reliability index (from FORM or SORM) or the design point (from Inverse FORM) may not reflect the actual probability of failure. Brinkpy reports this in a note that lists each active bound, whether it is the lower or upper bound, and about how much it affects the result. The same values appear in the `bnds_mult` column of the results (see [Results Tables Reference](results-tables.md#stochastic-variable-inputs-and-form-failure-point-outputs)). In that case, decide whether values outside the bounds are physically possible:
+
+    - If they are not, set `truncated[i] = True` so the distribution itself excludes them.
+    - If they are, widen or remove the bounds.
+
+For distributions that require `lb` and `ub` (beta, triangular, and uniform when defined by its bounds), the bounds are the limits of the distribution itself, so truncation does not change it.
 
 ## Supported Statistical Distributions
 

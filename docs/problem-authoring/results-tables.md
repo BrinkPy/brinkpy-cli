@@ -39,7 +39,7 @@ The example pages omit some columns to keep their tables readable: `lb`, `ub`, a
 | `u` | Failure point in (uncorrelated) standard normal space |
 | `alpha` | Direction cosines of the failure point (the alpha vector) |
 | `importance` | Importance factors: the alpha vector transformed to real space and normalized to unit length (the γ vector in Equation 10 of Kim and Song, 2018, [→](https://doi.org/10.1016/j.ress.2018.01.005)) |
-| `bnds_mult` | Lagrange multiplier for the variable's bounds in the FORM minimization. A value other than zero means the bound is active. |
+| `bnds_mult` | For an active bound, about how much the reliability index changes when the bound moves by one standard deviation: the Lagrange multiplier of the bound divided by 2β, since FORM minimizes β². Negative for an active lower bound, positive for an active upper bound. Empty when the bound is inactive (the value is below `1e-3`), when the variable has no bounds other than the natural limits of its distribution, or when FORM does not use the `trust-constr` optimizer (for example, when `LSFisSmooth` is `False`). |
 
 ### User-Defined Correlation Inputs
 
@@ -172,6 +172,14 @@ Brinkpy reports these values but does not enforce a limit. If `r_hat` is too hig
 
 !!! note "Partial factor convention"
     Brinkpy computes every partial factor as the design point value divided by the characteristic value, for loads and resistances alike. Some textbooks (for example, Sørensen) divide the characteristic value by the design value for resistance variables, so a resistance factor reported by Brinkpy is the reciprocal of the textbook value.
+
+### Inverse FORM Stochastic Variables
+
+The Excel file also includes a table of the stochastic variables and the Inverse FORM design point. It has the same columns as [Stochastic Variable Inputs and FORM Failure Point Outputs](#stochastic-variable-inputs-and-form-failure-point-outputs), plus the correlation matrix, except for the meaning of `bnds_mult`:
+
+| Column | Meaning |
+|---|---|
+| `bnds_mult` | For an active bound, about how much the limit state function at the design point changes when the bound moves by one standard deviation, expressed in standard deviations. Inverse FORM minimizes the limit state function, so its Lagrange multipliers have the units of the limit state function. Brinkpy divides them by the norm of the limit state function's gradient in standard normal space, which puts them on the same scale as the reliability index. The sign and the cases where the value is empty are the same as in FORM. |
 
 ### Load and Resistance Partial Factors
 
