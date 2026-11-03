@@ -3,11 +3,11 @@
 Run forward reliability analysis to estimate the failure probability, the reliability index (β), and the most probable point (MPP). The First-Order Reliability Method (FORM) always runs. The Second-Order Reliability Method (SORM) and Monte Carlo simulation are optional.
 
 !!! info "Before your first run"
-	If you want to test this command with packaged sample problems, first run:
+	To try this command with the packaged example problems, first copy them into your project folder:
 	```bash
 	brinkpy examples copy
 	```
-	Then select a problem file from the `problems/` folder in your project folder when the file picker opens.
+	This creates a `problems/` folder in your project folder and copies the example problem files into it. It does not run anything. When you then run `brinkpy analyze`, a file picker opens in the `problems/` folder, where you choose the problem to run. See [Packaged Example Problems](../examples.md).
 
 ## Basic Usage
 

@@ -133,7 +133,7 @@ The tables below are transcribed from the `Results` worksheet in `AU2-15fc9.xlsx
 
 ### Notes Reported by Brinkpy
 
-1. Validation: Stochastic variables definition and limit state function validation required 4 function calls.
+1. Validation: Stochastic variables definition and limit state function validation required 1 function call.
 2. Monte Carlo: Creation of importance sampling proposal distribution required 109,973 calls to the limit state function.
 3. Monte Carlo: Completed 3 cycles with `2.00e+03` samples per cycle.
 4. Monte Carlo: 0.02% of `T1` and 0.10% of `T2` values were not finite (NaN, inf, complex) out of `6.00e+03` samples and were excluded from the Monte Carlo statistics.

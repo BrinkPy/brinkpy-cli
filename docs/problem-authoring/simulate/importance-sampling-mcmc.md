@@ -114,7 +114,7 @@ For what each column means and how to use it, see [MCMC Diagnostics](../results-
 
 ### Notes Reported by Brinkpy
 
-1. Validation: Stochastic variables definition and limit state function validation required 16 function calls.
+1. Validation: Stochastic variables definition and limit state function validation required 1 function call.
 2. Monte Carlo: Creation of importance sampling proposal distribution required 8,660 calls to the limit state function.
 3. Monte Carlo: Completed 3 cycles with `2.00e+03` samples per cycle.
 4. Monte Carlo: Load and resistance histograms are not available since the limit state function does not return load and resistance values.

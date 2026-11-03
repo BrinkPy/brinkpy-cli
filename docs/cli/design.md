@@ -3,11 +3,11 @@
 Run design workflows that support two distinct modes depending on the problem definition: code calibration and partial factor derivation using Inverse FORM or Inverse SORM when no objective function is defined, or reliability-based design optimization (RBDO) when an objective function is defined to minimize cost, weight, or another performance metric while satisfying reliability constraints.
 
 !!! info "Before your first run"
-	If you want to test this command with packaged sample problems, first run:
+	To try this command with the packaged example problems, first copy them into your project folder:
 	```bash
 	brinkpy examples copy
 	```
-	Then select a problem file from the `problems/` folder in your project folder when the file picker opens. Choose an example that supports `design` (see [Available Examples](../examples.md#available-examples)).
+	This creates a `problems/` folder in your project folder and copies the example problem files into it. It does not run anything. When you then run `brinkpy design`, a file picker opens in the `problems/` folder, where you choose the problem to run. Choose an example that supports `design` (see [Available Examples](../examples.md#available-examples)).
 
 ## Basic Usage
 

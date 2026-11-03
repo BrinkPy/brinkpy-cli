@@ -167,8 +167,9 @@ For Inverse FORM, the workbook then repeats the tables below for each design cas
 |---|---|
 | `beta`, `pf` | Distance of the design point from the origin in standard normal space, and the corresponding probability of failure. Inverse FORM constrains this distance to the target, so `beta` equals `target_beta`. It is the reliability index of the design only when `lsf_value` is close to zero. |
 | `lsf_value` | Limit state function value at the design point. Inverse FORM finds the lowest value of the limit state function among all points at the target reliability index, so the sign shows whether the design meets the target. A value close to zero means the design meets the target exactly. A positive value means it exceeds the target, and a negative value means it falls short. |
-| `lsf_count`, `glsf_count`, `hlsf_count`, `beta_count`, `hbeta_count`, `nit`, `min_tries`, `min_method` | Same as in [FORM Results](#form-results) |
 | `bsr_mult` | Lagrange multiplier for the beta squared residual constraint. The optimizer requires the reliability index to match the target by driving the residual `beta^2 - target_beta^2` to zero. |
+
+The table also has the columns `lsf_count`, `glsf_count`, `hlsf_count`, `beta_count`, `hbeta_count`, `nit`, `min_tries`, and `min_method`, with the same meaning as in [FORM Results](#form-results).
 
 ### Design Point Stochastic Variables
 

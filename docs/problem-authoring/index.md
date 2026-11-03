@@ -4,6 +4,14 @@ This section explains how to define a Brinkpy problem module (`*.py`) that can b
 
 For result-folder location and output filename conventions, see [CLI Result Files](../cli/results-files.md).
 
+## How This Section Is Organized
+
+This page describes the problem file format: the top-level keys, the variables, the limit state function, and the plot keys. It uses short snippets from the packaged example problems to illustrate them.
+
+The rest of the section teaches by example. The pages under **Analyze**, **Design**, and **Simulate** each walk through one or two packaged example problems: the problem file, the command that runs it, the result tables and figures, and how to read them. Use them as templates for your own problems. To run the examples yourself, copy them into your project folder with `brinkpy examples copy` (see [Packaged Example Problems](../examples.md)).
+
+The [Results Tables Reference](results-tables.md) explains every column in the result files, and the example pages link to it. The **Design** group also has its own overview and a reference of the `DesignProblem` keys.
+
 ## Minimal File Pattern
 
 A problem module should expose `Problem()` (or `problem()`) and return a dictionary.

@@ -3,11 +3,11 @@
 Run Monte Carlo simulation to estimate the failure probability, including rare events. Importance sampling is optional, and the First-Order and Second-Order Reliability Methods (FORM and SORM) can be included for comparison.
 
 !!! info "Before your first run"
-	If you want to test this command with packaged sample problems, first run:
+	To try this command with the packaged example problems, first copy them into your project folder:
 	```bash
 	brinkpy examples copy
 	```
-	Then select a problem file from the `problems/` folder in your project folder when the file picker opens.
+	This creates a `problems/` folder in your project folder and copies the example problem files into it. It does not run anything. When you then run `brinkpy simulate`, a file picker opens in the `problems/` folder, where you choose the problem to run. See [Packaged Example Problems](../examples.md).
 
 ## Basic Usage
 
