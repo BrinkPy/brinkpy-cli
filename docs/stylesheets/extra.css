@@ -28,17 +28,19 @@
 }
 /* Show a shadow at the left or right edge of a wide table when more columns
    are hidden in that direction, so readers know the table scrolls sideways.
-   The bg-colored covers move with the content ("local") and hide the fixed
-   shadows ("scroll") once the reader reaches that edge, and tables that fit
-   show no shadow at all. The table background must be transparent for the
-   shadows underneath it to show. */
-.md-typeset__scrollwrap {
+   javascripts/table-scroll.js adds the scroll-left and scroll-right classes.
+   The table background must be transparent for the shadows underneath it to
+   show. */
+.md-typeset__scrollwrap.scroll-left {
+  background: radial-gradient(farthest-side at 0 50%, var(--md-default-fg-color--lighter), transparent) left center / 1rem 100% no-repeat;
+}
+.md-typeset__scrollwrap.scroll-right {
+  background: radial-gradient(farthest-side at 100% 50%, var(--md-default-fg-color--lighter), transparent) right center / 1rem 100% no-repeat;
+}
+.md-typeset__scrollwrap.scroll-left.scroll-right {
   background:
-    linear-gradient(to right, var(--md-default-bg-color) 30%, transparent) left center / 3rem 100% no-repeat local,
-    linear-gradient(to left, var(--md-default-bg-color) 30%, transparent) right center / 3rem 100% no-repeat local,
-    radial-gradient(farthest-side at 0 50%, var(--md-default-fg-color--lighter), transparent) left center / 1rem 100% no-repeat scroll,
-    radial-gradient(farthest-side at 100% 50%, var(--md-default-fg-color--lighter), transparent) right center / 1rem 100% no-repeat scroll;
-  background-color: var(--md-default-bg-color);
+    radial-gradient(farthest-side at 0 50%, var(--md-default-fg-color--lighter), transparent) left center / 1rem 100% no-repeat,
+    radial-gradient(farthest-side at 100% 50%, var(--md-default-fg-color--lighter), transparent) right center / 1rem 100% no-repeat;
 }
 .md-typeset__scrollwrap table:not([class]) {
   background-color: transparent;
