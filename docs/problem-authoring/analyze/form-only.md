@@ -14,12 +14,12 @@ Problem module:
 
 Recorded result set:
 
-- `results/2026-03-26/13-48-09/AT610-16541.xlsx`
-- `results/2026-03-26/13-48-09/AT610-16541.json`
-- `results/2026-03-26/13-48-09/AT610-16541.py`
-- `results/2026-03-26/13-48-09/AT610-16541.pickle`
-- `results/2026-03-26/13-48-09/AT610-16541.pdf`
-- `results/2026-03-26/13-48-09/profile-16541.yaml`
+- `results/2026-11-02/14-57-41/AT610-38f0f.xlsx`
+- `results/2026-11-02/14-57-41/AT610-38f0f.json`
+- `results/2026-11-02/14-57-41/AT610-38f0f.py`
+- `results/2026-11-02/14-57-41/AT610-38f0f.pickle`
+- `results/2026-11-02/14-57-41/AT610-38f0f.pdf`
+- `results/2026-11-02/14-57-41/profile-38f0f.yaml`
 
 Profile and run mode from saved profile:
 
@@ -57,29 +57,29 @@ This example uses the `default` profile. FORM behavior can be adjusted in a cust
 
 ## Extracted Results Worksheet Tables
 
-The tables below are transcribed from the `Results` worksheet in `AT610-16541.xlsx`. For the meaning of each column, see [Results Tables Reference](../results-tables.md#form).
+The tables below are transcribed from the `Results` worksheet in `AT610-38f0f.xlsx`. For the meaning of each column, see [Results Tables Reference](../results-tables.md#form).
 
 ### Header Information
 
 | Field | Value |
 |---|---|
 | Problem | `AT610` |
-| Request ID | `a3a7191398bd416abb6a3fff41f16541` |
-| Run time | `00 min 00.33 sec` |
+| Request ID | `0a1b0b712d6b4f84841f94f19b038f0f` |
+| Run time | `00 min 00.08 sec` |
 
 ### FORM Results
 
 | beta | pf | beta_count | hbeta_count | lsf_count | glsf_count | hlsf_count | nit | min_tries | min_method | lsf_mult |
 |---:|---:|---:|---:|---:|---:|---:|---:|---:|---|---:|
-| 2.6644 | 0.0038566 | 5120 | 4952 | 7 | 0 | 0 | 10 | 1 | tr_interior_point | 0.01110 |
+| 2.6644 | 0.0038566 | 6 | 6 | 6 | 6 | 6 | 6 | 1 | equality_constrained_sqp | 0.01110 |
 
 ### Stochastic Variable Inputs and FORM Failure Point Outputs
 
 | var_name | var_type | mean | std | x | u | alpha | importance |
 |---|---|---:|---:|---:|---:|---:|---:|
-| Y | LogNormal | 40 | 5 | 33.7837 | -1.2942 | -0.4857 | -0.4307 |
-| Z | LogNormal | 50 | 2.5 | 47.7543 | -0.4097 | -0.1538 | -0.1728 |
-| M | GumbelMax | 1000 | 200 | 1613.3165 | 2.2926 | 0.8605 | 0.8858 |
+| Y | LogNormal | 40 | 5 | 33.7834 | -1.2943 | -0.4858 | -0.4307 |
+| Z | LogNormal | 50 | 2.5 | 47.7542 | -0.4098 | -0.1538 | -0.1728 |
+| M | GumbelMax | 1000 | 200 | 1613.2985 | 2.2926 | 0.8605 | 0.8858 |
 
 ### User-Defined Correlation Inputs
 
@@ -90,8 +90,9 @@ The tables below are transcribed from the `Results` worksheet in `AT610-16541.xl
 ### Notes Reported by Brinkpy
 
 1. Validation: Stochastic variables definition and limit state function validation required 2 function calls.
-2. Validation: Validation of the limit state function's analytic gradient and hessian required 37 function calls.
-3. FORM: The lagrange multipliers for the bounds of variable(s) `Y`, `Z` and `M` are active (not zero). If they are large relative to Beta (`2.664`), try truncating the statistical distribution for these variables and check if the reliability index changes significantly.
+2. Validation: Validation of the limit state function's analytic gradient and hessian required 25 function calls.
+
+Brinkpy reports no note about active bounds because the problem does not define bounds for any variable. See [Bounds and Truncation](../index.md#bounds-and-truncation).
 
 ## Interpretation Snapshot
 
@@ -101,8 +102,8 @@ The tables below are transcribed from the `Results` worksheet in `AT610-16541.xl
 
 ## Generated Figures
 
-The PDF result file for this run is saved as `results/2026-03-26/13-48-09/AT610-16541.pdf`.
+The PDF result file for this run is saved as `results/2026-11-02/14-57-41/AT610-38f0f.pdf`.
 
 ### Figure 1: Importance Factors
 
-![AT610 FORM importance factors](../images/at610-16541-01.png)
+![AT610 FORM importance factors](../images/at610-38f0f-01.png)

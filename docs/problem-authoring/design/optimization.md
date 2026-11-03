@@ -16,10 +16,10 @@ Problem module:
 
 Recorded result set:
 
-- `results/2026-03-15/16-10-50/Sorensen 8.1-010a8.xlsx`
-- `results/2026-03-15/16-10-50/Sorensen 8.1-010a8.json`
-- `results/2026-03-15/16-10-50/Sorensen 8.1-010a8.py`
-- `results/2026-03-15/16-10-50/profile-010a8.yaml`
+- `results/2026-11-02/18-34-26/Sorensen 8.1-e70c6.xlsx`
+- `results/2026-11-02/18-34-26/Sorensen 8.1-e70c6.json`
+- `results/2026-11-02/18-34-26/Sorensen 8.1-e70c6.py`
+- `results/2026-11-02/18-34-26/profile-e70c6.yaml`
 
 Profile and run mode from saved profile:
 
@@ -80,21 +80,21 @@ In this example, the objective function is `DOF(d, D) = z`, so the solver seeks 
 
 ## Extracted Results Worksheet Tables
 
-The tables below are transcribed from the `Results` worksheet in `Sorensen 8.1-010a8.xlsx`. For the meaning of each column, see [Results Tables Reference](../results-tables.md#design).
+The tables below are transcribed from the `Results` worksheet in `Sorensen 8.1-e70c6.xlsx`. For the meaning of each column, see [Results Tables Reference](../results-tables.md#design).
 
 ### Header Information
 
 | Field | Value |
 |---|---|
 | Problem | `Sorensen 8.1` |
-| Request ID | `997f5a4d29f444f0bffa424ee74010a8` |
-| Run time | `00 min 00.91 sec` |
+| Request ID | `725856734eb54e3a99d786d3f05e70c6` |
+| Run time | `00 min 00.14 sec` |
 
 ### Design Data (Default Case)
 
-| obj_value | target_beta | actual_beta | target_pf | actual_pf | use_sorm | dof_count | beta_count | nit | min_tries | min_method | br_mult |
-|---:|---:|---:|---:|---:|---|---:|---:|---:|---:|---|---|
-| 15.58 | 3.8 | 3.8 | 7.235e-05 | 7.236e-05 | False | 7 | 16 | 10 | 1 | tr_interior_point | |
+| obj_value | target_beta | actual_beta | target_pf | actual_pf | use_sorm | dof_count | beta_count | nit | min_tries | min_method |
+|---:|---:|---:|---:|---:|---|---:|---:|---:|---:|---|
+| 15.58 | 3.8 | 3.8 | 7.235e-05 | 7.236e-05 | False | 7 | 16 | 10 | 1 | tr_interior_point |
 
 ### Design Variables Result
 
@@ -120,19 +120,17 @@ The tables below are transcribed from the `Results` worksheet in `Sorensen 8.1-0
 
 | beta | pf | beta_count | hbeta_count | lsf_count | glsf_count | hlsf_count | min_method |
 |---:|---:|---:|---:|---:|---:|---:|---|
-| 3.8 | 7.236e-05 | 102 | 102 | 102 | 102 | 102 | tr_interior_point |
+| 3.8 | 7.236e-05 | 96 | 96 | 96 | 96 | 96 | equality_constrained_sqp |
 
 ### Notes Reported by Brinkpy
 
 1. Validation: Stochastic variables definition and limit state function validation required 2 function calls.
 2. Validation: Design problem validation required 2 calls to the design objective function.
 3. Validation: Validation of the limit state function's analytic gradient and hessian required 37 function calls.
-4. Validation: Validation of the design objective function's analytic gradient and hessian required 12 function calls.
-5. FORM case (`default`): Active bound multipliers reported for `R`, `G`, and `Q`.
-6. Design: Active bound multipliers reported for design variable `z` in case `default`.
+4. Validation: Validation of the design objective function's analytic gradient and hessian required 18 function calls.
 
 ## Interpretation Snapshot
 
-- The optimizer converged in `10` iterations and found `z = 15.5812409574229`.
-- Reliability target matching is tight: `actual_beta = 3.799975486073672` versus `target_beta = 3.8`.
+- The optimizer converged in `10` iterations and found `z = 15.58124010560201`.
+- Reliability target matching is tight: `actual_beta = 3.799975490962742` versus `target_beta = 3.8`.
 - The objective and design variable are the same in this problem (`obj_value = z`), so objective minimization directly maps to minimizing `z` under reliability constraints.

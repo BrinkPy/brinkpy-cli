@@ -13,12 +13,12 @@ Problem module:
 
 Recorded result set:
 
-- `results/2026-10-31/08-51-07/AU2-effe7.xlsx`
-- `results/2026-10-31/08-51-07/AU2-effe7.json`
-- `results/2026-10-31/08-51-07/AU2-effe7.py`
-- `results/2026-10-31/08-51-07/AU2-effe7.pickle`
-- `results/2026-10-31/08-51-07/AU2-effe7.pdf`
-- `results/2026-10-31/08-51-07/profile-effe7.yaml`
+- `results/2026-11-02/18-50-21/AU2-b5cb6.xlsx`
+- `results/2026-11-02/18-50-21/AU2-b5cb6.json`
+- `results/2026-11-02/18-50-21/AU2-b5cb6.py`
+- `results/2026-11-02/18-50-21/AU2-b5cb6.pickle`
+- `results/2026-11-02/18-50-21/AU2-b5cb6.pdf`
+- `results/2026-11-02/18-50-21/profile-b5cb6.yaml`
 
 Profile and run mode from saved profile:
 
@@ -61,15 +61,15 @@ This run uses `AU2Problem.py`, the series system of two limit state functions in
 
 ## Extracted Results Worksheet Tables
 
-The tables below are transcribed from the `Results` worksheet in `AU2-effe7.xlsx`. For the meaning of each column, see [Results Tables Reference](../results-tables.md#monte-carlo).
+The tables below are transcribed from the `Results` worksheet in `AU2-b5cb6.xlsx`. For the meaning of each column, see [Results Tables Reference](../results-tables.md#monte-carlo).
 
 ### Header Information
 
 | Field | Value |
 |---|---|
 | Problem | `AU2` |
-| Request ID | `64af472980134deeba4d62e0b19effe7` |
-| Run time | `00 min 03.86 sec` |
+| Request ID | `c7c05e6bdb394a4ea34eb5f8fa8b5cb6` |
+| Run time | `00 min 01.29 sec` |
 
 ### Deterministic Variables
 
@@ -88,7 +88,7 @@ The tables below are transcribed from the `Results` worksheet in `AU2-effe7.xlsx
 
 | beta | pf | cv | max_cv | size | %_removed | cycles | auto_size | mc_with_is | method | bandwidth | chains | length | burn_in | thinning |
 |---:|---:|---:|---:|---:|---:|---:|---|---|---|---:|---:|---:|---:|---:|
-| 4.7745 | 9.008e−7 | 0.04931 | 0.05 | 8,000 | 0 | 4 | True | True | mcmc+kde | 0.2714 | 5 | 500 | 200 | 3 |
+| 4.7741 | 9.026e−7 | 0.01948 | 0.05 | 6,000 | 0 | 3 | True | True | mcmc+kde | 0.2714 | 5 | 500 | 200 | 3 |
 
 The `method` value `mcmc+kde` combines the sampling method (`is_method`) and the fitting method (`is_mcmc_fit_method`). The columns `chains`, `length`, `burn_in`, and `thinning` appear only for MCMC runs.
 
@@ -99,8 +99,8 @@ The `method` value `mcmc+kde` combines the sampling method (`is_method`) and the
 
 | var_name | mean | std | %_oob | cor(T1) | cor(T2) |
 |---|---:|---:|---:|---:|---:|
-| T1 | −0.0117 | 3.3723 | 0 | 1.0000 | 0.8350 |
-| T2 | 1.0203 | 3.7686 | 0 | 0.8350 | 1.0000 |
+| T1 | −0.3825 | 2.5302 | 0 | 1.0000 | 0.5644 |
+| T2 | 2.9297 | 3.3854 | 0 | 0.5644 | 1.0000 |
 
 ### MCMC Diagnostics
 
@@ -108,75 +108,75 @@ This table appears in the worksheet under **Importance sampling method-specific 
 
 | mean | sd | eti89_lb | eti89_ub | ess_bulk | ess_tail | r_hat | mcse_mean | mcse_sd |
 |---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| 5.1391 | 0.1181 | 5.0157 | 5.3576 | 240.5 | 342.5 | 1.026 | 0.007857 | 0.009308 |
+| 5.1419 | 0.1119 | 5.0171 | 5.3561 | 170.4 | 426.4 | 1.024 | 0.008469 | 0.004258 |
 
 For what each column means and how to use it, see [MCMC Diagnostics](../results-tables.md#mcmc-diagnostics).
 
 ### Notes Reported by Brinkpy
 
-1. Validation: Stochastic variables definition and limit state function validation required 1 function call.
-2. Monte Carlo: Creation of importance sampling proposal distribution required 8,615 calls to the limit state function.
-3. Monte Carlo: Completed 4 cycles with `2.00e+03` samples per cycle.
-4. Monte Carlo: Load and resistance histograms are not available because the limit state function does not return load and resistance values.
+1. Validation: Stochastic variables definition and limit state function validation required 16 function calls.
+2. Monte Carlo: Creation of importance sampling proposal distribution required 8,660 calls to the limit state function.
+3. Monte Carlo: Completed 3 cycles with `2.00e+03` samples per cycle.
+4. Monte Carlo: Load and resistance histograms are not available since the limit state function does not return load and resistance values.
 
 ## Comparison with the KDE Run
 
 | | KDE ([example](importance-sampling.md)) | MCMC (this page) |
 |---|---:|---:|
-| `beta` | 4.7775 | 4.7745 |
-| `pf` | 8.873e−7 | 9.008e−7 |
-| `cv` | 0.02978 | 0.04931 |
-| Samples (`size`) | 6,000 | 8,000 |
-| Limit state function calls to build the proposal | 109,980 | 8,615 |
-| Run time | 8.93 sec | 3.86 sec |
+| `beta` | 4.7702 | 4.7741 |
+| `pf` | 9.201e−7 | 9.026e−7 |
+| `cv` | 0.03124 | 0.01948 |
+| Samples (`size`) | 6,000 | 6,000 |
+| Limit state function calls to build the proposal | 109,973 | 8,660 |
+| Run time | 2.96 sec | 1.29 sec |
 
 Both methods estimate nearly the same probability of failure. For this problem, MCMC needed about 13 times fewer limit state function calls to build the proposal distribution. That matters most when each limit state function call is expensive.
 
 ## Interpretation Snapshot
 
-- The probability of failure (`pf ≈ 9.01 × 10⁻⁷`, `beta ≈ 4.77`) agrees with the KDE run, and `cv = 0.0493` is below `max_cv = 0.05`. Brinkpy added sampling cycles until the target was met, which took 4 cycles instead of 3.
+- The probability of failure (`pf ≈ 9.03 × 10⁻⁷`, `beta ≈ 4.77`) agrees with the KDE run, and `cv = 0.0195` is well below `max_cv = 0.05`.
 - The MCMC samples are used only to build the proposal distribution. The probability of failure comes from the weighted importance samples, and `cv` reports its precision. Chain convergence still matters: if the chains miss part of the failure region, the proposal distribution may not cover it.
-- Brinkpy calculates `r_hat` but does not enforce a limit. Here `r_hat = 1.026`, above the 1.01 often recommended in the MCMC literature. To improve convergence, increase `is_mcmc_chain_length`, `is_mcmc_burnin`, or `is_mcmc_chains` in the profile and run again. **Figures 1 and 2** show why a longer burn-in can help: chain 4 starts at a norm of about 6.2, well above the level where the chains settle, and takes several steps to come down.
+- Brinkpy calculates `r_hat` but does not enforce a limit. Here `r_hat = 1.024`, above the 1.01 often recommended in the MCMC literature. **Figure 3** shows where it comes from: the rank bars of chain 2 rise from left to right instead of staying level, and its autocorrelation decays more slowly than that of the other chains. To improve convergence, increase `is_mcmc_chain_length`, `is_mcmc_burnin`, or `is_mcmc_chains` in the profile and run again.
 - **Figures 4 and 5** show that the chains found all three parts of the failure region: the arc along the top (component 1) and the two branches in the upper-right and lower-left corners (component 2).
 
 ## Generated Figures
 
-The PDF result file for this run is saved as `results/2026-10-31/08-51-07/AU2-effe7.pdf`.
+The PDF result file for this run is saved as `results/2026-11-02/18-50-21/AU2-b5cb6.pdf`.
 
 ### Figures 1 and 2: Trace of Sample Norms in u-space
 
 Each row shows one chain. The left plot traces the norm of the chain's samples at each MCMC step, with the burn-in steps shaded gray. The right plot shows the distribution of the norms after burn-in. Well-mixed chains move up and down around a stable level, without long trends.
 
-![AU2 MCMC trace plots for chains 0 to 2](../images/au2-effe7-01-mcmc-trace-chains-0-2.png)
+![AU2 MCMC trace plots for chains 0 to 2](../images/au2-b5cb6-01-mcmc-trace-chains-0-2.png)
 
-![AU2 MCMC trace plots for chains 3 and 4](../images/au2-effe7-02-mcmc-trace-chains-3-4.png)
+![AU2 MCMC trace plots for chains 3 and 4](../images/au2-b5cb6-02-mcmc-trace-chains-3-4.png)
 
 ### Figure 3: Chain Convergence Diagnostics
 
 The rank plot shows, for each chain, how its samples rank among the samples of all chains. When the chains have converged to the same distribution, the bars of every chain are roughly level. The autocorrelation plot shows how strongly each sample depends on earlier samples in the same chain. Faster decay toward zero means more independent information per sample, which gives a larger effective sample size (`ess_bulk`, `ess_tail`).
 
-![AU2 MCMC chain convergence diagnostics](../images/au2-effe7-03-mcmc-convergence.png)
+![AU2 MCMC chain convergence diagnostics](../images/au2-b5cb6-03-mcmc-convergence.png)
 
 ### Figure 4: IS Proposal Diagnostics (u-space)
 
 The proposal samples in standard normal space, colored by the proposal probability density. The red curve is the limit state surface.
 
-![AU2 MCMC-KDE proposal diagnostics u-space](../images/au2-effe7-04-is-proposal-u-space.png)
+![AU2 MCMC-KDE proposal diagnostics u-space](../images/au2-b5cb6-04-is-proposal-u-space.png)
 
 ### Figure 5: IS Proposal Diagnostics (x-space)
 
 The same proposal samples in the original variable space (`T1`, `T2`). Because both variables are standard normal, this figure matches Figure 4.
 
-![AU2 MCMC-KDE proposal diagnostics x-space](../images/au2-effe7-05-is-proposal-x-space.png)
+![AU2 MCMC-KDE proposal diagnostics x-space](../images/au2-b5cb6-05-is-proposal-x-space.png)
 
 ### Figure 6: IS Histogram — `T1`
 
-![AU2 MCMC IS histogram for T1](../images/au2-effe7-06-T1-histogram.png)
+![AU2 MCMC IS histogram for T1](../images/au2-b5cb6-06-T1-histogram.png)
 
 ### Figure 7: IS Histogram — `T2`
 
-![AU2 MCMC IS histogram for T2](../images/au2-effe7-07-T2-histogram.png)
+![AU2 MCMC IS histogram for T2](../images/au2-b5cb6-07-T2-histogram.png)
 
 ### Figure 8: Limit State Function Histogram (Importance Sampling)
 
-![AU2 MCMC limit state function histogram with IS](../images/au2-effe7-08-lsf-histogram.png)
+![AU2 MCMC limit state function histogram with IS](../images/au2-b5cb6-08-lsf-histogram.png)

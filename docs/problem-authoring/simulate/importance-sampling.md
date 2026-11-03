@@ -13,12 +13,12 @@ Problem module:
 
 Recorded result set:
 
-- `results/2026-03-16/11-06-54/AU2-42d54.xlsx`
-- `results/2026-03-16/11-06-54/AU2-42d54.json`
-- `results/2026-03-16/11-06-54/AU2-42d54.py`
-- `results/2026-03-16/11-06-54/AU2-42d54.pickle`
-- `results/2026-03-16/11-06-54/AU2-42d54.pdf`
-- `results/2026-03-16/11-06-54/profile-42d54.yaml`
+- `results/2026-11-02/18-45-31/AU2-15fc9.xlsx`
+- `results/2026-11-02/18-45-31/AU2-15fc9.json`
+- `results/2026-11-02/18-45-31/AU2-15fc9.py`
+- `results/2026-11-02/18-45-31/AU2-15fc9.pickle`
+- `results/2026-11-02/18-45-31/AU2-15fc9.pdf`
+- `results/2026-11-02/18-45-31/profile-15fc9.yaml`
 
 Profile and run mode from saved profile:
 
@@ -90,15 +90,15 @@ This example uses the `default` profile. Importance sampling and Monte Carlo beh
 
 ## Extracted Results Worksheet Tables
 
-The tables below are transcribed from the `Results` worksheet in `AU2-42d54.xlsx`. For the meaning of each column, see [Results Tables Reference](../results-tables.md#monte-carlo).
+The tables below are transcribed from the `Results` worksheet in `AU2-15fc9.xlsx`. For the meaning of each column, see [Results Tables Reference](../results-tables.md#monte-carlo).
 
 ### Header Information
 
 | Field | Value |
 |---|---|
 | Problem | `AU2` |
-| Request ID | `cfcb942355da4179b9b48eb4dfa42d54` |
-| Run time | `00 min 08.93 sec` |
+| Request ID | `a806579f80e74c8b8103363e98e15fc9` |
+| Run time | `00 min 02.96 sec` |
 
 ### Deterministic Variables
 
@@ -117,7 +117,7 @@ The tables below are transcribed from the `Results` worksheet in `AU2-42d54.xlsx
 
 | beta | pf | cv | max_cv | size | %_removed | cycles | auto_size | mc_with_is | method | bandwidth | fit_samples |
 |---:|---:|---:|---:|---:|---:|---:|---|---|---|---:|---:|
-| 4.7775 | 8.873e−7 | 0.02978 | 0.05 | 6,000 | 0.08 | 3 | True | True | kde | 0.2817 | 2,000 |
+| 4.7702 | 9.201e−7 | 0.03124 | 0.05 | 6,000 | 0.1167 | 3 | True | True | kde | 0.2817 | 2,000 |
 
 ### Monte Carlo Variable Statistics and Correlations (Proposal Samples)
 
@@ -128,50 +128,51 @@ The tables below are transcribed from the `Results` worksheet in `AU2-42d54.xlsx
 
 | var_name | mean | std | %_oob | cor(T1) | cor(T2) |
 |---|---:|---:|---:|---:|---:|
-| T1 | −0.2182 | 3.5806 | 0 | 1.0000 | 0.5670 |
-| T2 | 2.3820 | 4.2807 | 0 | 0.5670 | 1.0000 |
+| T1 | −0.2971 | 3.5024 | 0 | 1.0000 | 0.5810 |
+| T2 | 2.4730 | 4.3069 | 0 | 0.5810 | 1.0000 |
 
 ### Notes Reported by Brinkpy
 
 1. Validation: Stochastic variables definition and limit state function validation required 4 function calls.
-2. Monte Carlo: Creation of importance sampling proposal distribution required 109,980 calls to the limit state function.
+2. Monte Carlo: Creation of importance sampling proposal distribution required 109,973 calls to the limit state function.
 3. Monte Carlo: Completed 3 cycles with `2.00e+03` samples per cycle.
-4. Monte Carlo: 0.03% of `T1` and 0.05% of `T2` values were not finite (NaN, inf, complex) out of `6.00e+03` samples and were excluded from the Monte Carlo statistics.
-5. Monte Carlo: Load and resistance histograms are not available because `LSFreturnsLandR: False`, so the limit state function returns empty load/resistance placeholders.
+4. Monte Carlo: 0.02% of `T1` and 0.10% of `T2` values were not finite (NaN, inf, complex) out of `6.00e+03` samples and were excluded from the Monte Carlo statistics.
+5. Monte Carlo: If a large fraction of samples were not finite, out of bounds or violated constraints, consider adjusting the statistical distributions of the variables, truncating them to finite lower (`lb`) and upper (`ub`) bounds, and reviewing any constraints on the variables to make sure they are valid.
+6. Monte Carlo: Load and resistance histograms are not available since the limit state function does not return load and resistance values.
 
 ## Interpretation Snapshot
 
-- The failure probability is very small (`pf ≈ 8.87 × 10⁻⁷`, `beta ≈ 4.78`), making plain Monte Carlo impractical — it would require on the order of 10⁸ samples for reliable estimation. Importance sampling achieves good precision with only 6,000 weighted samples.
-- The `cv = 0.0298` is below `max_cv = 0.05`, confirming adequate IS precision for this run.
+- The failure probability is very small (`pf ≈ 9.20 × 10⁻⁷`, `beta ≈ 4.77`), making plain Monte Carlo impractical — it would require on the order of 10⁸ samples for reliable estimation. Importance sampling achieves good precision with only 6,000 weighted samples.
+- The `cv = 0.0312` is below `max_cv = 0.05`, confirming adequate IS precision for this run.
 - The IS proposal construction required ~110,000 LSF evaluations to locate and characterize the failure region before the weighted sampling phase began.
-- The variable statistics (`T1` mean ≈ −0.22, `T2` mean ≈ 2.38) describe the proposal samples, which are shifted toward the failure region. This is expected.
+- The variable statistics (`T1` mean ≈ −0.30, `T2` mean ≈ 2.47) describe the proposal samples, which are shifted toward the failure region. This is expected.
 - No load/resistance histogram is generated because `LSFreturnsLandR: False`, so `L` and `R` are returned as empty placeholders.
 
 ## Generated Figures
 
-The PDF result file for this run is saved as `results/2026-03-16/11-06-54/AU2-42d54.pdf`.
+The PDF result file for this run is saved as `results/2026-11-02/18-45-31/AU2-15fc9.pdf`.
 
 ### Figure 1: IS Proposal Diagnostics (u-space)
 
 The KDE proposal distribution in standard-normal space. Contour lines show the proposal PDF; the failure region boundary is visible.
 
-![AU2 IS proposal diagnostics u-space](../images/au2-42d54-01-is-proposal-u-space.png)
+![AU2 IS proposal diagnostics u-space](../images/au2-15fc9-01-is-proposal-u-space.png)
 
 ### Figure 2: IS Proposal Diagnostics (x-space)
 
 The same proposal distribution plotted in original variable space (`T1`, `T2`).
 
-![AU2 IS proposal diagnostics x-space](../images/au2-42d54-02-is-proposal-x-space.png)
+![AU2 IS proposal diagnostics x-space](../images/au2-15fc9-02-is-proposal-x-space.png)
 
 ### Figure 3: IS Histogram — `T1`
 
-![AU2 IS histogram for T1](../images/au2-42d54-03-T1-histogram.png)
+![AU2 IS histogram for T1](../images/au2-15fc9-03-T1-histogram.png)
 
 ### Figure 4: IS Histogram — `T2`
 
-![AU2 IS histogram for T2](../images/au2-42d54-04-T2-histogram.png)
+![AU2 IS histogram for T2](../images/au2-15fc9-04-T2-histogram.png)
 
 ### Figure 5: Limit State Function Histogram (Importance Sampling)
 
-![AU2 limit state function histogram with IS](../images/au2-42d54-05-lsf-histogram.png)
+![AU2 limit state function histogram with IS](../images/au2-15fc9-05-lsf-histogram.png)
 

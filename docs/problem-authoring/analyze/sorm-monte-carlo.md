@@ -13,12 +13,12 @@ Problem module:
 
 Recorded result set:
 
-- `results/2026-03-26/13-49-14/Chan3-55cde.xlsx`
-- `results/2026-03-26/13-49-14/Chan3-55cde.json`
-- `results/2026-03-26/13-49-14/Chan3-55cde.py`
-- `results/2026-03-26/13-49-14/Chan3-55cde.pickle`
-- `results/2026-03-26/13-49-14/Chan3-55cde.pdf`
-- `results/2026-03-26/13-49-14/profile-55cde.yaml`
+- `results/2026-11-02/15-07-27/Chan3-c39ac.xlsx`
+- `results/2026-11-02/15-07-27/Chan3-c39ac.json`
+- `results/2026-11-02/15-07-27/Chan3-c39ac.py`
+- `results/2026-11-02/15-07-27/Chan3-c39ac.pickle`
+- `results/2026-11-02/15-07-27/Chan3-c39ac.pdf`
+- `results/2026-11-02/15-07-27/profile-c39ac.yaml`
 
 Profile and run mode from saved profile:
 
@@ -61,15 +61,15 @@ This example uses the `default` profile. SORM and Monte Carlo behavior can be ad
 
 ## Extracted Results Worksheet Tables
 
-The tables below are transcribed from the `Results` worksheet in `Chan3-55cde.xlsx`. For the meaning of each column, see [Results Tables Reference](../results-tables.md).
+The tables below are transcribed from the `Results` worksheet in `Chan3-c39ac.xlsx`. For the meaning of each column, see [Results Tables Reference](../results-tables.md).
 
 ### Header Information
 
 | Field | Value |
 |---|---|
 | Problem | `Chan3` |
-| Request ID | `501c48c8d22c48228352ac5b39855cde` |
-| Run time | `00 min 00.53 sec` |
+| Request ID | `1839cc68e23b4d7b9efe3dbb79ac39ac` |
+| Run time | `00 min 00.35 sec` |
 
 ### Deterministic Variables
 
@@ -83,7 +83,7 @@ The tables below are transcribed from the `Results` worksheet in `Chan3-55cde.xl
 
 | beta | pf | beta_count | hbeta_count | lsf_count | glsf_count | hlsf_count | nit | min_tries | min_method | lsf_mult |
 |---:|---:|---:|---:|---:|---:|---:|---:|---:|---|---:|
-| 0.9543 | 0.1700 | 5127 | 4959 | 7 | 0 | 0 | 11 | 1 | tr_interior_point | 0.03079 |
+| 0.9543 | 0.1700 | 7 | 7 | 7 | 7 | 0 | 11 | 1 | tr_interior_point | 0.03079 |
 
 ### SORM Results
 
@@ -95,7 +95,7 @@ The tables below are transcribed from the `Results` worksheet in `Chan3-55cde.xl
 
 | beta | pf | cv | max_cv | size | %_removed | cycles | auto_size | mc_with_is |
 |---:|---:|---:|---:|---:|---:|---:|---|---|
-| 1.1593 | 0.1232 | 0.02436 | 0.05 | 12000 | 0 | 3 | True | False |
+| 1.1536 | 0.1243 | 0.02423 | 0.05 | 12000 | 0 | 3 | True | False |
 
 ### Stochastic Variable Inputs and FORM Failure Point Outputs
 
@@ -107,46 +107,45 @@ The tables below are transcribed from the `Results` worksheet in `Chan3-55cde.xl
 
 ### Notes Reported by Brinkpy
 
-1. Validation: Stochastic variables definition and limit state function validation required 22 function calls.
+1. Validation: Stochastic variables definition and limit state function validation required 2 function calls.
 2. Validation: SORM `reliability_options.sor_fit_method` was changed from `None` to `Kiureghian` because `sor_approximation` is `Paraboloid` and the selected reliability options require a compatible fit method.
 3. Validation: Validation of the limit state function's analytic gradient and hessian required 4 function calls.
-4. FORM: The lagrange multipliers for the bounds of variable(s) `Qv`, `cp` and `cs` are active (not zero). If they are large relative to Beta (`0.954`), try truncating the statistical distribution for these variables and check if the reliability index changes significantly.
-5. Monte Carlo: Completed 3 cycles with `4.00e+03` samples per cycle.
+4. Monte Carlo: Completed 3 cycles with `4.00e+03` samples per cycle.
 
 ## Interpretation Snapshot
 
 - FORM gives `beta = 0.9543` (`pf ≈ 0.1700`). SORM and Monte Carlo give a larger reliability index (`beta ≈ 1.16`) and therefore a smaller probability of failure (`pf ≈ 0.12`). A larger β always means a smaller probability of failure, since `pf = Φ(-β)`.
-- SORM and Monte Carlo are closely aligned (`pf ≈ 0.1216` vs `0.1232`), suggesting that the SORM estimate is more accurate than FORM for this problem.
-- Monte Carlo precision is acceptable for this run (`cv = 0.02436 < 0.05`).
+- SORM and Monte Carlo are closely aligned (`pf ≈ 0.1216` vs `0.1243`), suggesting that the SORM estimate is more accurate than FORM for this problem.
+- Monte Carlo precision is acceptable for this run (`cv = 0.02423 < 0.05`).
 
 ## Generated Figures
 
-The PDF result file for this run is saved as `results/2026-03-26/13-49-14/Chan3-55cde.pdf`.
+The PDF result file for this run is saved as `results/2026-11-02/15-07-27/Chan3-c39ac.pdf`.
 
 ### Figure 1: Importance Factors
 
-![Chan3 importance factors](../images/chan3-55cde-01.png)
+![Chan3 importance factors](../images/chan3-c39ac-01.png)
 
 ### Figure 2: SORM SOSPA Cumulant Generating Function and Derivatives
 
-![Chan3 SORM SOSPA cumulant generating function and derivatives](../images/chan3-55cde-02.png)
+![Chan3 SORM SOSPA cumulant generating function and derivatives](../images/chan3-c39ac-02.png)
 
 ### Figure 3: Monte Carlo Histogram - Qv (Beta Distribution)
 
-![Chan3 Monte Carlo histogram for Qv](../images/chan3-55cde-03.png)
+![Chan3 Monte Carlo histogram for Qv](../images/chan3-c39ac-03.png)
 
 ### Figure 4: Monte Carlo Histogram - cp (Beta Distribution)
 
-![Chan3 Monte Carlo histogram for cp](../images/chan3-55cde-04.png)
+![Chan3 Monte Carlo histogram for cp](../images/chan3-c39ac-04.png)
 
 ### Figure 5: Monte Carlo Histogram - cs (Beta Distribution)
 
-![Chan3 Monte Carlo histogram for cs](../images/chan3-55cde-05.png)
+![Chan3 Monte Carlo histogram for cs](../images/chan3-c39ac-05.png)
 
 ### Figure 6: Histogram of Limit State Function Values
 
-![Chan3 limit state function histogram](../images/chan3-55cde-06.png)
+![Chan3 limit state function histogram](../images/chan3-c39ac-06.png)
 
 ### Figure 7: Load and Resistance Histogram
 
-![Chan3 load and resistance histogram](../images/chan3-55cde-07.png)
+![Chan3 load and resistance histogram](../images/chan3-c39ac-07.png)

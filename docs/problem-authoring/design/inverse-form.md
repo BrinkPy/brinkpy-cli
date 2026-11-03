@@ -29,10 +29,10 @@ Problem module:
 
 Recorded result set:
 
-- `results/2026-03-15/15-01-56/Ang and Tang 6.25-88679.xlsx`
-- `results/2026-03-15/15-01-56/Ang and Tang 6.25-88679.json`
-- `results/2026-03-15/15-01-56/Ang and Tang 6.25-88679.py`
-- `results/2026-03-15/15-01-56/profile-88679.yaml`
+- `results/2026-11-02/12-37-06/Ang and Tang 6.25-19c5b.xlsx`
+- `results/2026-11-02/12-37-06/Ang and Tang 6.25-19c5b.json`
+- `results/2026-11-02/12-37-06/Ang and Tang 6.25-19c5b.py`
+- `results/2026-11-02/12-37-06/profile-19c5b.yaml`
 
 Profile and run mode from saved profile:
 
@@ -61,16 +61,16 @@ Run summary:
 
 | Field | Value |
 |---|---|
-| Request ID | `e580592237a84a2ca36275f5bbd88679` |
+| Request ID | `88e31f31ef144fe89b2f7c3d2a319c5b` |
 | Target beta | `1.28` |
 | Target pf | `0.1003` |
 | Cases | `default` |
 
 Default-case inverse FORM result:
 
-| case | beta | pf | lsf_count | glsf_count | hlsf_count | nit |
-|---|---:|---:|---:|---:|---:|---:|
-| default | 1.28 | 0.1003 | 8 | 8 | 8 | 12 |
+| case | beta | pf | lsf_value | lsf_count | glsf_count | hlsf_count | beta_count | hbeta_count | nit | min_tries | min_method |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|
+| default | 1.28 | 0.1003 | −109.5 | 8 | 7 | 7 | 7 | 7 | 8 | 1 | equality_constrained_sqp |
 
 Design point stochastic variables result (`default`):
 
@@ -90,6 +90,7 @@ Load and resistance partial factors (`default`):
 Notes:
 
 - This is the canonical single-case inverse FORM setup.
+- `lsf_value` is negative (−109.5), so this design falls slightly short of the target. FORM gives β = 1.252 for the same problem.
 - `AT625` also reports load and resistance partial factors in the design output.
 
 ## Example B: `AT624Problem.py` (Multi-Case)
@@ -102,10 +103,10 @@ Problem module:
 
 Recorded result set:
 
-- `results/2026-03-15/15-01-29/Ang and Tang 6.24-9e10e.xlsx`
-- `results/2026-03-15/15-01-29/Ang and Tang 6.24-9e10e.json`
-- `results/2026-03-15/15-01-29/Ang and Tang 6.24-9e10e.py`
-- `results/2026-03-15/15-01-29/profile-9e10e.yaml`
+- `results/2026-11-02/12-33-53/Ang and Tang 6.24-3deac.xlsx`
+- `results/2026-11-02/12-33-53/Ang and Tang 6.24-3deac.json`
+- `results/2026-11-02/12-33-53/Ang and Tang 6.24-3deac.py`
+- `results/2026-11-02/12-33-53/profile-3deac.yaml`
 
 Profile and run mode from saved profile:
 
@@ -134,19 +135,21 @@ Run summary:
 
 | Field | Value |
 |---|---|
-| Request ID | `0a4040de1dc341adb06688f5cdd9e10e` |
-| Target beta | `2.0` |
+| Request ID | `1f72e3830fb147dab3b3db12c263deac` |
+| Target beta | `2.000` |
 | Target pf | `0.02275` |
 | Cases | `1`, `2`, `3`, `4` |
 
+The workbook repeats the following tables for each design case. On this page, the cases are combined into one table with a `case` column.
+
 Case-by-case inverse FORM results:
 
-| case | beta | pf | lsf_count | glsf_count | hlsf_count | nit |
-|---|---:|---:|---:|---:|---:|---:|
-| 1 | 2.0 | 0.02275 | 7 | 7 | 7 | 10 |
-| 2 | 2.0 | 0.02275 | 6 | 7 | 7 | 10 |
-| 3 | 2.0 | 0.02275 | 7 | 7 | 7 | 10 |
-| 4 | 2.0 | 0.02275 | 7 | 7 | 7 | 10 |
+| case | beta | pf | lsf_value | lsf_count | glsf_count | hlsf_count | beta_count | hbeta_count | nit | min_tries | min_method |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|
+| 1 | 2.000 | 0.02275 | −0.001177 | 6 | 6 | 6 | 6 | 6 | 6 | 1 | equality_constrained_sqp |
+| 2 | 2.000 | 0.02275 | −0.0003227 | 5 | 6 | 6 | 5 | 5 | 6 | 1 | equality_constrained_sqp |
+| 3 | 2.000 | 0.02275 | −0.001776 | 6 | 6 | 6 | 5 | 5 | 6 | 1 | equality_constrained_sqp |
+| 4 | 2.000 | 0.02275 | −0.0008712 | 6 | 6 | 6 | 5 | 5 | 6 | 1 | equality_constrained_sqp |
 
 Design point stochastic variables result (all cases):
 
@@ -172,7 +175,7 @@ Load and resistance partial factors:
 Notes:
 
 - This example demonstrates the `DesignProblem.cases` structure for running multiple reliability design scenarios in one command.
-- In this example, every case reaches the target reliability exactly (β = 2.0), using different case-level input statistics.
+- Every case uses different case-level input statistics. `lsf_value` is close to zero in every case, so each design meets the target reliability (β = 2.0) exactly.
 
 ## Recommended Authoring Pattern
 

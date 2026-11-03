@@ -49,6 +49,8 @@ The example pages omit some columns to keep their tables readable: `lb`, `ub`, a
 | `cor_x` | The correlation you defined, in real space |
 | `cor_z` | The equivalent correlation in standard normal space, from the Nataf transformation |
 
+When all the variables are normal, `cor_z` equals `cor_x`, so Brinkpy does not calculate it. The correlation matrix then appears instead as columns of the variable table: a `cor_x` column with the row variable's name, followed by one column per variable.
+
 ## SORM
 
 ### SORM Results
@@ -151,19 +153,27 @@ Brinkpy reports these values but does not enforce a limit. If `r_hat` is too hig
 
 ## Design
 
-### Design Case Results
+### Design Results
 
 | Column | Meaning |
 |---|---|
-| `case` | Design case name (`default` when `DesignProblem` defines no `cases`) |
-| `beta`, `pf` | Reliability index (β) and probability of failure reached at the design point |
-| `lsf_count`, `glsf_count`, `hlsf_count`, `nit` | Same as in [FORM Results](#form-results) |
+| `target_beta`, `target_pf` | The reliability target. The problem defines one (`TargetBeta` or `TargetPf`), and Brinkpy calculates the other. |
+
+For Inverse FORM, the workbook then repeats the tables below for each design case, under a heading with the case name (`Design case 'default'` when `DesignProblem` defines no `cases`). The example pages combine the cases into one table with a `case` column.
+
+### Inverse FORM Results
+
+| Column | Meaning |
+|---|---|
+| `beta`, `pf` | Distance of the design point from the origin in standard normal space, and the corresponding probability of failure. Inverse FORM constrains this distance to the target, so `beta` equals `target_beta`. It is the reliability index of the design only when `lsf_value` is close to zero. |
+| `lsf_value` | Limit state function value at the design point. Inverse FORM finds the lowest value of the limit state function among all points at the target reliability index, so the sign shows whether the design meets the target. A value close to zero means the design meets the target exactly. A positive value means it exceeds the target, and a negative value means it falls short. |
+| `lsf_count`, `glsf_count`, `hlsf_count`, `beta_count`, `hbeta_count`, `nit`, `min_tries`, `min_method` | Same as in [FORM Results](#form-results) |
+| `bsr_mult` | Lagrange multiplier for the beta squared residual constraint. The optimizer requires the reliability index to match the target by driving the residual `beta^2 - target_beta^2` to zero. |
 
 ### Design Point Stochastic Variables
 
 | Column | Meaning |
 |---|---|
-| `case` | Design case name (shown when the problem defines several cases) |
 | `var_name` | Stochastic variable name |
 | `x` | Design point value |
 | `fractile` | Fractile used for the characteristic value (from `fractiles`) |
@@ -175,7 +185,7 @@ Brinkpy reports these values but does not enforce a limit. If `r_hat` is too hig
 
 ### Inverse FORM Stochastic Variables
 
-The Excel file also includes a table of the stochastic variables and the Inverse FORM design point. It has the same columns as [Stochastic Variable Inputs and FORM Failure Point Outputs](#stochastic-variable-inputs-and-form-failure-point-outputs), plus the correlation matrix, except for the meaning of `bnds_mult`:
+The Excel file also includes a table of the stochastic variables and the Inverse FORM design point. It has the same columns as [Stochastic Variable Inputs and FORM Failure Point Outputs](#stochastic-variable-inputs-and-form-failure-point-outputs), plus the correlation matrix when the problem defines correlations (see [User-Defined Correlation Inputs](#user-defined-correlation-inputs)). Only the meaning of `bnds_mult` differs:
 
 | Column | Meaning |
 |---|---|
@@ -211,5 +221,6 @@ These tables appear when `DesignProblem` defines a `DesignObjectiveFunction`.
 | `var_name` | Design variable name (from `DesignVariables`) |
 | `opt_value` | Optimal value of the design variable |
 | `lb`, `ub` | Lower and upper bounds of the design variable (from `DesignProblem`) |
+| `bnds_mult` | For an active bound, about the relative change in the design objective function when the bound moves by one unit of the design variable: the Lagrange multiplier of the bound divided by the absolute value of `obj_value`. The value depends on the units of the design variable. Negative for an active lower bound, positive for an active upper bound. Empty when the bound is inactive (the value is below `1e-3`), when no design variable has a finite bound, or when the design optimization does not use the `trust-constr` optimizer. |
 
 The **FORM Results (At Optimum)** table uses the same columns as [FORM Results](#form-results), evaluated at the optimal design.
