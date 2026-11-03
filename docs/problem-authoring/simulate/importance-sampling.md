@@ -126,10 +126,10 @@ The tables below are transcribed from the `Results` worksheet in `AU2-15fc9.xlsx
 
     The histograms in **Figures 3, 4, and 5** also show the proposal samples, not the original input distributions.
 
-| var_name | mean | std | %_oob | cor(T1) | cor(T2) |
-|---|---:|---:|---:|---:|---:|
-| T1 | −0.2971 | 3.5024 | 0 | 1.0000 | 0.5810 |
-| T2 | 2.4730 | 4.3069 | 0 | 0.5810 | 1.0000 |
+| var_name | mean | std | %_oob | cor_x | T1 | T2 |
+|---|---:|---:|---:|---|---:|---:|
+| T1 | −0.2971 | 3.5024 | 0 | T1 | 1.0000 | 0.5810 |
+| T2 | 2.4730 | 4.3069 | 0 | T2 | 0.5810 | 1.0000 |
 
 ### Notes Reported by Brinkpy
 

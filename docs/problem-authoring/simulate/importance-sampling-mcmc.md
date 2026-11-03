@@ -97,10 +97,10 @@ The `method` value `mcmc+kde` combines the sampling method (`is_method`) and the
 !!! warning "Statistics describe the proposal samples"
     As with any importance sampling run, these statistics describe the samples drawn from the proposal distribution, not the original input distributions. The histograms in **Figures 6 and 7** also show the proposal samples.
 
-| var_name | mean | std | %_oob | cor(T1) | cor(T2) |
-|---|---:|---:|---:|---:|---:|
-| T1 | −0.3825 | 2.5302 | 0 | 1.0000 | 0.5644 |
-| T2 | 2.9297 | 3.3854 | 0 | 0.5644 | 1.0000 |
+| var_name | mean | std | %_oob | cor_x | T1 | T2 |
+|---|---:|---:|---:|---|---:|---:|
+| T1 | −0.3825 | 2.5302 | 0 | T1 | 1.0000 | 0.5644 |
+| T2 | 2.9297 | 3.3854 | 0 | T2 | 0.5644 | 1.0000 |
 
 ### MCMC Diagnostics
 

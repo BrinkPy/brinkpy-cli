@@ -81,7 +81,7 @@ The tables below are transcribed from the `Results` worksheet in `AT610-38f0f.xl
 | Z | LogNormal | 50 | 2.5 | 47.7542 | -0.4098 | -0.1538 | -0.1728 |
 | M | GumbelMax | 1000 | 200 | 1613.2985 | 2.2926 | 0.8605 | 0.8858 |
 
-### User-Defined Correlation Inputs
+### Correlations
 
 | var 1 | var 2 | cor_x | cor_z |
 |---|---|---:|---:|

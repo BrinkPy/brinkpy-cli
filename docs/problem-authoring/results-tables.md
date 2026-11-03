@@ -39,15 +39,22 @@ The example pages omit some columns to keep their tables readable: `lb`, `ub`, a
 | `u` | Failure point in (uncorrelated) standard normal space |
 | `alpha` | Direction cosines of the failure point (the alpha vector) |
 | `importance` | Importance factors: the alpha vector transformed to real space and normalized to unit length (the γ vector in Equation 10 of Kim and Song, 2018, [→](https://doi.org/10.1016/j.ress.2018.01.005)) |
-| `bnds_mult` | For an active bound, about how much the reliability index changes when the bound moves by one standard deviation: the Lagrange multiplier of the bound divided by 2β, since FORM minimizes β². Negative for an active lower bound, positive for an active upper bound. Empty when the bound is inactive (the value is below `1e-3`), when the variable has no bounds other than the natural limits of its distribution, or when FORM does not use the `trust-constr` optimizer (for example, when `LSFisSmooth` is `False`). |
+| `bnds_mult` | For an active bound, about how much the reliability index changes when the bound moves by one standard deviation: the Lagrange multiplier of the bound divided by 2|β|, since FORM minimizes β². Negative for an active lower bound, positive for an active upper bound. Empty when the bound is inactive (the value is below `1e-3`), when the variable has no bounds other than the natural limits of its distribution, or when FORM does not use the `trust-constr` optimizer (for example, when `LSFisSmooth` is `False`). |
 
-### User-Defined Correlation Inputs
+### Correlations
+
+The problem defines the correlations between stochastic variables in real space, with one of two keys of `StochasticVariables` (see [`StochasticVariables` Keys](index.md#stochasticvariables-keys)):
+
+- `cor_list`: a list of `[var_1, var_2, value]` entries, for example `"cor_list": [["Y", "Z", 0.4]]` in `AT610Problem.py`.
+- `cor`: the full n × n correlation matrix, in the same variable order as `name`, as in `Chan2Problem.py`.
+
+FORM transforms the variables to standard normal space with the Nataf transformation, which changes the correlations. The result file reports both:
 
 | Column | Meaning |
 |---|---|
 | `var 1`, `var 2` | The pair of correlated variables |
-| `cor_x` | The correlation you defined, in real space |
-| `cor_z` | The equivalent correlation in standard normal space, from the Nataf transformation |
+| `cor_x` | The correlation defined in the problem, in real space (an input) |
+| `cor_z` | The equivalent correlation in standard normal space, calculated by the Nataf transformation (a result) |
 
 When all the variables are normal, `cor_z` equals `cor_x`, so Brinkpy does not calculate it. The correlation matrix then appears instead as columns of the variable table: a `cor_x` column with the row variable's name, followed by one column per variable.
 
@@ -117,7 +124,7 @@ With `mpp_normal`, Brinkpy first runs FORM to find the most probable point (MPP)
 | `var_name` | Stochastic variable name |
 | `mean`, `std` | Mean and standard deviation of the samples |
 | `%_oob` | Percentage of that variable's samples outside its bounds |
-| `cor(...)` | Sample correlation between this variable and the variable named in the column |
+| `cor_x` and the columns after it | The sample correlation matrix, in real space. `cor_x` repeats the row variable's name, and each following column is named after a variable. Each cell is the sample correlation between the row variable and the column variable. |
 
 With importance sampling, these statistics describe the samples drawn from the proposal distribution, so they do not match the original input distributions.
 
@@ -167,7 +174,7 @@ For Inverse FORM, the workbook then repeats the tables below for each design cas
 |---|---|
 | `beta`, `pf` | Distance of the design point from the origin in standard normal space, and the corresponding probability of failure. Inverse FORM constrains this distance to the target, so `beta` equals `target_beta`. It is the reliability index of the design only when `lsf_value` is close to zero. |
 | `lsf_value` | Limit state function value at the design point. Inverse FORM finds the lowest value of the limit state function among all points at the target reliability index, so the sign shows whether the design meets the target. A value close to zero means the design meets the target exactly. A positive value means it exceeds the target, and a negative value means it falls short. |
-| `bsr_mult` | Lagrange multiplier for the beta squared residual constraint. The optimizer requires the reliability index to match the target by driving the residual `beta^2 - target_beta^2` to zero. |
+| `bsr_mult` | Lagrange multiplier for the beta squared residual constraint. The optimizer requires the reliability index to match the target by driving the residual `beta`² − `target_beta`² to zero. |
 
 The table also has the columns `lsf_count`, `glsf_count`, `hlsf_count`, `beta_count`, `hbeta_count`, `nit`, `min_tries`, and `min_method`, with the same meaning as in [FORM Results](#form-results).
 
@@ -186,7 +193,7 @@ The table also has the columns `lsf_count`, `glsf_count`, `hlsf_count`, `beta_co
 
 ### Inverse FORM Stochastic Variables
 
-The Excel file also includes a table of the stochastic variables and the Inverse FORM design point. It has the same columns as [Stochastic Variable Inputs and FORM Failure Point Outputs](#stochastic-variable-inputs-and-form-failure-point-outputs), plus the correlation matrix when the problem defines correlations (see [User-Defined Correlation Inputs](#user-defined-correlation-inputs)). Only the meaning of `bnds_mult` differs:
+The Excel file also includes a table of the stochastic variables and the Inverse FORM design point. It has the same columns as [Stochastic Variable Inputs and FORM Failure Point Outputs](#stochastic-variable-inputs-and-form-failure-point-outputs), plus the correlation matrix when the problem defines correlations (see [Correlations](#correlations)). Only the meaning of `bnds_mult` differs:
 
 | Column | Meaning |
 |---|---|
@@ -213,7 +220,7 @@ These tables appear when `DesignProblem` defines a `DesignObjectiveFunction`.
 | `use_sorm` | Whether SORM was used for the reliability constraint (`--use-sorm`) |
 | `dof_count` | Number of design objective function calls |
 | `beta_count`, `nit`, `min_tries`, `min_method` | Same as in [FORM Results](#form-results) |
-| `br_mult` | Lagrange multiplier for the beta residual constraint. The optimizer requires the reliability index to match the target by driving the squared residual, `(beta - target_beta)^2`, to zero. |
+| `br_mult` | Lagrange multiplier for the beta residual constraint. The optimizer requires the reliability index to match the target by driving the squared residual, (`beta` − `target_beta`)², to zero. |
 
 ### Objective Optimization: Design Variables Result
 
