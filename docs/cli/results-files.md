@@ -16,7 +16,7 @@ Inside that folder, files are named:
 <ProblemName>-<suffix>.<ext>
 ```
 
-- `<ProblemName>` comes from the problem definition.
+- `<ProblemName>` is the `Name` key of the problem definition, with each space, dot, slash (`/`), and colon (`:`) replaced by an underscore. For example, `"Sorensen 8.1"` becomes `Sorensen_8_1`.
 - `<suffix>` is the last 5 characters of the server request ID. It changes on every run.
 - `<ext>` is the file type (see below).
 

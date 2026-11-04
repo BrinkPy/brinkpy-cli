@@ -8,7 +8,7 @@ import numpy as np
 def Problem():
 
     Problem = {
-        "Name": "Ji et al. Problem 2",
+        "Name": "Ji Example 2",
         "LimitStateFunction": LSF,
         "LSFisVectorized": True,
         "LSFisSmooth": True,

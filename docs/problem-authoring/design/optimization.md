@@ -16,9 +16,9 @@ Problem module:
 
 Recorded result set:
 
-- `results/2026-11-02/18-34-26/Sorensen 8.1-e70c6.xlsx`
-- `results/2026-11-02/18-34-26/Sorensen 8.1-e70c6.json`
-- `results/2026-11-02/18-34-26/Sorensen 8.1-e70c6.py`
+- `results/2026-11-02/18-34-26/Sorensen_8_1-e70c6.xlsx`
+- `results/2026-11-02/18-34-26/Sorensen_8_1-e70c6.json`
+- `results/2026-11-02/18-34-26/Sorensen_8_1-e70c6.py`
 - `results/2026-11-02/18-34-26/profile-e70c6.yaml`
 
 Profile and run mode from saved profile:
@@ -80,7 +80,7 @@ In this example, the objective function is `DOF(d, D) = z`, so the solver seeks 
 
 ## Extracted Results Worksheet Tables
 
-The tables below are transcribed from the `Results` worksheet in `Sorensen 8.1-e70c6.xlsx`. For the meaning of each column, see [Results Tables Reference](../results-tables.md#design).
+The tables below are transcribed from the `Results` worksheet in `Sorensen_8_1-e70c6.xlsx`. For the meaning of each column, see [Results Tables Reference](../results-tables.md#design).
 
 ### Header Information
 

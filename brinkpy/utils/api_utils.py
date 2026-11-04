@@ -55,6 +55,25 @@ def get_timestamped_results_dir(base_results_path: Path) -> Path:
     return time_dir
 
 
+def result_file_stem(problem_json: Dict) -> str:
+    """
+    Return the stem shared by the result files of a run: <name>-<suffix>.
+
+    The name is the problem's Name with each space, dot, slash, and colon
+    replaced by an underscore. The suffix is the last 5 characters of the
+    request ID.
+
+    Args:
+        problem_json: Problem dictionary with name and Request_ID
+
+    Returns:
+        File name stem without extension
+    """
+    name = problem_json.get("name", "result").translate(str.maketrans(" ./:", "____"))
+    request_id = problem_json.get("Request_ID", "unknown")
+    return f"{name}-{request_id[-5:]}"
+
+
 def cleanup_old_results(base_results_path: Path, days: int = 30) -> None:
     """
     Remove result directories older than the specified number of days.
@@ -392,8 +411,8 @@ def download_results(
     ]
 
     request_id = problem_json.get("Request_ID", "unknown")
-    file_paths: List[Path] = [Path(results_dir, f"{problem_json['name']}-{request_id[-5:]}.{ft}") for ft in file_types]
-    request_id = problem_json["Request_ID"]
+    stem = result_file_stem(problem_json)
+    file_paths: List[Path] = [Path(results_dir, f"{stem}.{ft}") for ft in file_types]
 
     downloaded = [False] * len(file_types)
 
@@ -730,7 +749,8 @@ def run_app(
     )
 
     # 8) Save server returned problem to timestamped directory as JSON
-    out_json_path = Path(timestamped_dir, f"{problem_json.get('name', 'result')}-{request_id[-5:]}.json")
+    stem = result_file_stem(problem_json)
+    out_json_path = Path(timestamped_dir, f"{stem}.json")
     try:
         safe_write_json(problem_json, out_json_path, indent=4)
         console.print(f"{ICON_OK} Saved problem JSON: {out_json_path.name}")
@@ -746,7 +766,7 @@ def run_app(
 
     # 12) Save a copy of the problem .py file to the results directory for reference
     try:
-        problem_py_copy_path = Path(timestamped_dir, f"{problem_json.get('name', 'result')}-{request_id[-5:]}.py")
+        problem_py_copy_path = Path(timestamped_dir, f"{stem}.py")
         shutil.copy2(problem_file_path, problem_py_copy_path)
         console.print(f"{ICON_OK} Copied problem file to results: {problem_py_copy_path.name}")
     except Exception as e:

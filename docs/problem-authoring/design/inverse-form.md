@@ -29,9 +29,9 @@ Problem module:
 
 Recorded result set:
 
-- `results/2026-11-02/12-37-06/Ang and Tang 6.25-19c5b.xlsx`
-- `results/2026-11-02/12-37-06/Ang and Tang 6.25-19c5b.json`
-- `results/2026-11-02/12-37-06/Ang and Tang 6.25-19c5b.py`
+- `results/2026-11-02/12-37-06/Ang_and_Tang_6_25-19c5b.xlsx`
+- `results/2026-11-02/12-37-06/Ang_and_Tang_6_25-19c5b.json`
+- `results/2026-11-02/12-37-06/Ang_and_Tang_6_25-19c5b.py`
 - `results/2026-11-02/12-37-06/profile-19c5b.yaml`
 
 Profile and run mode from saved profile:
@@ -103,9 +103,9 @@ Problem module:
 
 Recorded result set:
 
-- `results/2026-11-02/12-33-53/Ang and Tang 6.24-3deac.xlsx`
-- `results/2026-11-02/12-33-53/Ang and Tang 6.24-3deac.json`
-- `results/2026-11-02/12-33-53/Ang and Tang 6.24-3deac.py`
+- `results/2026-11-02/12-33-53/Ang_and_Tang_6_24-3deac.xlsx`
+- `results/2026-11-02/12-33-53/Ang_and_Tang_6_24-3deac.json`
+- `results/2026-11-02/12-33-53/Ang_and_Tang_6_24-3deac.py`
 - `results/2026-11-02/12-33-53/profile-3deac.yaml`
 
 Profile and run mode from saved profile:
