@@ -5,8 +5,8 @@ type: software
 authors:
   - family-names: Carrasco
     given-names: Cesar
-version: 0.1.2
-date-released: 2026-10-28
+version: 0.2.0
+date-released: 2026-11-04
 abstract: >-
   Brinkpy CLI is a Python-based command-line interface for reliability analysis, reliability-based design optimization, and simulation workflows with profile-based configuration.
 
