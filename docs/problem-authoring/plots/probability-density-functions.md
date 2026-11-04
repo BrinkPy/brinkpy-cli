@@ -106,3 +106,22 @@ The subtitle values follow from the mean and coefficient of variation of `Y`: `Ï
 
 - The shaded areas show where failure comes from. The failure point of `M` lies far in its upper tail, while the failure points of `Y` and `Z` lie close to their means. Failure is driven mainly by a large load, which matches the importance factors in Figure 1.
 - A small shaded area means the variable must take an unusual value for failure to occur. Such variables are good candidates for a closer look at their distribution, because the result depends on the shape of their tail.
+
+## With Monte Carlo Simulation
+
+When a run also includes Monte Carlo simulation, Brinkpy draws a histogram of the samples of each variable on the same plot. For example:
+
+```bash
+brinkpy analyze -m -p
+```
+
+The result set for this run is in `results/2026-11-04/11-31-58/`, with files named `AT68-a3efd`. The probability density function plots are again Figures 2 to 4, now with the histograms:
+
+![AT68 probability density function of Y with the Monte Carlo histogram](../images/at68-a3efd-02-Y-pdf-mc.png)
+
+The histogram (blue) shows the 300,000 samples of `Y` from three Monte Carlo cycles of 100,000 samples. It follows the black curve closely, which confirms that the samples come from the distribution defined in the problem file. With fewer samples the histogram is rougher, but it should still follow the curve. The figures for `Z` and `M` look the same.
+
+The PDF result file also contains the Monte Carlo histograms of the limit state function and of the load and resistance (Figures 5 and 6). See [Classic Monte Carlo](../simulate/classic-monte-carlo.md) for those.
+
+!!! note "Importance sampling"
+    With importance sampling (`-i`), Brinkpy still draws the histograms on these plots, but the samples come from the proposal distribution, not from the distributions in the problem file. The histograms are not expected to follow the probability density functions. See [Importance Sampling](../simulate/importance-sampling.md).
