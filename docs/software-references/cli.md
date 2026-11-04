@@ -6,18 +6,18 @@ If you are citing Brinkpy itself, cite the Zenodo software record: Carrasco, C. 
 
 Only direct, top-level dependencies are listed — transitive packages installed automatically as dependencies of these libraries are not included.
 
-## Preferred Citation Sources
+## Packages with a Published Citation
 
-If you need to cite a dependency, use the preferred references below:
+The authors of these packages publish a preferred way to cite them, either a paper or a citation file. If you need to cite one of them, use the reference below:
 
 - NumPy: Harris, C. R., Millman, K. J., van der Walt, S. J., et al. (2020). *Array programming with NumPy*. *Nature*, 585, 357-362. <https://doi.org/10.1038/s41586-020-2649-2>
 - Matplotlib: Hunter, J. D. (2007). *Matplotlib: A 2D Graphics Environment*. *Computing in Science and Engineering*, 9(3), 90-95. <https://doi.org/10.1109/MCSE.2007.55>
 - Typer: Ramírez, S. *Typer* (software). Citation metadata: <https://github.com/fastapi/typer/blob/master/CITATION.cff>
 - Pydantic: Colvin, S., et al. *Pydantic Validation* (software). Citation metadata: <https://github.com/pydantic/pydantic/blob/main/CITATION.cff>
 
-For the remaining packages, see the project pages below.
-
 ## Main CLI Libraries (Top-Level)
+
+Brinkpy CLI needs every package below to run, including those listed above. To cite a package without a published citation, give its name, the version you used, and its project page, for example: *Requests* (version 2.34.2), <https://requests.readthedocs.io/>. Run `pip show <package>` to see the installed version.
 
 - `typer`: https://typer.tiangolo.com/
 - `rich`: https://rich.readthedocs.io/
@@ -25,7 +25,6 @@ For the remaining packages, see the project pages below.
 - `numpy`: https://numpy.org/citing-numpy/
 - `matplotlib`: https://matplotlib.org/stable/users/project/citing.html
 - `pydantic`: https://docs.pydantic.dev/
-- `pydantic-core`: https://pypi.org/project/pydantic-core/
 - `typing_extensions`: https://pypi.org/project/typing_extensions/
 - `filedialpy`: https://pypi.org/project/filedialpy/
 - `platformdirs`: https://pypi.org/project/platformdirs/

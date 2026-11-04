@@ -4,23 +4,22 @@ This page lists the top-level Python packages used by the Brinkpy API. These are
 
 Only direct, top-level dependencies are listed — transitive packages installed automatically as dependencies of these libraries are not included.
 
-## Preferred Citation Sources
+## Packages with a Published Citation
 
-If you need to cite an API dependency, use the preferred references below:
+The authors of these packages publish a preferred way to cite them, either a paper or a citation file. If you need to cite one of them, use the reference below:
 
 - SciPy: Virtanen, P., Gommers, R., Oliphant, T. E., et al. (2020). *SciPy 1.0: Fundamental algorithms for scientific computing in Python*. *Nature Methods*, 17, 261-272. <https://doi.org/10.1038/s41592-019-0686-2>
 - NumPy: Harris, C. R., Millman, K. J., van der Walt, S. J., et al. (2020). *Array programming with NumPy*. *Nature*, 585, 357-362. <https://doi.org/10.1038/s41586-020-2649-2>
 - Matplotlib: Hunter, J. D. (2007). *Matplotlib: A 2D Graphics Environment*. *Computing in Science and Engineering*, 9(3), 90-95. <https://doi.org/10.1109/MCSE.2007.55>
-- FastAPI: Ramírez, S. *FastAPI* (software). <https://github.com/fastapi/fastapi/tree/master>
 - pandas: McKinney, W. (2010). *Data structures for statistical computing in Python*. In *Proceedings of the 9th Python in Science Conference*, 56-61. <https://doi.org/10.25080/Majora-92bf1922-00a>
 - Pydantic: Colvin, S., et al. *Pydantic Validation* (software). Citation metadata: <https://github.com/pydantic/pydantic/blob/main/CITATION.cff>
 - scikit-learn: Pedregosa, F., Varoquaux, G., Gramfort, A., et al. (2011). *Scikit-learn: Machine Learning in Python*. *Journal of Machine Learning Research*, 12, 2825-2830. <https://jmlr.csail.mit.edu/papers/v12/pedregosa11a.html>
 - ArviZ: Kumar, R., Carroll, C., Hartikainen, A., and Martin, O. (2019). *ArviZ a unified library for exploratory analysis of Bayesian models in Python*. *Journal of Open Source Software*, 4(33), 1143. <https://doi.org/10.21105/joss.01143>
 - statsmodels: Seabold, S., and Perktold, J. (2010). *statsmodels: Econometric and statistical modeling with python*. In *Proceedings of the 9th Python in Science Conference*. <https://proceedings.scipy.org/articles/Majora-92bf1922-011>
 
-For the remaining packages, see the project pages below.
-
 ## Main API Libraries (Top-Level)
+
+The Brinkpy API needs every package below to run, including those listed above. To cite a package without a published citation, give its name, the version, and its project page.
 
 - `algopy`: https://pypi.org/project/algopy/
 - `arviz`: https://www.arviz.org/en/latest/support.html#cite
