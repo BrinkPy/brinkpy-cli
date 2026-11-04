@@ -758,10 +758,10 @@ def run_app(
             "name": profile_name,
             "description": f"Configuration profile for '{problem_json.get('name', problem_file_path.stem)}' run",
             "run_configuration": run_configuration,
-            "reporting_options": reporting_options,
-            "rfad_plot_options": rfad_plot_options,
-            "lsf_plot_options": lsf_plot_options,
             "reliability_options": reliability_options,
+            "lsf_plot_options": lsf_plot_options,
+            "rfad_plot_options": rfad_plot_options,
+            "reporting_options": reporting_options,
         }
     )
     profile_path = Path(timestamped_dir, f"profile-{request_id[-5:]}.yaml")

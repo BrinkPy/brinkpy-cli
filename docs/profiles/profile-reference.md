@@ -8,108 +8,23 @@ A profile YAML file starts with two identifying fields, followed by four option 
 
 - `name`: The profile name
 - `description`: A short description of the profile
-- `reporting_options`: Report generation settings
-- `rfad_plot_options`: Reliability-based failure assessment diagram (RFAD) settings
-- `lsf_plot_options`: Limit state function (LSF) plot settings
 - `reliability_options`: Reliability analysis, SORM, Monte Carlo, importance sampling, and optimization settings
-
----
-
-## Reporting Options
-
-Options for saving analysis results and visualizations.
-
-Used by: all commands. See [Result Files](../cli/results-files.md) for what each file contains.
-
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `save_plots_to_pdf` | bool | `true` | Whether to save all generated plots in PDF format |
-| `save_plots_to_pickle` | bool | `true` | Whether to save figure objects in pickle format for later retrieval and editing |
-| `save_excel_summary` | bool | `true` | Whether to save the numerical results summary to an Excel file |
-
-**Example:**
-```yaml
-reporting_options:
-  save_plots_to_pdf: true
-  save_plots_to_pickle: true
-  save_excel_summary: true
-```
-
----
-
-## RFAD Plot Options
-
-Options for reliability-based failure assessment diagram (RFAD) visualization.
-
-Used by: `analyze --plot-rfad`.
-
-| Option | Type | Default | Range/Values | Description |
-|--------|------|---------|--------------|-------------|
-| `n_x_points` | int | `30` | [5, 60] | Number of grid points along the first variable axis |
-| `n_y_points` | int | `29` | [5, 60] | Number of grid points along the second variable axis |
-| `plot_beta` | bool | `true` | - | Whether to plot the reliability index (β) contours |
-| `plot_alphas` | bool | `true` | - | Whether to plot alpha values (normalized sensitivity factors) for each variable |
-| `plot_base_point` | bool | `true` | - | Whether to plot the base point (mean of input variables) on the diagram |
-| `with_labels` | bool | `true` | - | Whether to add text labels to the base point on the diagram |
-| `ignore_axis_funcs` | bool | `false` | - | Whether to ignore axis transformation functions and plot in original variable space |
-| `view` | str or tuple | `"auto"` | `"auto"`, `"default"`, `"XY"`, `"XZ"`, `"YZ"`, `"-XY"`, `"-XZ"`, `"-YZ"` (case-insensitive) or tuple of 3 floats (elevation, azimuth, roll) in degrees | View orientation for 3D perspective |
-| `cmap` | str or list | `"plasma"` | Valid matplotlib colormap name or list of shape (n, 4) with RGBA values in [0, 1] where 1 ≤ n ≤ 256 | Colormap specification |
-| `type` | str | `"surface"` | `"contour"`, `"surface"` | Plot visualization type |
-
-**Example:**
-```yaml
-rfad_plot_options:
-  n_x_points: 30
-  n_y_points: 29
-  plot_beta: true
-  plot_alphas: true
-  plot_base_point: true
-  with_labels: true
-  ignore_axis_funcs: false
-  view: "auto"
-  cmap: "plasma"
-  type: "surface"
-```
-
----
-
-## LSF Plot Options
-
-Options for limit state function (LSF) 3D visualization.
-
-Used by: `analyze --plot-lsf` and `simulate --plot-lsf`.
-
-| Option | Type | Default | Range/Values | Description |
-|--------|------|---------|--------------|-------------|
-| `n_x_points` | int | `30` | [5, 60] | Number of grid points along the first variable axis |
-| `n_y_points` | int | `29` | [5, 60] | Number of grid points along the second variable axis |
-| `plot_base_point` | bool | `true` | - | Whether to plot the base point (mean of input variables) on the LSF surface |
-| `plot_failure_point` | bool | `true` | - | Whether to plot the design point (Most Probable Point of Failure) on the LSF surface |
-| `with_labels` | bool | `true` | - | Whether to add text labels to the base and failure points |
-| `ignore_axis_funcs` | bool | `false` | - | Whether to ignore axis transformation functions and plot in original variable space |
-| `view` | str or tuple | `"auto"` | `"auto"`, `"default"`, `"XY"`, `"XZ"`, `"YZ"`, `"-XY"`, `"-XZ"`, `"-YZ"` (case-insensitive) or tuple of 3 floats (elevation, azimuth, roll) in degrees | View orientation for 3D perspective |
-| `cmap` | str or list | `"plasma"` | Valid matplotlib colormap name or list of shape (n, 4) with RGBA values in [0, 1] where 1 ≤ n ≤ 256 | Colormap specification |
-| `type` | str | `"surface"` | `"contour"`, `"surface"` | Plot visualization type |
-
-**Example:**
-```yaml
-lsf_plot_options:
-  n_x_points: 30
-  n_y_points: 29
-  plot_base_point: true
-  plot_failure_point: true
-  with_labels: true
-  ignore_axis_funcs: false
-  view: "auto"
-  cmap: "plasma"
-  type: "surface"
-```
+- `lsf_plot_options`: Limit state function (LSF) plot settings
+- `rfad_plot_options`: Reliability-based failure assessment diagram (RFAD) settings
+- `reporting_options`: Report generation settings
 
 ---
 
 ## Reliability Options
 
 Options for reliability calculations and related numerical settings. This section collects tolerances, algorithm choices, finite-difference settings, plotting flags, Monte Carlo controls and various checks used across FORM, SORM, inverse problems and design optimization routines.
+
+### General Reliability Settings
+
+| Option | Type | Default | Values | Description |
+|--------|------|---------|--------|-------------|
+| `alpha_direction` | str | `"outward"` | `"outward"`, `"inward"` | Direction convention for the alpha vector |
+| `use_nearest_correlation` | bool | `false` | - | Controls fallback behavior when Cholesky decomposition of the correlation matrix fails. If `false`, the run stops with an error. If `true`, Brinkpy attempts to replace the matrix with a nearest positive semidefinite (PSD) correlation matrix using the methodology in [Rebonato and Jaeckel (2011)](https://ssrn.com/abstract=1969689) ([DOI](http://dx.doi.org/10.2139/ssrn.1969689)). |
 
 ### FORM and Inverse FORM Settings
 
@@ -140,14 +55,6 @@ Used by: `design` when the problem defines an objective function.
 | `design_random_start` | bool | `false` | - | Use a random starting point for design optimization |
 | `design_seed` | int or null | `null` | - | Random seed for design optimization random starts |
 
-### General Reliability Settings
-
-| Option | Type | Default | Values | Description |
-|--------|------|---------|--------|-------------|
-| `alpha_direction` | str | `"outward"` | `"outward"`, `"inward"` | Direction convention for the alpha vector |
-| `use_nearest_correlation` | bool | `false` | - | Controls fallback behavior when Cholesky decomposition of the correlation matrix fails. If `false`, the run stops with an error. If `true`, Brinkpy attempts to replace the matrix with a nearest positive semidefinite (PSD) correlation matrix using the methodology in [Rebonato and Jaeckel (2011)](https://ssrn.com/abstract=1969689) ([DOI](http://dx.doi.org/10.2139/ssrn.1969689)). |
-| `qn_epsilon` | float | `1e-8` | [1e-8, 1e-2] | Tolerance used by the quasi-Newton SR1 (Symmetric Rank 1) update when `sor_fit_method` is set to `SR1` |
-
 ### SORM Settings
 
 Used by: `analyze --include-sorm`, `simulate --include-sorm`, and `design --use-sorm`.
@@ -161,6 +68,7 @@ Used by: `analyze --include-sorm`, `simulate --include-sorm`, and `design --use-
 | `sor_fdm` | str | `"forward"` | `"central"`, `"forward"`, `"backward"` | Finite-difference method for gradient and Hessian (used when `sor_fit_method` is `FiniteDiff`) |
 | `sor_fdm_hess_form` | str | `"full"` | `"full"`, `"diagonal"` | Hessian form for finite-difference approximation (used when `sor_fit_method` is `FiniteDiff`) |
 | `force_curvatures` | bool | `false` | - | Force curvature computations even if not strictly required by selected SORM options |
+| `qn_epsilon` | float | `1e-8` | [1e-8, 1e-2] | Tolerance used by the quasi-Newton SR1 (Symmetric Rank 1) update when `sor_fit_method` is set to `SR1` |
 
 #### SORM References
 
@@ -218,25 +126,6 @@ Used by: SORM runs with `sor_method: "SOSPA_L"` or `"SOSPA_H"`.
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `plot_sospa_funcs` | bool | `true` | Generate diagnostic plots for SOSPA characteristic functions and derivatives |
-
-### Derivative Checking
-
-These options validate user-provided derivatives against numerical finite differences.
-
-Used by: any run where the problem file provides analytic derivatives.
-
-| Option | Type | Default | Values | Description |
-|--------|------|---------|--------|-------------|
-| `check_lsf_diffs_wrtx` | bool | `false` | - | Validate user-provided LSF derivatives against numerical diffs w.r.t. real-space variables |
-| `check_lsf_diffs_wrtu` | bool | `true` | - | Validate user-provided LSF derivatives against numerical diffs w.r.t. standard-normal (U-space) variables |
-| `lsf_diffs_check_method` | str | `"forward"` | `"central"`, `"forward"`, `"backward"`, `"complex"` | Method for LSF derivative checks |
-| `check_varscf_diffs_wrtx` | bool | `false` | - | Validate user-provided stochastic variables constraints (real-space) |
-| `check_varscf_diffs_wrtu` | bool | `true` | - | Validate user-provided stochastic variables constraints (U-space) |
-| `varscf_diffs_check_method` | str | `"forward"` | `"central"`, `"forward"`, `"backward"`, `"complex"` | Method for stochastic variables constraint derivative checks |
-| `check_dof_diffs` | bool | `true` | - | Validate user-provided design objective function derivatives against numerical diffs |
-| `dof_diffs_check_method` | str | `"forward"` | `"central"`, `"forward"`, `"backward"`, `"complex"` | Method for design objective function derivative checks |
-| `check_dcf_diffs` | bool | `true` | - | Validate user-provided design constraint function derivatives against numerical diffs |
-| `dcf_diffs_check_method` | str | `"forward"` | `"central"`, `"forward"`, `"backward"`, `"complex"` | Method for design constraint function derivative checks |
 
 ### Monte Carlo Settings
 
@@ -298,29 +187,49 @@ Use these references as starting points for method details and implementation ba
 !!! warning "Limitation: one most probable point"
     FORM finds a single MPP, so `mpp_normal` covers only the failure region around it. When the failure region has several separate parts, such as in series systems built with `numpy.minimum()`, the proposal distribution misses the other parts and the probability of failure is underestimated. For the series problem `AU2Problem`, `mpp_normal` gave β = 4.839, while `kde`, `mixture`, and `mcmc` all gave β ≈ 4.78. It also needed 1,264,000 samples to reach the target coefficient of variation, compared with 6,000 to 8,000 for the other methods. For such problems, use `kde`, `mixture`, or `mcmc`.
 
-**Example:**
+### Derivative Checking
+
+These options validate user-provided derivatives against numerical finite differences.
+
+Used by: any run where the problem file provides analytic derivatives.
+
+| Option | Type | Default | Values | Description |
+|--------|------|---------|--------|-------------|
+| `check_lsf_diffs_wrtx` | bool | `false` | - | Validate user-provided LSF derivatives against numerical diffs w.r.t. real-space variables |
+| `check_lsf_diffs_wrtu` | bool | `true` | - | Validate user-provided LSF derivatives against numerical diffs w.r.t. standard-normal (U-space) variables |
+| `lsf_diffs_check_method` | str | `"forward"` | `"central"`, `"forward"`, `"backward"`, `"complex"` | Method for LSF derivative checks |
+| `check_varscf_diffs_wrtx` | bool | `false` | - | Validate user-provided stochastic variables constraints (real-space) |
+| `check_varscf_diffs_wrtu` | bool | `true` | - | Validate user-provided stochastic variables constraints (U-space) |
+| `varscf_diffs_check_method` | str | `"forward"` | `"central"`, `"forward"`, `"backward"`, `"complex"` | Method for stochastic variables constraint derivative checks |
+| `check_dof_diffs` | bool | `true` | - | Validate user-provided design objective function derivatives against numerical diffs |
+| `dof_diffs_check_method` | str | `"forward"` | `"central"`, `"forward"`, `"backward"`, `"complex"` | Method for design objective function derivative checks |
+| `check_dcf_diffs` | bool | `true` | - | Validate user-provided design constraint function derivatives against numerical diffs |
+| `dcf_diffs_check_method` | str | `"forward"` | `"central"`, `"forward"`, `"backward"`, `"complex"` | Method for design constraint function derivative checks |
+
+### Example
+
+A complete `reliability_options` section with the default values:
 
 ```yaml
 reliability_options:
+  # General
+  alpha_direction: "outward"
+  use_nearest_correlation: false
+
   # FORM
   form_xtol: 0.0001
   form_gtol: 0.0001
   form_maxiter: 1000
   form_random_start: false
   form_seed: null
-  
+
   # Design
   design_xtol: 0.001
   design_gtol: 0.001
   design_maxiter: 1000
   design_random_start: false
   design_seed: null
-  
-  # General
-  alpha_direction: "outward"
-  use_nearest_correlation: false
-  qn_epsilon: 1e-8
-  
+
   # SORM
   sor_method: "SOSPA_H"
   sor_approximation: "Paraboloid"
@@ -329,33 +238,22 @@ reliability_options:
   sor_fdm: "forward"
   sor_fdm_hess_form: "full"
   force_curvatures: false
-  
+  qn_epsilon: 1e-8
+
   # IFFT
   ifft_std_domain: 16.0
   ifft_n: 4096
   plot_ifft_funcs: true
-  
+
   # SOSPA
   plot_sospa_funcs: true
-  
-  # Derivative checking
-  check_lsf_diffs_wrtx: false
-  check_lsf_diffs_wrtu: true
-  lsf_diffs_check_method: "forward"
-  check_varscf_diffs_wrtx: false
-  check_varscf_diffs_wrtu: true
-  varscf_diffs_check_method: "forward"
-  check_dof_diffs: true
-  dof_diffs_check_method: "forward"
-  check_dcf_diffs: true
-  dcf_diffs_check_method: "forward"
-  
+
   # Monte Carlo
   mc_n: null
   mc_max_cv: 0.05
   mc_seed: null
   mc_remove_oob: true
-  
+
   # Importance Sampling
   is_method: "kde"
   is_kde_bandwidth: "scott"
@@ -367,6 +265,110 @@ reliability_options:
   is_mcmc_thinning: 3
   is_mcmc_burnin: 200
   is_mcmc_fit_method: "kde"
+
+  # Derivative checking
+  check_lsf_diffs_wrtx: false
+  check_lsf_diffs_wrtu: true
+  lsf_diffs_check_method: "forward"
+  check_varscf_diffs_wrtx: false
+  check_varscf_diffs_wrtu: true
+  varscf_diffs_check_method: "forward"
+  check_dof_diffs: true
+  dof_diffs_check_method: "forward"
+  check_dcf_diffs: true
+  dcf_diffs_check_method: "forward"
+```
+
+---
+
+## LSF Plot Options
+
+Options for limit state function (LSF) 3D visualization.
+
+Used by: `analyze --plot-lsf` and `simulate --plot-lsf`.
+
+| Option | Type | Default | Range/Values | Description |
+|--------|------|---------|--------------|-------------|
+| `n_x_points` | int | `30` | [5, 60] | Number of grid points along the first variable axis |
+| `n_y_points` | int | `29` | [5, 60] | Number of grid points along the second variable axis |
+| `plot_base_point` | bool | `true` | - | Whether to plot the base point (mean of input variables) on the LSF surface |
+| `plot_failure_point` | bool | `true` | - | Whether to plot the design point (Most Probable Point of Failure) on the LSF surface |
+| `with_labels` | bool | `true` | - | Whether to add text labels to the base and failure points |
+| `ignore_axis_funcs` | bool | `false` | - | Whether to ignore axis transformation functions and plot in original variable space |
+| `view` | str or tuple | `"auto"` | `"auto"`, `"default"`, `"XY"`, `"XZ"`, `"YZ"`, `"-XY"`, `"-XZ"`, `"-YZ"` (case-insensitive) or tuple of 3 floats (elevation, azimuth, roll) in degrees | View orientation for 3D perspective |
+| `cmap` | str or list | `"plasma"` | Valid matplotlib colormap name or list of shape (n, 4) with RGBA values in [0, 1] where 1 ≤ n ≤ 256 | Colormap specification |
+| `type` | str | `"surface"` | `"contour"`, `"surface"` | Plot visualization type |
+
+**Example:**
+```yaml
+lsf_plot_options:
+  n_x_points: 30
+  n_y_points: 29
+  plot_base_point: true
+  plot_failure_point: true
+  with_labels: true
+  ignore_axis_funcs: false
+  view: "auto"
+  cmap: "plasma"
+  type: "surface"
+```
+
+---
+
+## RFAD Plot Options
+
+Options for reliability-based failure assessment diagram (RFAD) visualization.
+
+Used by: `analyze --plot-rfad`.
+
+| Option | Type | Default | Range/Values | Description |
+|--------|------|---------|--------------|-------------|
+| `n_x_points` | int | `30` | [5, 60] | Number of grid points along the first variable axis |
+| `n_y_points` | int | `29` | [5, 60] | Number of grid points along the second variable axis |
+| `plot_beta` | bool | `true` | - | Whether to plot the reliability index (β) contours |
+| `plot_alphas` | bool | `true` | - | Whether to plot alpha values (normalized sensitivity factors) for each variable |
+| `plot_base_point` | bool | `true` | - | Whether to plot the base point (mean of input variables) on the diagram |
+| `with_labels` | bool | `true` | - | Whether to add text labels to the base point on the diagram |
+| `ignore_axis_funcs` | bool | `false` | - | Whether to ignore axis transformation functions and plot in original variable space |
+| `view` | str or tuple | `"auto"` | `"auto"`, `"default"`, `"XY"`, `"XZ"`, `"YZ"`, `"-XY"`, `"-XZ"`, `"-YZ"` (case-insensitive) or tuple of 3 floats (elevation, azimuth, roll) in degrees | View orientation for 3D perspective |
+| `cmap` | str or list | `"plasma"` | Valid matplotlib colormap name or list of shape (n, 4) with RGBA values in [0, 1] where 1 ≤ n ≤ 256 | Colormap specification |
+| `type` | str | `"surface"` | `"contour"`, `"surface"` | Plot visualization type |
+
+**Example:**
+```yaml
+rfad_plot_options:
+  n_x_points: 30
+  n_y_points: 29
+  plot_beta: true
+  plot_alphas: true
+  plot_base_point: true
+  with_labels: true
+  ignore_axis_funcs: false
+  view: "auto"
+  cmap: "plasma"
+  type: "surface"
+```
+
+---
+
+## Reporting Options
+
+Options for saving analysis results and visualizations.
+
+Used by: all commands. See [Result Files](../cli/results-files.md) for what each file contains.
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `save_plots_to_pdf` | bool | `true` | Whether to save all generated plots in PDF format |
+| `save_plots_to_pickle` | bool | `true` | Whether to save figure objects in pickle format for later retrieval and editing |
+| `save_excel_summary` | bool | `true` | Whether to save the numerical results summary to an Excel file |
+
+**Example:**
+```yaml
+reporting_options:
+  save_plots_to_pdf: true
+  save_plots_to_pickle: true
+  save_excel_summary: true
 ```
 
 ---

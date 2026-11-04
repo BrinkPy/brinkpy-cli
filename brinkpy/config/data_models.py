@@ -332,9 +332,9 @@ class ReliabilityOptions(BaseEnumModel):
     model_config = ConfigDict(extra="forbid", validate_assignment=True)
 
     PROFILE_GROUPS: ClassVar[tuple[tuple[str, tuple[str, ...]], ...]] = (
+        ("General", ("alpha_direction", "use_nearest_correlation")),
         ("FORM", ("form_xtol", "form_gtol", "form_maxiter", "form_random_start", "form_seed")),
         ("Design", ("design_xtol", "design_gtol", "design_maxiter", "design_random_start", "design_seed")),
-        ("General", ("alpha_direction", "use_nearest_correlation")),
         (
             "SORM",
             (
@@ -350,21 +350,6 @@ class ReliabilityOptions(BaseEnumModel):
         ),
         ("IFFT", ("ifft_std_domain", "ifft_n", "plot_ifft_funcs")),
         ("SOSPA", ("plot_sospa_funcs",)),
-        (
-            "Derivative checking",
-            (
-                "check_lsf_diffs_wrtx",
-                "check_lsf_diffs_wrtu",
-                "lsf_diffs_check_method",
-                "check_varscf_diffs_wrtx",
-                "check_varscf_diffs_wrtu",
-                "varscf_diffs_check_method",
-                "check_dof_diffs",
-                "dof_diffs_check_method",
-                "check_dcf_diffs",
-                "dcf_diffs_check_method",
-            ),
-        ),
         ("Monte Carlo", ("mc_n", "mc_max_cv", "mc_seed", "mc_remove_oob")),
         (
             "Importance Sampling",
@@ -379,6 +364,21 @@ class ReliabilityOptions(BaseEnumModel):
                 "is_mcmc_thinning",
                 "is_mcmc_burnin",
                 "is_mcmc_fit_method",
+            ),
+        ),
+        (
+            "Derivative checking",
+            (
+                "check_lsf_diffs_wrtx",
+                "check_lsf_diffs_wrtu",
+                "lsf_diffs_check_method",
+                "check_varscf_diffs_wrtx",
+                "check_varscf_diffs_wrtu",
+                "varscf_diffs_check_method",
+                "check_dof_diffs",
+                "dof_diffs_check_method",
+                "check_dcf_diffs",
+                "dcf_diffs_check_method",
             ),
         ),
     )

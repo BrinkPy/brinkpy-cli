@@ -103,10 +103,10 @@ def default_profile_dict() -> OrderedDict:
             "name": "default",
             "description": "Default configuration profile",
             "run_configuration": run_configuration.model_dump(mode="json"),
-            "reporting_options": reporting_options.model_dump(mode="json"),
-            "rfad_plot_options": rfad_plot_options.model_dump(mode="json"),
-            "lsf_plot_options": lsf_plot_options.model_dump(mode="json"),
             "reliability_options": reliability_options.model_dump(mode="json"),
+            "lsf_plot_options": lsf_plot_options.model_dump(mode="json"),
+            "rfad_plot_options": rfad_plot_options.model_dump(mode="json"),
+            "reporting_options": reporting_options.model_dump(mode="json"),
         }
     )
     return default_as_dict
@@ -299,14 +299,9 @@ def show_profile_rich(profile_name: str, highlight_changes: bool = True):
         #     defaults.get("run_configuration") if defaults else None,
         # ), # Exclude run_configuration from display
         (
-            "Reporting Options",
-            profile_data.get("reporting_options", {}),
-            defaults.get("reporting_options") if defaults else None,
-        ),
-        (
-            "RFAD Plot Options",
-            profile_data.get("rfad_plot_options", {}),
-            defaults.get("rfad_plot_options") if defaults else None,
+            "Reliability Options",
+            profile_data.get("reliability_options", {}),
+            defaults.get("reliability_options") if defaults else None,
         ),
         (
             "LSF Plot Options",
@@ -314,9 +309,14 @@ def show_profile_rich(profile_name: str, highlight_changes: bool = True):
             defaults.get("lsf_plot_options") if defaults else None,
         ),
         (
-            "Reliability Options",
-            profile_data.get("reliability_options", {}),
-            defaults.get("reliability_options") if defaults else None,
+            "RFAD Plot Options",
+            profile_data.get("rfad_plot_options", {}),
+            defaults.get("rfad_plot_options") if defaults else None,
+        ),
+        (
+            "Reporting Options",
+            profile_data.get("reporting_options", {}),
+            defaults.get("reporting_options") if defaults else None,
         ),
     ]
 

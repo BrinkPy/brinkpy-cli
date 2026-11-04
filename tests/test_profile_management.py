@@ -19,15 +19,18 @@ class TestProfileFormatting(unittest.TestCase):
                 profile_path = Path(temp_dir) / "profiles" / "custom.yaml"
                 profile_text = profile_path.read_text()
 
-                self.assertIn("reliability_options:\n  # FORM\n  form_xtol:", profile_text)
+                self.assertIn("reliability_options:\n  # General\n  alpha_direction:", profile_text)
+                self.assertIn("\n  # FORM\n  form_xtol:", profile_text)
                 self.assertIn("\n  # Design\n  design_xtol:", profile_text)
-                self.assertIn("\n  # General\n  alpha_direction:", profile_text)
                 self.assertIn("\n  # SORM\n  sor_method:", profile_text)
                 self.assertIn("\n  # Monte Carlo\n  mc_n:", profile_text)
                 self.assertIn("\n  # Importance Sampling\n  is_method:", profile_text)
 
                 loaded_profile = yaml.safe_load(profile_text)
-                self.assertIn("reliability_options", loaded_profile)
+                self.assertEqual(
+                    [key for key in loaded_profile if key.endswith("_options")],
+                    ["reliability_options", "lsf_plot_options", "rfad_plot_options", "reporting_options"],
+                )
                 self.assertEqual(loaded_profile["name"], "custom")
                 self.assertEqual(loaded_profile["description"], "User-defined profile")
             finally:
