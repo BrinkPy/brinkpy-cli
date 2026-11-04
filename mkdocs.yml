@@ -65,6 +65,10 @@ nav:
       - Classic Monte Carlo: problem-authoring/simulate/classic-monte-carlo.md
       - Importance Sampling: problem-authoring/simulate/importance-sampling.md
       - MCMC Importance Sampling: problem-authoring/simulate/importance-sampling-mcmc.md
+    - Plots:
+      - Probability Density Functions: problem-authoring/plots/probability-density-functions.md
+      - Limit State Function: problem-authoring/plots/limit-state-function.md
+      - Failure Assessment Diagram: problem-authoring/plots/rfad.md
     - Recommended Texts and References: problem-authoring/recommended-texts.md
   - Software References:
     - Overview: software-references/index.md

@@ -42,7 +42,7 @@ def Problem():
             "x_func": lambda S, D: S[0] * S[1],
             "x_label": "Resistance: Y*Z",
             "y_var": "M",
-            "y_lim": [800, 1200],
+            "y_lim": [800, 1800],
             "y_func": lambda S, D: S[2],
             "y_label": "Load: M",
         },

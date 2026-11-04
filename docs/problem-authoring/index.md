@@ -8,7 +8,7 @@ For result-folder location and output filename conventions, see [CLI Result File
 
 This page describes the problem file format: the top-level keys, the variables, the limit state function, and the plot keys. It uses short snippets from the packaged example problems to illustrate them.
 
-The rest of the section teaches by example. The pages under **Analyze**, **Design**, and **Simulate** each walk through one or two packaged example problems: the problem file, the command that runs it, the result tables and figures, and how to read them. Use them as templates for your own problems. To run the examples yourself, copy them into your project folder with `brinkpy examples copy` (see [Packaged Example Problems](../examples.md)).
+The rest of the section teaches by example. The pages under **Analyze**, **Design**, **Simulate**, and **Plots** each walk through one or two packaged example problems: the problem file, the command that runs it, the result tables and figures, and how to read them. Use them as templates for your own problems. To run the examples yourself, copy them into your project folder with `brinkpy examples copy` (see [Packaged Example Problems](../examples.md)).
 
 The [Results Tables Reference](results-tables.md) explains every column in the result files, and the example pages link to it. The **Design** group also has its own overview and a reference of the `DesignProblem` keys.
 
@@ -368,7 +368,7 @@ These blocks are optional for computation but needed for plot commands and riche
 
 ### `LSFplot`
 
-`LSFplot` defines a 3D plot of the limit state function (LSF) over two stochastic variables on the x and y axes. It is used when running `brinkpy analyze -l` or `brinkpy simulate -l`. The plot style (surface or contour) and whether the mean point and design point are shown are set in the profile (see [LSF Plot Options](../profiles/profile-reference.md#lsf-plot-options)).
+`LSFplot` defines a 3D plot of the limit state function (LSF) over two stochastic variables on the x and y axes. It is used when running `brinkpy analyze -l` or `brinkpy simulate -l`. The plot style (surface or contour) and whether the mean point and design point are shown are set in the profile (see [LSF Plot Options](../profiles/profile-reference.md#lsf-plot-options)). For a worked example, see [Limit State Function](plots/limit-state-function.md).
 
 **Required and optional keys:**
 
@@ -406,7 +406,7 @@ These blocks are optional for computation but needed for plot commands and riche
     "x_func": lambda S, D: S[0] * S[1],      # Resistance: product of Y and Z
     "x_label": "Resistance: Y*Z",
     "y_var": "M",
-    "y_lim": [800, 1200],
+    "y_lim": [800, 1800],
     "y_func": lambda S, D: S[2],              # Load: just M
     "y_label": "Load: M",
 }
@@ -423,10 +423,10 @@ Here, stochastic variables are indexed as `S[0]` for Y, `S[1]` for Z, and `S[2]`
 | Key | Type | Required | Meaning |
 |---|---|---|---|
 | `x_var` | `str` | Yes | Stochastic variable whose parameter is swept along the x axis |
-| `x_param` | `str` | Yes | Parameter to sweep, e.g. `"mean"` |
+| `x_param` | `str` | Yes | Parameter to sweep: `"mean"`, `"std"`, `"param1"`, or `"param2"` |
 | `x_lim` | `list[float]` | Yes | Sweep range `[min, max]` for the x parameter |
 | `y_var` | `str` | Yes | Stochastic variable whose parameter is swept along the y axis |
-| `y_param` | `str` | Yes | Parameter to sweep, e.g. `"mean"` |
+| `y_param` | `str` | Yes | Parameter to sweep: `"mean"`, `"std"`, `"param1"`, or `"param2"` |
 | `y_lim` | `list[float]` | Yes | Sweep range `[min, max]` for the y parameter |
 | `x_func` | `callable` or omitted | No | Transformation `lambda S, D: ...` mapping the swept stochastic values to the plotted x quantity. If omitted, the swept parameter value is plotted directly. |
 | `y_func` | `callable` or omitted | No | Transformation `lambda S, D: ...` mapping the swept stochastic values to the plotted y quantity. If omitted, the swept parameter value is plotted directly. |
@@ -452,7 +452,7 @@ Here, stochastic variables are indexed as `S[0]` for Y, `S[1]` for Z, and `S[2]`
 }
 ```
 
-Here `S[0]` is Y, `S[1]` is Z, and `S[2]` is M. As Brinkpy sweeps `mean(Y)` and `mean(M)`, `x_func` converts the current Y mean into ` μ(Y)·μ(Z)` (resistance) and `y_func` passes `mean(M)` through as the load axis. The RFAD contour plot is included in the run PDF.
+Here `S[0]` is Y, `S[1]` is Z, and `S[2]` is M. As Brinkpy sweeps `mean(Y)` and `mean(M)`, `x_func` converts the current Y mean into ` μ(Y)·μ(Z)` (resistance) and `y_func` passes `mean(M)` through as the load axis. The RFAD plots are included in the PDF result file. For a worked example, see [Failure Assessment Diagram](plots/rfad.md).
 
 ### `ISplot`
 
@@ -500,3 +500,6 @@ When a module is rejected, the API returns a validation error describing the dis
 - [Classic Monte Carlo](simulate/classic-monte-carlo.md): simulation example using plain Monte Carlo (Chan2).
 - [Importance Sampling](simulate/importance-sampling.md): simulation example using importance sampling (AU2).
 - [MCMC Importance Sampling](simulate/importance-sampling-mcmc.md): the same problem with a Markov chain Monte Carlo (MCMC) proposal distribution (AU2).
+- [Probability Density Functions](plots/probability-density-functions.md): plots of the probability density function of each stochastic variable (`AT68`).
+- [Limit State Function](plots/limit-state-function.md): plots of the limit state function in x-space and u-space, with the profile options that control them (`AT68`).
+- [Failure Assessment Diagram](plots/rfad.md): reliability-based failure assessment diagram (RFAD) plots of the probability of failure, the reliability index, and the alpha values over a grid of mean resistance and mean load (`AT68`).
