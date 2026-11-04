@@ -33,7 +33,7 @@ Brinkpy is verified against published results. Every [packaged example](examples
 The few differences from published results have a known cause, and in each case Brinkpy's result is the more accurate one:
 
 - **Correlated variables in Ang and Tang.** In the textbook examples with correlated non-normal variables, such as [`AT610`](problem-authoring/analyze/form-only.md), the book applies the correlation coefficients directly in standard normal space. Brinkpy adjusts them with the Nataf transformation, which accounts for how the correlation changes under the transformation to standard normal space.
-- **The failure region of `AU2`.** In the series system example of Au and Beck (1999), Brinkpy's importance sampling finds a part of the failure region that the published solution does not include, so its probability of failure, about `9.1e−7`, is larger than the published `6.97e−7` (see [MCMC Importance Sampling](problem-authoring/simulate/importance-sampling-mcmc.md#interpretation-snapshot)). When the variables are bounded to the region used in the paper, Brinkpy's estimate matches the published one within the variation expected from random sampling.
+- **The failure region of `AU2`.** In the series system example of Au and Beck (1999), Brinkpy's importance sampling finds a part of the failure region that the published solution does not include, so its probability of failure, about `9.1e−7`, is larger than the published `6.97e−7` (see [MCMC Importance Sampling](problem-authoring/simulate/importance-sampling-mcmc.md#problem-file-used)). When the variables are bounded to the region used in the paper, Brinkpy's estimate matches the published one within the variation expected from random sampling.
 
 ## Reproducible Results
 

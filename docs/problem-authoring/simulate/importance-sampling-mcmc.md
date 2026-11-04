@@ -59,6 +59,9 @@ With `is_mcmc_fit_method: kde`, the MCMC samples are fitted with a KDE to form t
 
 This run uses `AU2Problem.py`, the series system of two limit state functions in two standard normal variables. See [Problem File Used](importance-sampling.md#problem-file-used) on the KDE example page for the definition and the `ISplot` key.
 
+!!! note "Comparison with the paper"
+    This page uses the method of Au and Beck (1999), who build the proposal distribution with MCMC. Brinkpy's estimate of the probability of failure, `pf = 9.026e−7`, is larger than the `6.97e−7` published in the paper. Brinkpy's MCMC chains find a part of the failure region that the published solution does not include (see **Figures 4 and 5**). When the variables are bounded to the region used in the paper, Brinkpy's estimate matches the published one within the variation expected from random sampling. See [Verification](../../why-brinkpy.md#verification).
+
 ## Extracted Results Worksheet Tables
 
 The tables below are transcribed from the `Results` worksheet in `AU2-b5cb6.xlsx`. For the meaning of each column, see [Results Tables Reference](../results-tables.md#monte-carlo).
@@ -137,7 +140,7 @@ Both methods estimate nearly the same probability of failure. For this problem, 
 - The probability of failure (`pf ≈ 9.03 × 10⁻⁷`, `beta ≈ 4.77`) agrees with the KDE run, and `cv = 0.0195` is well below `max_cv = 0.05`.
 - The MCMC samples are used only to build the proposal distribution. The probability of failure comes from the weighted importance samples, and `cv` reports its precision. Chain convergence still matters: if the chains miss part of the failure region, the proposal distribution may not cover it.
 - Brinkpy calculates `r_hat` but does not enforce a limit. Here `r_hat = 1.024`, above the 1.01 often recommended in the MCMC literature. **Figure 3** shows where it comes from: the rank bars of chain 2 rise from left to right instead of staying level, and its autocorrelation decays more slowly than that of the other chains. To improve convergence, increase `is_mcmc_chain_length`, `is_mcmc_burnin`, or `is_mcmc_chains` in the profile and run again.
-- **Figures 4 and 5** show that the chains found all three parts of the failure region: the arc along the top (component 1) and the two branches in the upper-right and lower-left corners (component 2). The published solution by Au and Beck (1999) does not include all of them, which is why Brinkpy's estimate (`pf = 9.026e−7`) is larger than the published `6.97e−7`. See [Verification](../../why-brinkpy.md#verification).
+- **Figures 4 and 5** show that the chains found all three parts of the failure region: the arc along the top (component 1) and the two branches in the upper-right and lower-left corners (component 2). The published solution does not include all of them (see [Comparison with the paper](#problem-file-used)).
 
 ## Generated Figures
 

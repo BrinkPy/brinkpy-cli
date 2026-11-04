@@ -89,7 +89,7 @@ This example uses the `default` profile. Importance sampling and Monte Carlo beh
 ```
 
 !!! note "Comparison with the paper"
-    Brinkpy's estimate of the probability of failure, `pf = 9.201e−7`, is larger than the `6.97e−7` published by Au and Beck (1999). Brinkpy's importance sampling finds a part of the failure region that the published solution does not include. When the variables are bounded to the region used in the paper, Brinkpy's estimate matches the published one within the variation expected from random sampling. See [Verification](../../why-brinkpy.md#verification).
+    Au and Beck (1999) build the importance sampling proposal with Markov chain Monte Carlo (MCMC). Brinkpy's estimate differs from the published one for a known reason. See [MCMC Importance Sampling](importance-sampling-mcmc.md#problem-file-used) for the comparison.
 
 ## Extracted Results Worksheet Tables
 
