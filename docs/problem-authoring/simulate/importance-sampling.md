@@ -88,6 +88,9 @@ This example uses the `default` profile. Importance sampling and Monte Carlo beh
 },
 ```
 
+!!! note "Comparison with the paper"
+    Brinkpy's estimate of the probability of failure, `pf = 9.201e−7`, is larger than the `6.97e−7` published by Au and Beck (1999). Brinkpy's importance sampling finds a part of the failure region that the published solution does not include. When the variables are bounded to the region used in the paper, Brinkpy's estimate matches the published one within the variation expected from random sampling. See [Verification](../../why-brinkpy.md#verification).
+
 ## Extracted Results Worksheet Tables
 
 The tables below are transcribed from the `Results` worksheet in `AU2-15fc9.xlsx`. For the meaning of each column, see [Results Tables Reference](../results-tables.md#monte-carlo).

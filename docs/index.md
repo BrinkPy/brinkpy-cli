@@ -22,6 +22,8 @@ Typical use cases include:
 
 Recommended background readings are listed at [Recommended Texts and References](problem-authoring/recommended-texts.md).
 
+For what Brinkpy adds over general scientific libraries and your own code, see [Why Use Brinkpy](why-brinkpy.md).
+
 ## Core Workflows
 
 Brinkpy CLI provides five core reliability workflows:

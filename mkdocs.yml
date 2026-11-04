@@ -39,6 +39,7 @@ extra:
     provider: mathjax
 nav:
   - Home: index.md
+  - Why Use Brinkpy: why-brinkpy.md
   - Packaged Examples: examples.md
   - CLI Commands:
     - CLI Basics for Brinkpy Users: cli/index.md

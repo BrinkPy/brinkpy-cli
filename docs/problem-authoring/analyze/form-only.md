@@ -55,6 +55,9 @@ This example uses the `default` profile. FORM behavior can be adjusted in a cust
   - `L = M`
   - `g = R - L`
 
+!!! note "Comparison with the book"
+    Brinkpy's results differ slightly from the book's. The book applies the correlation coefficient directly in standard normal space, while Brinkpy adjusts it with the Nataf transformation, which is more accurate for correlated non-normal variables. See [Verification](../../why-brinkpy.md#verification).
+
 ## Extracted Results Worksheet Tables
 
 The tables below are transcribed from the `Results` worksheet in `AT610-38f0f.xlsx`. For the meaning of each column, see [Results Tables Reference](../results-tables.md#form).

@@ -137,7 +137,7 @@ Both methods estimate nearly the same probability of failure. For this problem, 
 - The probability of failure (`pf ≈ 9.03 × 10⁻⁷`, `beta ≈ 4.77`) agrees with the KDE run, and `cv = 0.0195` is well below `max_cv = 0.05`.
 - The MCMC samples are used only to build the proposal distribution. The probability of failure comes from the weighted importance samples, and `cv` reports its precision. Chain convergence still matters: if the chains miss part of the failure region, the proposal distribution may not cover it.
 - Brinkpy calculates `r_hat` but does not enforce a limit. Here `r_hat = 1.024`, above the 1.01 often recommended in the MCMC literature. **Figure 3** shows where it comes from: the rank bars of chain 2 rise from left to right instead of staying level, and its autocorrelation decays more slowly than that of the other chains. To improve convergence, increase `is_mcmc_chain_length`, `is_mcmc_burnin`, or `is_mcmc_chains` in the profile and run again.
-- **Figures 4 and 5** show that the chains found all three parts of the failure region: the arc along the top (component 1) and the two branches in the upper-right and lower-left corners (component 2).
+- **Figures 4 and 5** show that the chains found all three parts of the failure region: the arc along the top (component 1) and the two branches in the upper-right and lower-left corners (component 2). The published solution by Au and Beck (1999) does not include all of them, which is why Brinkpy's estimate (`pf = 9.026e−7`) is larger than the published `6.97e−7`. See [Verification](../../why-brinkpy.md#verification).
 
 ## Generated Figures
 
