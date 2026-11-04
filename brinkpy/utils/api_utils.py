@@ -492,20 +492,27 @@ def show_pickle_plots(
     ):
         return
 
-    pickle_path = file_paths[2]
+    show_figures_from_pickle(file_paths[2])
 
+
+def show_figures_from_pickle(pickle_path: Path) -> bool:
+    """
+    Load the matplotlib figures pickled by the API, display them non-blocking,
+    and wait for the user to hit return before closing.
+    Returns True if the figures were displayed.
+    """
     try:
         with open(pickle_path, "rb") as f:
             figs_to_show = pickle.load(f)
     except Exception as e:
         console.print(f"{ICON_ERR} Failed to load pickle file: {e}")
         traceback.print_exc()
-        return
+        return False
 
     # API always pickles a list of Figure objects
     if not isinstance(figs_to_show, list) or not figs_to_show:
         console.print(f"{ICON_WARN} No valid matplotlib figures found in pickle.")
-        return
+        return False
 
     # Display all figures
     for fig in figs_to_show:
@@ -515,10 +522,11 @@ def show_pickle_plots(
     plt.show(block=False)
     try:
         input("⌨️ Hit [return] to end")
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, EOFError):
         pass
     finally:
         plt.close("all")
+    return True
 
 
 def load_problem_from_module(problem_file_path: Path) -> Dict | None:
@@ -815,6 +823,26 @@ def get_problem_file_name(problems_path: Path) -> Path | None:
         filter="*.py",
         title="Select a problem file",
         initial_file=str(latest_py_file) if latest_py_file else "",
+    )
+    if selected_file is not None and Path(selected_file).is_file():
+        return Path(selected_file)
+    return None
+
+
+def get_pickle_file_name(results_path: Path) -> Path | None:
+    """
+    Prompt the user to select a pickle file of saved plots.
+    Returns the Path or None.
+    """
+    # Preselect the most recently modified .pickle file in any run folder
+    pickle_files = [p for p in results_path.rglob("*.pickle") if p.is_file()]
+    latest_pickle_file = max(pickle_files, default=None, key=lambda p: p.stat().st_mtime)
+
+    selected_file = filedialpy.openFile(
+        initial_dir=str(latest_pickle_file.parent if latest_pickle_file else results_path),
+        filter="*.pickle",
+        title="Select a plots file",
+        initial_file=str(latest_pickle_file) if latest_pickle_file else "",
     )
     if selected_file is not None and Path(selected_file).is_file():
         return Path(selected_file)

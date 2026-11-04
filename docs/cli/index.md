@@ -64,7 +64,7 @@ brinkpy analyze default --include-sorm --plot-rfad
 
 Brinkpy saves run outputs in timestamped folders inside `results/` in your project folder.
 
-See [Result Files](results-files.md) for path and filename patterns.
+See [Result Files](results-files.md) for path and filename patterns. To reopen the plots of an earlier run, use `brinkpy plots` (see [Opening Saved Plots](results-files.md#opening-saved-plots)).
 
 ## Useful Help Commands
 

@@ -42,3 +42,11 @@ Run Monte Carlo simulation to estimate the failure probability, including rare e
 Usage: `brinkpy simulate <profile> [OPTIONS]`
 
 → [Full options and examples](simulate.md)
+
+## Plots: Reopen Saved Plots
+
+Open the plots of an earlier run from its `.pickle` result file. A file picker opens at the most recent run, or you can give the path of the file.
+
+Usage: `brinkpy plots [PICKLE_FILE]`
+
+→ [Opening Saved Plots](results-files.md#opening-saved-plots)

@@ -54,7 +54,24 @@ Set an option to `false` in your profile to skip that file. See [Reporting Optio
 
 To open the results automatically when a run finishes, including the plots, add `--open-results` (`-o`) to the command.
 
-To reopen the plots from a `.pickle` file later, load the file in Python:
+To reopen the plots of an earlier run, use the `plots` command:
+
+```bash
+brinkpy plots
+```
+
+A file picker opens at the most recent run in `results/`, where you choose a `.pickle` file. The figures open in Matplotlib windows. Press Enter in the terminal to close them. To skip the file picker, give the path of the file:
+
+```bash
+brinkpy plots results/2026-10-30/14-05-12/AT610-ab12c.pickle
+```
+
+!!! warning "Open only pickle files that Brinkpy created"
+    Loading a pickle file can run code stored in it. Open only `.pickle` files from your own Brinkpy runs, never files from an unknown source.
+
+### Editing Saved Plots
+
+To edit the figures, for example to change labels or styles for a report, load the `.pickle` file in Python:
 
 ```python
 import pickle
@@ -68,7 +85,7 @@ for fig in figures:
 plt.show()
 ```
 
-Replace the path with the one for your run. Once loaded, the figures can be edited like any other Matplotlib figure, for example to change labels or styles for a report.
+Replace the path with the one for your run. Once loaded, the figures can be edited like any other Matplotlib figure. Run the script in the same Python environment where Brinkpy is installed. A pickled figure may fail to load with a different version of Matplotlib.
 
 ## Design Runs
 

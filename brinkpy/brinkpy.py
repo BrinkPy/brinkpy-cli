@@ -33,13 +33,14 @@ from rich.table import Table
 from typing_extensions import Annotated
 
 from brinkpy.config.data_models import IsMethodEnum, RunTypeEnum
-from brinkpy.utils.api_utils import get_api_url, run_app
+from brinkpy.utils.api_utils import get_api_url, get_pickle_file_name, run_app, show_figures_from_pickle
 from brinkpy.utils.auth_cli import get_token, get_user_id
 from brinkpy.utils.icons import ICON_ASK, ICON_ERR, ICON_INFO, ICON_OK, ICON_RUN, ICON_WARN
 from brinkpy.utils.path_helpers import (
     copy_examples_to_working_dir,
     ensure_runtime_dirs,
     get_profiles_dir,
+    get_results_dir,
     list_packaged_example_problems,
 )
 from brinkpy.utils.profile_management import (
@@ -377,6 +378,32 @@ def simulate(
 # Register an alias 'sim' that points to the same function
 app.command(name="sim", help="Alias for simulate", hidden=True)(simulate)
 # fmt: on
+
+
+@app.command(help="[bold green]Open[/bold green] the plots saved in a results pickle file")
+def plots(
+    pickle_file: Annotated[
+        Path | None,
+        typer.Argument(help="Path to a .pickle results file. If omitted, a file picker opens at the most recent run"),
+    ] = None,
+):
+    """Open the plots saved in a results pickle file."""
+    if pickle_file is None:
+        pickle_file = get_pickle_file_name(get_results_dir())
+        if pickle_file is None:
+            console.print(f"{ICON_INFO} No file selected.")
+            console.print()
+            return
+    elif not pickle_file.is_file():
+        console.print(f"{ICON_ERR} Error: File '{pickle_file}' does not exist.")
+        console.print()
+        raise typer.Exit(code=1)
+
+    console.print(f"{ICON_OK} Opening plots from: {pickle_file}")
+    if not show_figures_from_pickle(pickle_file):
+        console.print()
+        raise typer.Exit(code=1)
+    console.print()
 
 
 @examples.command(help="[bold green]Copy[/bold green] packaged example problems to working directory")
