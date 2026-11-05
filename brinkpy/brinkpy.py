@@ -476,6 +476,10 @@ def new(
         ctx.invoke(list)
 
 
+# Register alias 'create' that points to the same function
+profiles.command(name="create", help="Alias for new", hidden=True)(new)
+
+
 @profiles.command(help="[bold green]Display[/bold green] a configuration profile")
 def show(
     name: Annotated[str, typer.Argument(help="Name of the profile to display")],
