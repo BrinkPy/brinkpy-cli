@@ -62,6 +62,7 @@ nav:
       - Design Keys Reference: problem-authoring/design/design-keys.md
       - Inverse FORM Examples: problem-authoring/design/inverse-form.md
       - Objective Optimization Example: problem-authoring/design/optimization.md
+      - Random Design Parameters Example: problem-authoring/design/random-design-parameters.md
     - Simulate:
       - Classic Monte Carlo: problem-authoring/simulate/classic-monte-carlo.md
       - Importance Sampling: problem-authoring/simulate/importance-sampling.md

@@ -22,6 +22,7 @@ Packaged examples for each workflow (see [Packaged Examples](../../examples.md))
 - [Design Keys Reference](design-keys.md): full `DesignProblem` dictionary reference and validation rules.
 - [Inverse FORM Examples](inverse-form.md): worked Inverse FORM examples (`AT625Problem` single-case and `AT624Problem` multi-case).
 - [Objective Optimization Example](optimization.md): worked objective optimization example (`Sorensen81Problem`) including additional optimization keys.
+- [Random Design Parameters Example](random-design-parameters.md): how to model a design parameter that is also a random variable (`Ji1Problem`), with limitations and exceptions.
 
 ## Notes On Cases
 

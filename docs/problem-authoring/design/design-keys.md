@@ -39,7 +39,7 @@ When `DesignProblem` defines a `DesignObjectiveFunction`, Brinkpy runs objective
 `DesignVariables` must be selected from `DeterministicVariables.name`.
 
 !!! note "RBDO modeling assumption"
-    In Brinkpy's objective-optimization workflow, the optimized variables are assumed to be deterministic design variables, not stochastic variables. This is the standard RBDO formulation: the optimizer chooses deterministic design values, and reliability is then evaluated with respect to the stochastic variables.
+    In Brinkpy's objective-optimization workflow, the optimized variables are assumed to be deterministic design variables, not stochastic variables. This is the standard RBDO formulation: the optimizer chooses deterministic design values, and reliability is then evaluated with respect to the stochastic variables. To model a design parameter that is also random, see [Random Design Parameters Example](random-design-parameters.md).
 
 ## Inverse FORM Pattern
 

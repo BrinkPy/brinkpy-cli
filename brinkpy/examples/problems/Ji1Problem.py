@@ -17,7 +17,7 @@ def Problem():
         "LSFreturnsLandR": False,
         "DeterministicVariables": {
             "name": ["Lambda"],
-            "value": [1.0],
+            "value": [0.15],
         },
         "StochasticVariables": {
             "name": ["x1", "x2", "x3", "x4", "t"],
@@ -32,8 +32,8 @@ def Problem():
             "DOFisSmooth": True,
             "DOFreturnsHessian": True,
             "DesignVariables": ["Lambda"],
-            "InitialGuess": [0.4],
-            "lb": [-10.0],
+            "InitialGuess": [0.15],
+            "lb": [0.01],
             "ub": [10.0],
             "TargetBeta": 2.0,
         },
