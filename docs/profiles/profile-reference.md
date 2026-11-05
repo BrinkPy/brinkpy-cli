@@ -103,7 +103,7 @@ Use these references as starting points for method details and derivation nuance
 - `Kiureghian`: point-fitting procedure following Der Kiureghian, A. (2022). *Structural and System Reliability*. Cambridge University Press.
 - `ZhaoPF`: point-fitting procedure — Zhao and Ono (1999a) above.
 - `AnalyticAll`: uses user-provided analytic gradient and Hessian from the problem definition.
-- `null` (auto): Brinkpy selects the most appropriate fit strategy based on available problem information.
+- `null` (auto): Brinkpy uses `AnalyticAll` if the limit state function returns both its gradient and Hessian, because exact derivatives give the most accurate fit. Otherwise it uses the most accurate of the remaining methods for the chosen approximation: `Kiureghian` for `Paraboloid` and `ZhaoPF` for `Taylor2`. A validation note in the results reports which method was used.
 
 **`sor_fit_delta_factor`**
 

@@ -20,7 +20,7 @@ The example pages omit some columns to keep their tables readable: `lb`, `ub`, a
 | `glsf_count` | Number of limit state function gradient calculations |
 | `hlsf_count` | Number of limit state function Hessian calculations |
 | `nit` | Number of iterations used by SciPy's `minimize` function |
-| `min_tries` | Number of attempts to find a solution. When an attempt fails, a new random starting point is tried. |
+| `min_tries` | Number of attempts to find a solution. When an attempt fails, a new random starting point is tried. When the problem has bounds and the optimizer is SciPy's `trust-constr`, Brinkpy restarts it once from its first result to make the solution accurate near the bounds. The restart also counts as an attempt. |
 | `min_method` | SciPy `minimize` method used |
 | `lsf_mult` | Lagrange multiplier for the limit state function |
 
@@ -39,7 +39,7 @@ The example pages omit some columns to keep their tables readable: `lb`, `ub`, a
 | `u` | Failure point in (uncorrelated) standard normal space |
 | `alpha` | Direction cosines of the failure point (the alpha vector) |
 | `importance` | Importance factors: the alpha vector transformed to real space and normalized to unit length (the γ vector in Equation 10 of Kim and Song, 2018, [→](https://doi.org/10.1016/j.ress.2018.01.005)) |
-| `bnds_mult` | For an active bound, about how much the reliability index changes when the bound moves by one standard deviation: the Lagrange multiplier of the bound divided by 2|β|, since FORM minimizes β². Negative for an active lower bound, positive for an active upper bound. Empty when the bound is inactive (the value is below `1e-3`), when the variable has no bounds other than the natural limits of its distribution, or when FORM does not use the `trust-constr` optimizer (for example, when `LSFisSmooth` is `False`). |
+| `bnds_mult` | For an active bound, about how much the reliability index changes per unit change in the bound, in the variable's own units. Brinkpy divides the Lagrange multiplier of the bound by 2|β|, since FORM minimizes β², and converts it from standard normal space to the variable's units. Negative for an active lower bound, positive for an active upper bound. Relaxing an active bound lowers a positive reliability index, or raises a negative one toward zero. For an inactive bound the value is close to zero but not exactly zero. Brinkpy decides which bounds are active from the distance between the failure point and the bound, as explained in [Bounds and Truncation](index.md#bounds-and-truncation). Empty when the variable has no bounds other than the natural limits of its distribution, when β is zero, or when FORM does not use the `trust-constr` optimizer (for example, when `LSFisSmooth` is `False`). |
 
 ### Correlations
 
@@ -197,7 +197,7 @@ The Excel file also includes a table of the stochastic variables and the Inverse
 
 | Column | Meaning |
 |---|---|
-| `bnds_mult` | For an active bound, about how much the limit state function at the design point changes when the bound moves by one standard deviation, expressed in standard deviations. Inverse FORM minimizes the limit state function, so its Lagrange multipliers have the units of the limit state function. Brinkpy divides them by the norm of the limit state function's gradient in standard normal space, which puts them on the same scale as the reliability index. The sign and the cases where the value is empty are the same as in FORM. |
+| `bnds_mult` | For an active bound, about how much the limit state function at the design point changes per unit change in the bound, in the variable's own units. Inverse FORM minimizes the limit state function, so relaxing an active bound lowers it. Brinkpy converts the Lagrange multiplier of the bound from standard normal space to the variable's units. The sign, the values close to zero for inactive bounds, and the cases where the value is empty are the same as in FORM. |
 
 ### Load and Resistance Partial Factors
 
@@ -229,6 +229,6 @@ These tables appear when `DesignProblem` defines a `DesignObjectiveFunction`.
 | `var_name` | Design variable name (from `DesignVariables`) |
 | `opt_value` | Optimal value of the design variable |
 | `lb`, `ub` | Lower and upper bounds of the design variable (from `DesignProblem`) |
-| `bnds_mult` | For an active bound, about the relative change in the design objective function when the bound moves by one unit of the design variable: the Lagrange multiplier of the bound divided by the absolute value of `obj_value`. The value depends on the units of the design variable. Negative for an active lower bound, positive for an active upper bound. Empty when the bound is inactive (the value is below `1e-3`), when no design variable has a finite bound, or when the design optimization does not use the `trust-constr` optimizer. |
+| `bnds_mult` | Lagrange multiplier of the bound. For an active bound, its absolute value is about how much relaxing the bound by one unit of the design variable would reduce the design objective function. Negative for an active lower bound, positive for an active upper bound. For an inactive bound the value is close to zero but not exactly zero. Brinkpy decides which bounds are active with the same distance rule as for stochastic variables (see [Bounds and Truncation](index.md#bounds-and-truncation)). Empty when no design variable has a finite bound or when the design optimization does not use the `trust-constr` optimizer. |
 
 The **FORM Results (At Optimum)** table uses the same columns as [FORM Results](#form-results), evaluated at the optimal design.

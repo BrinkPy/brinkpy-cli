@@ -16,10 +16,10 @@ Problem module:
 
 Recorded result set:
 
-- `results/2026-11-02/18-34-26/Sorensen_8_1-e70c6.xlsx`
-- `results/2026-11-02/18-34-26/Sorensen_8_1-e70c6.json`
-- `results/2026-11-02/18-34-26/Sorensen_8_1-e70c6.py`
-- `results/2026-11-02/18-34-26/profile-e70c6.yaml`
+- `results/2026-11-04/22-34-41/Sorensen_8_1-90946.xlsx`
+- `results/2026-11-04/22-34-41/Sorensen_8_1-90946.json`
+- `results/2026-11-04/22-34-41/Sorensen_8_1-90946.py`
+- `results/2026-11-04/22-34-41/profile-90946.yaml`
 
 Profile and run mode from saved profile:
 
@@ -80,21 +80,21 @@ In this example, the objective function is `DOF(d, D) = z`, so the solver seeks 
 
 ## Extracted Results Worksheet Tables
 
-The tables below are transcribed from the `Results` worksheet in `Sorensen_8_1-e70c6.xlsx`. For the meaning of each column, see [Results Tables Reference](../results-tables.md#design).
+The tables below are transcribed from the `Results` worksheet in `Sorensen_8_1-90946.xlsx`. For the meaning of each column, see [Results Tables Reference](../results-tables.md#design).
 
 ### Header Information
 
 | Field | Value |
 |---|---|
 | Problem | `Sorensen 8.1` |
-| Request ID | `725856734eb54e3a99d786d3f05e70c6` |
-| Run time | `00 min 00.14 sec` |
+| Request ID | `1881bff564cd4a5797f61f8ed5790946` |
+| Run time | `00 min 00.15 sec` |
 
 ### Design Data (Default Case)
 
 | obj_value | target_beta | actual_beta | target_pf | actual_pf | use_sorm | dof_count | beta_count | nit | min_tries | min_method |
 |---:|---:|---:|---:|---:|---|---:|---:|---:|---:|---|
-| 15.58 | 3.8 | 3.8 | 7.235e-05 | 7.236e-05 | False | 7 | 16 | 10 | 1 | tr_interior_point |
+| 15.58 | 3.8 | 3.8 | 7.235e-05 | 7.236e-05 | False | 7 | 16 | 11 | 2 | tr_interior_point |
 
 ### Design Variables Result
 
@@ -126,11 +126,11 @@ The tables below are transcribed from the `Results` worksheet in `Sorensen_8_1-e
 
 1. Validation: Stochastic variables definition and limit state function validation required 2 function calls.
 2. Validation: Design problem validation required 2 calls to the design objective function.
-3. Validation: Validation of the limit state function's analytic gradient and hessian required 37 function calls.
-4. Validation: Validation of the design objective function's analytic gradient and hessian required 18 function calls.
+3. Validation: Validation of the limit state function's analytic gradient and Hessian required 37 function calls.
+4. Validation: Validation of the design objective function's analytic gradient and Hessian required 18 function calls.
 
 ## Interpretation Snapshot
 
-- The optimizer converged in `10` iterations and found `z = 15.58124010560201`.
+- The optimizer converged in `11` iterations and found `z = 15.58124010560201`.
 - Reliability target matching is tight: `actual_beta = 3.799975490962742` versus `target_beta = 3.8`.
 - The objective and design variable are the same in this problem (`obj_value = z`), so objective minimization directly maps to minimizing `z` under reliability constraints.

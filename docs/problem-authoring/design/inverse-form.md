@@ -29,10 +29,10 @@ Problem module:
 
 Recorded result set:
 
-- `results/2026-11-02/12-37-06/Ang_and_Tang_6_25-19c5b.xlsx`
-- `results/2026-11-02/12-37-06/Ang_and_Tang_6_25-19c5b.json`
-- `results/2026-11-02/12-37-06/Ang_and_Tang_6_25-19c5b.py`
-- `results/2026-11-02/12-37-06/profile-19c5b.yaml`
+- `results/2026-11-04/22-32-14/Ang_and_Tang_6_25-d8ead.xlsx`
+- `results/2026-11-04/22-32-14/Ang_and_Tang_6_25-d8ead.json`
+- `results/2026-11-04/22-32-14/Ang_and_Tang_6_25-d8ead.py`
+- `results/2026-11-04/22-32-14/profile-d8ead.yaml`
 
 Profile and run mode from saved profile:
 
@@ -61,7 +61,7 @@ Run summary:
 
 | Field | Value |
 |---|---|
-| Request ID | `88e31f31ef144fe89b2f7c3d2a319c5b` |
+| Request ID | `de52fb190d354e1eae481cbb792d8ead` |
 | Target beta | `1.28` |
 | Target pf | `0.1003` |
 | Cases | `default` |
@@ -70,7 +70,7 @@ Default-case inverse FORM result:
 
 | case | beta | pf | lsf_value | lsf_count | glsf_count | hlsf_count | beta_count | hbeta_count | nit | min_tries | min_method |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|
-| default | 1.28 | 0.1003 | −109.5 | 8 | 7 | 7 | 7 | 7 | 8 | 1 | equality_constrained_sqp |
+| default | 1.28 | 0.1003 | −109.5 | 8 | 8 | 8 | 8 | 8 | 8 | 1 | equality_constrained_sqp |
 
 Design point stochastic variables result (`default`):
 
@@ -103,10 +103,10 @@ Problem module:
 
 Recorded result set:
 
-- `results/2026-11-02/12-33-53/Ang_and_Tang_6_24-3deac.xlsx`
-- `results/2026-11-02/12-33-53/Ang_and_Tang_6_24-3deac.json`
-- `results/2026-11-02/12-33-53/Ang_and_Tang_6_24-3deac.py`
-- `results/2026-11-02/12-33-53/profile-3deac.yaml`
+- `results/2026-11-04/22-33-27/Ang_and_Tang_6_24-bb301.xlsx`
+- `results/2026-11-04/22-33-27/Ang_and_Tang_6_24-bb301.json`
+- `results/2026-11-04/22-33-27/Ang_and_Tang_6_24-bb301.py`
+- `results/2026-11-04/22-33-27/profile-bb301.yaml`
 
 Profile and run mode from saved profile:
 
@@ -135,7 +135,7 @@ Run summary:
 
 | Field | Value |
 |---|---|
-| Request ID | `1f72e3830fb147dab3b3db12c263deac` |
+| Request ID | `88e8e39280bf4724a24c4ef8de7bb301` |
 | Target beta | `2.000` |
 | Target pf | `0.02275` |
 | Cases | `1`, `2`, `3`, `4` |
