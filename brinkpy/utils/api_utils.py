@@ -572,7 +572,7 @@ def validate_problem_module(problem_file_path: Path, run_configuration: Dict) ->
 
     if run_configuration["run_type"].lower() == "design" and "DesignProblem" not in problem:
         console.print(
-            f"{ICON_ERR} Design problem missing 'DesignProblem' key. Did you mean to set run_type = 'analysis'?"
+            f"{ICON_ERR} Design problem missing 'DesignProblem' key. Did you mean to run command 'analyze'?"
         )
         return False
 
