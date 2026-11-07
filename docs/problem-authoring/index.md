@@ -254,13 +254,7 @@ Rules:
 - You can set individual bounds to `-np.inf` and `np.inf` to indicate no lower/upper bound for that variable.
 - If `lb`, `ub`, and/or `truncated` are omitted, defaults are used: no bounds and `truncated=False` for all variables.
 - Bounds and truncation have different effects. See [Bounds and Truncation](#bounds-and-truncation).
-- `constraints`, when provided, follows a dictionary format similar to SciPy `optimize.minimize` constraints (Brinkpy uses SciPy optimization internally).
-- Constraint callables are defined on the stochastic-variable vector and may optionally include Jacobians.
-
-Example definition reference:
-
-- `problems/PipecorrProblem.py` shows `constraints` entries under `StochasticVariables` (for example `d_over_t` and `l_over_Do` bounds).
-- This is a key-format reference only; it is not used as a worked run in the `analyze`, `design`, or `simulate` documentation pages.
+- `constraints`, when provided, is a list of constraint dictionaries. See [Constraints on Stochastic Variables](#constraints-on-stochastic-variables).
 
 ### Bounds and Truncation
 
@@ -277,12 +271,68 @@ SORM uses the MPP found by FORM, so the bounds affect SORM results in the same w
 Bounds without truncation are useful to keep the search for the MPP away from values where the limit state function is not defined, such as negative values inside a square root or logarithm, without changing the probability model.
 
 !!! warning "When the MPP lies on a bound"
-    With `truncated[i] = False`, the bounds restrict only where FORM and Inverse FORM search. If the MPP ends up on a bound, the result describes the constrained search, not the full distribution, so the reliability index (from FORM or SORM) or the design point (from Inverse FORM) may not reflect the actual probability of failure. Brinkpy reports this in a note that lists each active bound, whether it is the lower or upper bound, and about how much it affects the result. A bound counts as active when the MPP lies within 1% of it, or within 0.01 when the bound is between −1 and 1. The same rule applies to the bounds of design variables. The same values appear in the `bnds_mult` column of the results (see [Results Tables Reference](results-tables.md#stochastic-variable-inputs-and-form-failure-point-outputs)). In that case, decide whether values outside the bounds are physically possible:
+    With `truncated[i] = False`, the bounds restrict only where FORM and Inverse FORM search. If the MPP ends up on a bound, the result describes the constrained search, not the full distribution, so the reliability index (from FORM or SORM) or the design point (from Inverse FORM) may not reflect the actual probability of failure. Brinkpy reports this in a note that lists each active bound, whether it is the lower or upper bound, and about how much it affects the result. A bound counts as active when the MPP lies within 1% of it, or within 0.01 when the bound is between −1 and 1. The same rule applies to the bounds of design variables. The same values appear in the `bnds_mult` column of the results (see [Lagrange Multipliers for Bounds and Constraints](results-tables.md#lagrange-multipliers-for-bounds-and-constraints)). In that case, decide whether values outside the bounds are physically possible:
 
     - If they are not, set `truncated[i] = True` so the distribution itself excludes them.
     - If they are, widen or remove the bounds.
 
 For distributions that require `lb` and `ub` (beta, triangular, and uniform when defined by its bounds), the bounds are the limits of the distribution itself, so truncation does not change it.
+
+### Constraints on Stochastic Variables
+
+Bounds limit each variable on its own. Constraints limit functions of several variables, for example a ratio between two dimensions. In `PipecorrProblem.py`, the ratio of the defect depth to the wall thickness, `d / t`, must stay between 0.1 and 0.8, the range where the limit state function is valid (see [Stochastic Variable Constraints Example](design/stochastic-constraints.md)):
+
+```python
+"StochasticVariables": {
+    ...
+    "constraints": [
+        {"fun": d_over_t, "lb": [0.1], "ub": [0.8], "jac": d_over_t_gradient},
+        {"fun": l_over_Do, "lb": [0.0], "ub": [1.5]},
+    ],
+},
+```
+
+Brinkpy passes the constraints to SciPy's [`minimize`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html), so each dictionary uses the keys of SciPy's [`NonlinearConstraint`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.NonlinearConstraint.html) or [`LinearConstraint`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.LinearConstraint.html).
+
+A nonlinear constraint uses these keys:
+
+| Key | Required | Meaning |
+|---|---|---|
+| `fun` | Yes | Constraint function `fun(X, D)`, with `X` the stochastic variables in the order of `name` and `D` the deterministic variables, as in the limit state function. It returns one value per output. |
+| `lb`, `ub` | Yes | Lists with the lower and upper limit of each output. Use `-np.inf` or `np.inf` for no limit, and the same value in both for an equality. |
+| `jac` | No | Function `jac(X, D)` that returns the gradient of each output with respect to `X`, one row per output. Without it, SciPy approximates the gradient with finite differences. |
+| `hess` | No | Function `hess(X, v, D)` that returns the Hessian of the sum of the outputs weighted by `v`, as an `n x n` matrix. Without it, SciPy approximates the Hessian with a quasi-Newton (BFGS) update. |
+| `keep_feasible` | No | Whether the optimizer must keep every iterate inside the limits. The default is `False`. See the warning below. |
+
+A linear constraint uses these keys:
+
+| Key | Required | Meaning |
+|---|---|---|
+| `A` | Yes | Matrix with one row per output and one column per stochastic variable. The outputs are `A @ X`. |
+| `lb`, `ub` | Yes | Same as for a nonlinear constraint |
+| `keep_feasible` | No | Same as for a nonlinear constraint |
+
+A constraint function can return several outputs, with one entry per output in `lb` and `ub`. The results and notes identify each output by its number, starting at 1.
+
+Both kinds of constraint are defined on the stochastic variables in real space. FORM and Inverse FORM search in standard normal space, so Brinkpy transforms each point of the search to real space before it evaluates the constraints.
+
+When `jac` or `hess` is provided, Brinkpy checks it against finite differences before the analysis and reports the number of function calls in a note. The profile options `check_varscf_diffs_wrtx`, `check_varscf_diffs_wrtu`, and `varscf_diffs_check_method` control the check (see [Derivative Checking](../profiles/profile-reference.md#derivative-checking)).
+
+Constraints affect each method as follows:
+
+| Method | Effect |
+|---|---|
+| FORM, Inverse FORM, and `design` | The search for the MPP is restricted to the points that satisfy the constraints. The distributions are unchanged. |
+| SORM | Uses the MPP found by FORM, so the constraints affect SORM results in the same way. |
+| Monte Carlo | Samples are drawn from the full distributions. When the profile option `mc_remove_oob` is `true`, samples that violate a constraint are removed from the statistics and counted in `%_removed`, and a note reports the share removed by each constraint. |
+
+The results include a table of the constraint values at the MPP (see [Stochastic Variables Constraints](results-tables.md#stochastic-variables-constraints)).
+
+!!! warning "When the MPP lies on a constraint limit"
+    As with bounds, if the MPP ends up on a constraint limit, the result describes the constrained search, not the full distribution. Brinkpy reports this in a note that lists each active limit, whether it is the lower or upper limit, and about how much it affects the result, in the units of the constraint's output. A limit counts as active when the constraint's value lies within 1% of it, or within 0.01 when the limit is between −1 and 1. Equalities are not listed. Decide whether values beyond the limit are physically possible, and if they are, widen the limit.
+
+!!! warning "Setting `keep_feasible` to `True`"
+    With `keep_feasible` set to `True`, the starting point of the search must already satisfy the constraint, or SciPy stops with an error and the run fails. Every step of the search must then stay inside the limits, which can slow the search or stop it short of a solution that lies on a limit. Set it to `True` only when the problem's functions cannot be evaluated outside the limits, for example when a value inside a square root or logarithm would become negative. `keep_feasible` has no effect on equalities.
 
 ## Supported Statistical Distributions
 

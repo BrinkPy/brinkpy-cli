@@ -13,12 +13,12 @@ Problem module:
 
 Recorded result set:
 
-- `results/2026-11-04/23-23-40/Chan3-682c6.xlsx`
-- `results/2026-11-04/23-23-40/Chan3-682c6.json`
-- `results/2026-11-04/23-23-40/Chan3-682c6.py`
-- `results/2026-11-04/23-23-40/Chan3-682c6.pickle`
-- `results/2026-11-04/23-23-40/Chan3-682c6.pdf`
-- `results/2026-11-04/23-23-40/profile-682c6.yaml`
+- `results/2026-11-06/18-09-01/Chan3-efee6.xlsx`
+- `results/2026-11-06/18-09-01/Chan3-efee6.json`
+- `results/2026-11-06/18-09-01/Chan3-efee6.py`
+- `results/2026-11-06/18-09-01/Chan3-efee6.pickle`
+- `results/2026-11-06/18-09-01/Chan3-efee6.pdf`
+- `results/2026-11-06/18-09-01/profile-efee6.yaml`
 
 Profile and run mode from saved profile:
 
@@ -61,15 +61,15 @@ This example uses the `default` profile. SORM and Monte Carlo behavior can be ad
 
 ## Extracted Results Worksheet Tables
 
-The tables below are transcribed from the `Results` worksheet in `Chan3-682c6.xlsx`. For the meaning of each column, see [Results Tables Reference](../results-tables.md).
+The tables below are transcribed from the `Results` worksheet in `Chan3-efee6.xlsx`. For the meaning of each column, see [Results Tables Reference](../results-tables.md).
 
 ### Header Information
 
 | Field | Value |
 |---|---|
 | Problem | `Chan3` |
-| Request ID | `176fc928a9fe4e30b640f08b427682c6` |
-| Run time | `00 min 00.40 sec` |
+| Request ID | `094516d7a5e041eaa90d5b43ec1efee6` |
+| Run time | `00 min 00.36 sec` |
 
 ### Deterministic Variables
 
@@ -95,7 +95,7 @@ The tables below are transcribed from the `Results` worksheet in `Chan3-682c6.xl
 
 | beta | pf | cv | max_cv | size | %_removed | cycles | auto_size | mc_with_is |
 |---:|---:|---:|---:|---:|---:|---:|---|---|
-| 1.1213 | 0.1311 | 0.02350 | 0.05 | 12000 | 0 | 3 | True | False |
+| 1.1655 | 0.1219 | 0.02450 | 0.05 | 12000 | 0 | 3 | True | False |
 
 ### Stochastic Variable Inputs and FORM Failure Point Outputs
 
@@ -109,43 +109,43 @@ The tables below are transcribed from the `Results` worksheet in `Chan3-682c6.xl
 
 1. Validation: Stochastic variables definition and limit state function validation required 2 function calls.
 2. Validation: SORM used the 'Kiureghian' fit method because 'AnalyticAll' requires the limit state function to return both its gradient and Hessian.
-3. Validation: Validation of the limit state function's analytic gradient and Hessian required 4 function calls.
+3. Validation: Validation of the limit state function's analytic gradient required 4 function calls.
 4. Monte Carlo: Completed 3 cycles with `4.00e+03` samples per cycle.
 
 ## Interpretation Snapshot
 
-- FORM gives `beta = 0.9543` (`pf ≈ 0.1700`). SORM and Monte Carlo give a larger reliability index (`beta ≈ 1.12` to `1.17`) and therefore a smaller probability of failure (`pf ≈ 0.12` to `0.13`). A larger β always means a smaller probability of failure, since `pf = Φ(-β)`.
-- SORM is much closer to Monte Carlo than FORM is (`pf ≈ 0.1216` and `0.1311` vs `0.1700`), suggesting that the SORM estimate is more accurate than FORM for this problem.
-- Monte Carlo precision is acceptable for this run (`cv = 0.02350 < 0.05`).
+- FORM gives `beta = 0.9543` (`pf ≈ 0.1700`). SORM and Monte Carlo give a larger reliability index (`beta ≈ 1.17`) and therefore a smaller probability of failure (`pf ≈ 0.12`). A larger β always means a smaller probability of failure, since `pf = Φ(-β)`.
+- SORM is much closer to Monte Carlo than FORM is (`pf ≈ 0.1216` and `0.1219` vs `0.1700`), suggesting that the SORM estimate is more accurate than FORM for this problem.
+- Monte Carlo precision is acceptable for this run (`cv = 0.02450 < 0.05`).
 
 ## Generated Figures
 
-The PDF result file for this run is saved as `results/2026-11-04/23-23-40/Chan3-682c6.pdf`.
+The PDF result file for this run is saved as `results/2026-11-06/18-09-01/Chan3-efee6.pdf`.
 
 ### Figure 1: Importance Factors
 
-![Chan3 importance factors](../images/chan3-682c6-01.png)
+![Chan3 importance factors](../images/chan3-efee6-01.png)
 
 ### Figure 2: SORM SOSPA Cumulant Generating Function and Derivatives
 
-![Chan3 SORM SOSPA cumulant generating function and derivatives](../images/chan3-682c6-02.png)
+![Chan3 SORM SOSPA cumulant generating function and derivatives](../images/chan3-efee6-02.png)
 
 ### Figure 3: Monte Carlo Histogram - Qv (Beta Distribution)
 
-![Chan3 Monte Carlo histogram for Qv](../images/chan3-682c6-03.png)
+![Chan3 Monte Carlo histogram for Qv](../images/chan3-efee6-03.png)
 
 ### Figure 4: Monte Carlo Histogram - cp (Beta Distribution)
 
-![Chan3 Monte Carlo histogram for cp](../images/chan3-682c6-04.png)
+![Chan3 Monte Carlo histogram for cp](../images/chan3-efee6-04.png)
 
 ### Figure 5: Monte Carlo Histogram - cs (Beta Distribution)
 
-![Chan3 Monte Carlo histogram for cs](../images/chan3-682c6-05.png)
+![Chan3 Monte Carlo histogram for cs](../images/chan3-efee6-05.png)
 
 ### Figure 6: Histogram of Limit State Function Values
 
-![Chan3 limit state function histogram](../images/chan3-682c6-06.png)
+![Chan3 limit state function histogram](../images/chan3-efee6-06.png)
 
 ### Figure 7: Load and Resistance Histogram
 
-![Chan3 load and resistance histogram](../images/chan3-682c6-07.png)
+![Chan3 load and resistance histogram](../images/chan3-efee6-07.png)

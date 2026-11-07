@@ -23,6 +23,7 @@ Packaged examples for each workflow (see [Packaged Examples](../../examples.md))
 - [Inverse FORM Examples](inverse-form.md): worked Inverse FORM examples (`AT625Problem` single-case and `AT624Problem` multi-case).
 - [Objective Optimization Example](optimization.md): worked objective optimization example (`Sorensen81Problem`) including additional optimization keys.
 - [Random Design Parameters Example](random-design-parameters.md): how to model a design parameter that is also a random variable (`Ji1Problem`), with limitations and exceptions.
+- [Stochastic Variable Constraints Example](stochastic-constraints.md): how to keep the search for the design point inside the range where the limit state function is valid, with constraints on the stochastic variables (`PipecorrProblem`), including a Monte Carlo run.
 
 ## Notes On Cases
 
