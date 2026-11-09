@@ -240,7 +240,7 @@ Advanced/optional fields can also be used depending on model needs:
 | `lb` | Conditional | `list[float]` | Lower bounds per stochastic variable; required for some distributions and optional otherwise |
 | `ub` | Conditional | `list[float]` | Upper bounds per stochastic variable; required for some distributions and optional otherwise |
 | `truncated` | No | `list[bool]` | Whether each variable distribution is truncated to `[lb, ub]` |
-| `constraints` | No | `list[dict]` | Additional nonlinear constraints on stochastic variables |
+| `constraints` | No | `list[dict]` | Linear or nonlinear constraints on functions of the stochastic variables (see [Constraints on Stochastic Variables](#constraints-on-stochastic-variables)) |
 
 Rules:
 
