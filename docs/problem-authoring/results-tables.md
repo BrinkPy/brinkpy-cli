@@ -10,6 +10,8 @@ The example pages omit some columns to keep their tables readable: `lb`, `ub`, a
 
 The `Results` worksheet starts each table with a heading. Find the heading in the table below, or search this page for the column name.
 
+<div class="wrap-first-column" markdown>
+
 | Heading in the worksheet | Section on this page |
 |---|---|
 | `Deterministic variables data:` | The names and values of the deterministic variables |
@@ -30,6 +32,8 @@ The `Results` worksheet starts each table with a heading. Find the heading in th
 | `Design data:` | [Objective Optimization: Design Data](#objective-optimization-design-data) |
 | `Design variables result:` | [Objective Optimization: Design Variables Result](#objective-optimization-design-variables-result) |
 | `Design constraints result:` | [Objective Optimization: Design Constraints Result](#objective-optimization-design-constraints-result) |
+
+</div>
 
 The `bnds_mult` and `constr_mult` columns appear in several tables, with a different scaling in each. See [Lagrange Multipliers for Bounds and Constraints](#lagrange-multipliers-for-bounds-and-constraints).
 

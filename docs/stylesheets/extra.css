@@ -5,6 +5,13 @@
   .md-typeset table:not([class]) td:first-child {
     white-space: nowrap;
   }
+
+  /* Opt out for tables whose first column holds long text: wrap the table in
+     <div class="wrap-first-column" markdown> ... </div>. */
+  .md-typeset .wrap-first-column table:not([class]) th:first-child,
+  .md-typeset .wrap-first-column table:not([class]) td:first-child {
+    white-space: normal;
+  }
 }
 /* Set primary and accent colors for the default color scheme to darker
    orange to improve contrast */
