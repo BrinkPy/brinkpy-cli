@@ -110,17 +110,27 @@ def cleanup_old_results(base_results_path: Path, days: int = 30) -> None:
         console.print(f"{ICON_INFO} No old results to clean up (keeping last {days} days)")
 
 
+DEFAULT_API_URL = "https://brinkpy.up.railway.app"
+_api_url_notice_shown = False
+
+
 def get_api_url() -> str:
     """
     Return the base URL of the Brinkpy API.
 
     Set BRINKPY_API_URL (for example in .env.local) to use a local API
-    during development.
+    during development. An empty value uses the default API. When the URL
+    is not the default, a notice is printed once per run.
 
     Returns:
         str: API base URL without a trailing slash.
     """
-    return os.getenv("BRINKPY_API_URL", "https://brinkpy.up.railway.app").rstrip("/")
+    global _api_url_notice_shown
+    url = (os.getenv("BRINKPY_API_URL") or DEFAULT_API_URL).rstrip("/")
+    if url != DEFAULT_API_URL and not _api_url_notice_shown:
+        console.print(f"{ICON_INFO} Using API at {url} (from BRINKPY_API_URL).", style="dim")
+        _api_url_notice_shown = True
+    return url
 
 
 def setup_paths():

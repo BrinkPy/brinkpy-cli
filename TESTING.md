@@ -75,3 +75,17 @@ BRINKPY_API_URL=http://localhost:8080
 ```
 
 Comment out the line or delete the file to return to the production API.
+
+To test the production API for a single command without editing `.env.local`, set the variable in the shell. A variable set in the shell takes precedence over `.env.local`:
+
+```zsh
+BRINKPY_API_URL=https://brinkpy.up.railway.app brinkpy analyze
+```
+
+An alias in `~/.zshrc` saves typing the address:
+
+```zsh
+alias brinkpy-railway='BRINKPY_API_URL=https://brinkpy.up.railway.app brinkpy'
+```
+
+Whenever the CLI uses an API other than the production one, it prints a notice such as `Using API at http://localhost:8080 (from BRINKPY_API_URL)`, so you can tell which API produced a result.
