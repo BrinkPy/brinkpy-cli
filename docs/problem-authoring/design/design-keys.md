@@ -102,7 +102,7 @@ Rules:
 `DesignConstraints` limits functions of the design variables, for example a minimum ratio between two dimensions. It is a list of constraint dictionaries with the same keys as [Constraints on Stochastic Variables](../index.md#constraints-on-stochastic-variables), with two differences:
 
 - The functions take the design variables: `fun(d, D)`, `jac(d, D)`, and `hess(d, v, D)`, with `d` and `D` as in the [Design Objective Function Contract](#design-objective-function-contract). The design variables are deterministic, so the constraints are evaluated directly, with no transformation.
-- For a linear constraint, `A` has one column per design variable, and the outputs are `A @ d`.
+- For a linear constraint, `A` has one column per design variable, and the outputs are `A @ d`. Design variables are in real space, so SciPy evaluates the constraint directly. The results and notes name it `linear_k`, where k is its position in the `DesignConstraints` list, starting at 1.
 
 For example, a function that returns two outputs, `2 z2 - z1 >= 0` and `z1 - 5 = 0`:
 

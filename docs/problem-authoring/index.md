@@ -292,7 +292,7 @@ Bounds limit each variable on its own. Constraints limit functions of several va
 },
 ```
 
-Brinkpy passes the constraints to SciPy's [`minimize`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html), so each dictionary uses the keys of SciPy's [`NonlinearConstraint`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.NonlinearConstraint.html) or [`LinearConstraint`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.LinearConstraint.html).
+Brinkpy passes the constraints to SciPy's [`minimize`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html). Each dictionary uses the keys of SciPy's [`NonlinearConstraint`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.NonlinearConstraint.html) or [`LinearConstraint`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.LinearConstraint.html).
 
 A nonlinear constraint uses these keys:
 
@@ -304,13 +304,15 @@ A nonlinear constraint uses these keys:
 | `hess` | No | Function `hess(X, v, D)` that returns the Hessian of the sum of the outputs weighted by `v`, as an `n x n` matrix. Without it, SciPy approximates the Hessian with a quasi-Newton (BFGS) update. |
 | `keep_feasible` | No | Whether the optimizer must keep every iterate inside the limits. The default is `False`. See the warning below. |
 
-A linear constraint uses these keys:
+A linear constraint limits weighted sums of the stochastic variables, such as `Y - 2 Po >= 0`. It uses these keys:
 
 | Key | Required | Meaning |
 |---|---|---|
 | `A` | Yes | Matrix with one row per output and one column per stochastic variable. The outputs are `A @ X`. |
 | `lb`, `ub` | Yes | Same as for a nonlinear constraint |
 | `keep_feasible` | No | Same as for a nonlinear constraint |
+
+A sum that is linear in real space is not linear in standard normal space, where FORM and Inverse FORM search. Brinkpy therefore turns each linear constraint into a nonlinear one, with `fun` returning `A @ X` and `jac` returning `A`. The results and notes name it `linear_k`, where k is its position in the `constraints` list, starting at 1, and each row of `A` is one of its outputs. To limit a single variable, use the variable's `lb` and `ub` instead (see [Bounds and Truncation](#bounds-and-truncation)).
 
 A constraint function can return several outputs, with one entry per output in `lb` and `ub`. The results and notes identify each output by its number, starting at 1.
 
