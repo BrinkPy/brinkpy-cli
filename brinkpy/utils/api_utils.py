@@ -27,6 +27,8 @@ import numpy as np
 import requests
 from matplotlib import pyplot as plt
 from rich.console import Console
+from rich.panel import Panel
+from rich.text import Text
 
 from brinkpy.utils.auth_cli import get_token
 from brinkpy.utils.icons import ICON_ASK, ICON_DOWN, ICON_ERR, ICON_INFO, ICON_OK, ICON_WARN
@@ -210,15 +212,23 @@ def get_exception_source(e: BaseException) -> str:
     return f"{type(e).__name__}: {e}"
 
 
+def _print_panel(body: Text, title: str, border_style: str) -> None:
+    """Print a message in a Rich panel, the style the CLI uses for errors and warnings."""
+    console.print()
+    console.print(Panel(body, title=title, title_align="left", border_style=border_style))
+    console.print()
+
+
 def handle_rate_limit_error(response: requests.Response) -> None:
     """
-    Handle rate limit errors with a friendly, multi-line output.
+    Handle rate limit errors with a friendly, multi-line output in a yellow panel.
     """
+    body = Text()
     try:
         error_data = response.json()
     except json.JSONDecodeError:
-        console.print(f"{ICON_ERR} RATE LIMIT EXCEEDED", style="bold red")
-        console.print(f"{ICON_INFO} Unable to parse rate limit response. Please wait and try again.", style="blue")
+        body.append(f"{ICON_INFO} Unable to parse rate limit response. Please wait and try again.", style="blue")
+        _print_panel(body, "Rate limit exceeded", "yellow")
         return
 
     endpoint = error_data.get("endpoint", "Unknown endpoint")
@@ -228,40 +238,51 @@ def handle_rate_limit_error(response: requests.Response) -> None:
     reason = error_data.get("reason", "Rate limiting active")
     suggestion = error_data.get("suggestion", "Please wait 15 seconds before retrying")
 
-    console.print("\n" + "=" * 60, style="red")
-    console.print(f"{ICON_ERR} RATE LIMIT EXCEEDED", style="bold red")
-    console.print("=" * 60, style="red")
-    console.print(f"{ICON_INFO} Endpoint: {endpoint}", style="blue")
-
+    lines = [(f"{ICON_INFO} Endpoint: {endpoint}", "blue")]
     if limit_type == "per_minute":
-        console.print(f"{ICON_WARN} Minute Limit Exceeded: {limit_exceeded}", style="yellow")
-        console.print(f"{ICON_INFO} All Limits: {all_limits}", style="blue")
-        console.print(f"{ICON_INFO} This means you're making requests too quickly", style="blue")
+        lines += [
+            (f"{ICON_WARN} Minute Limit Exceeded: {limit_exceeded}", "yellow"),
+            (f"{ICON_INFO} All Limits: {all_limits}", "blue"),
+            (f"{ICON_INFO} This means you're making requests too quickly", "blue"),
+        ]
     elif limit_type == "per_day":
-        console.print(f"{ICON_WARN} Daily Limit Exceeded: {limit_exceeded}", style="yellow")
-        console.print(f"{ICON_INFO} All Limits: {all_limits}", style="blue")
-        console.print(f"{ICON_INFO} You've used up your daily quota", style="blue")
+        lines += [
+            (f"{ICON_WARN} Daily Limit Exceeded: {limit_exceeded}", "yellow"),
+            (f"{ICON_INFO} All Limits: {all_limits}", "blue"),
+            (f"{ICON_INFO} You've used up your daily quota", "blue"),
+        ]
     else:
-        console.print(f"{ICON_WARN} Limit Exceeded: {limit_exceeded}", style="yellow")
-        console.print(f"{ICON_INFO} All Limits: {all_limits}", style="blue")
+        lines += [
+            (f"{ICON_WARN} Limit Exceeded: {limit_exceeded}", "yellow"),
+            (f"{ICON_INFO} All Limits: {all_limits}", "blue"),
+        ]
+    lines += [(f"{ICON_INFO} Reason: {reason}", "blue"), (f"{ICON_INFO} Suggestion: {suggestion}", "blue")]
 
-    console.print(f"{ICON_INFO} Reason: {reason}", style="blue")
-    console.print(f"{ICON_INFO} Suggestion: {suggestion}\n", style="blue")
+    for i, (line, style) in enumerate(lines):
+        body.append(("\n" if i else "") + line, style=style)
+    _print_panel(body, "Rate limit exceeded", "yellow")
 
 
 def handle_other_http_errors(response: requests.Response, context_msg: str = "Error") -> None:
     """
-    Print an HTTP error message from a Response.
+    Print an HTTP error message from a Response in a red panel.
+
+    When the API sends detail as {"code": ..., "message": ...}, the message was written
+    for the user (a Brinkpy error about their problem), so the panel is titled "Error".
+    Any other detail gets the context and status code as the title.
     """
-    console.print("\n" + "=" * 60, style="red")
-    try:
-        error_data = response.json()
-        detail = error_data.get("detail", error_data)
-        console.print(f"{ICON_ERR} {context_msg}: status code: {response.status_code}: {detail}", style="red")
-    except json.JSONDecodeError:
-        console.print(f"{ICON_ERR} {context_msg}: status code: {response.status_code}: {response.text}", style="red")
-    finally:
-        console.print("=" * 60 + "\n", style="red")
+    msg, code = _extract_error_detail(response)
+    if code:
+        title = "Error"
+    else:
+        title = f"{context_msg} · status code {response.status_code}"
+        try:
+            error_data = response.json()
+            msg = str(error_data.get("detail", error_data)) if isinstance(error_data, dict) else str(error_data)
+        except json.JSONDecodeError:
+            msg = response.text
+    # Text, not markup, so brackets in the message, such as "d = [1, 1]", print as written
+    _print_panel(Text(f"{ICON_ERR} {msg}"), title, "red")
 
 
 def _extract_error_detail(response: requests.Response) -> tuple[str, str | None]:
