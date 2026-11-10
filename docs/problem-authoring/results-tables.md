@@ -97,7 +97,7 @@ This table appears when `StochasticVariables` defines `constraints` (see [Constr
 |---|---|
 | `constr_name` | Name of the constraint function |
 | `constr_row` | Output number within the constraint function, starting at 1. A function that returns one value has only row 1. |
-| `lb`, `ub` | Lower and upper limits of that output, from the problem file |
+| `lb`, `ub` | Lower and upper limits of that output, from the problem file. If the constraint leaves one out, the default is `-inf` or `inf`. |
 | `value` | Value of that output at the failure point |
 | `constr_count` | Number of calls to the constraint function. It appears once per function, on its first row. |
 | `constr_mult` | For an active limit, about how much the reliability index changes per unit change in the limit, in the units of the constraint's output. See [Lagrange Multipliers for Bounds and Constraints](#lagrange-multipliers-for-bounds-and-constraints). |

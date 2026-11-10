@@ -41,6 +41,8 @@ When `DesignProblem` defines a `DesignObjectiveFunction`, Brinkpy runs objective
 
 If `InitialGuess` lies outside the bounds or does not satisfy `DesignConstraints`, Brinkpy first moves it to a nearby point that does, and starts the optimization from there.
 
+When the optimum lies on a bound of a design variable, a note lists each active bound and about how much relaxing it would reduce the design objective function. The same values appear in the `bnds_mult` column of the results (see [Lagrange Multipliers for Bounds and Constraints](../results-tables.md#lagrange-multipliers-for-bounds-and-constraints)). A bound counts as active when the optimum lies within 1% of it, or within 0.01 when the bound is between −1 and 1.
+
 !!! note "RBDO modeling assumption"
     In Brinkpy's objective-optimization workflow, the optimized variables are assumed to be deterministic design variables, not stochastic variables. This is the standard RBDO formulation: the optimizer chooses deterministic design values, and reliability is then evaluated with respect to the stochastic variables. To model a design parameter that is also random, see [Random Design Parameters Example](random-design-parameters.md).
 
@@ -129,7 +131,7 @@ def dsgn_constr_jac(d, D):
 
 When `jac` or `hess` is provided, Brinkpy checks it against finite differences before the optimization. The profile options `check_dcf_diffs` and `dcf_diffs_check_method` control the check (see [Derivative Checking](../../profiles/profile-reference.md#derivative-checking)).
 
-The results include a table of the constraint values at the optimum (see [Design Constraints Result](../results-tables.md#objective-optimization-design-constraints-result)). When the optimum lies on a limit, a note lists each active limit and about how much relaxing it would reduce the design objective function, using the same 1% rule as for bounds (see [Bounds and Truncation](../index.md#bounds-and-truncation)). Equalities are always active, so the note does not list them.
+The results include a table of the constraint values at the optimum (see [Design Constraints Result](../results-tables.md#objective-optimization-design-constraints-result)). When the optimum lies on a limit, a note lists each active limit and about how much relaxing it would reduce the design objective function, using the same 1% rule as for the bounds of design variables (see [Additional Keys For Objective Optimization](#additional-keys-for-objective-optimization)). Equalities are always active, so the note does not list them.
 
 The warning about [setting `keep_feasible` to `True`](../index.md#constraints-on-stochastic-variables) also applies here, except that Brinkpy first moves an infeasible `InitialGuess` to a point that satisfies the constraints.
 

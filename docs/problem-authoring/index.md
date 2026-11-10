@@ -271,7 +271,7 @@ SORM uses the MPP found by FORM, so the bounds affect SORM results in the same w
 Bounds without truncation are useful to keep the search for the MPP away from values where the limit state function is not defined, such as negative values inside a square root or logarithm, without changing the probability model.
 
 !!! warning "When the MPP lies on a bound"
-    With `truncated[i] = False`, the bounds restrict only where FORM and Inverse FORM search. If the MPP ends up on a bound, the result describes the constrained search, not the full distribution, so the reliability index (from FORM or SORM) or the design point (from Inverse FORM) may not reflect the actual probability of failure. Brinkpy reports this in a note that lists each active bound, whether it is the lower or upper bound, and about how much it affects the result. A bound counts as active when the MPP lies within 1% of it, or within 0.01 when the bound is between −1 and 1. The same rule applies to the bounds of design variables. The same values appear in the `bnds_mult` column of the results (see [Lagrange Multipliers for Bounds and Constraints](results-tables.md#lagrange-multipliers-for-bounds-and-constraints)). In that case, decide whether values outside the bounds are physically possible:
+    With `truncated[i] = False`, the bounds restrict only where FORM and Inverse FORM search. If the MPP ends up on a bound, the result describes the constrained search, not the full distribution, so the reliability index (from FORM or SORM) or the design point (from Inverse FORM) may not reflect the actual probability of failure. Brinkpy reports this in a note that lists each active bound, whether it is the lower or upper bound, and about how much it affects the result. A bound counts as active when the MPP lies within 1% of it, or within 0.01 when the bound is between −1 and 1. The same values appear in the `bnds_mult` column of the results (see [Lagrange Multipliers for Bounds and Constraints](results-tables.md#lagrange-multipliers-for-bounds-and-constraints)). When a bound is active, decide whether values of the variable outside the bounds are physically possible:
 
     - If they are not, set `truncated[i] = True` so the distribution itself excludes them.
     - If they are, widen or remove the bounds.
@@ -299,7 +299,7 @@ A nonlinear constraint uses these keys:
 | Key | Required | Meaning |
 |---|---|---|
 | `fun` | Yes | Constraint function `fun(X, D)`, with `X` the stochastic variables in the order of `name` and `D` the deterministic variables, as in the limit state function. It returns one value per output. |
-| `lb`, `ub` | Yes | Lists with the lower and upper limit of each output. Use `-np.inf` or `np.inf` for no limit, and the same value in both for an equality. |
+| `lb`, `ub` | At least one | Lists with the lower and upper limit of each output. A missing `lb` means no lower limits (`-np.inf`) and a missing `ub` means no upper limits (`np.inf`). Inside a list, use `-np.inf` or `np.inf` for an output with no limit on that side, and the same value in `lb` and `ub` for an equality. |
 | `jac` | No | Function `jac(X, D)` that returns the gradient of each output with respect to `X`, one row per output. Without it, SciPy approximates the gradient with finite differences. |
 | `hess` | No | Function `hess(X, v, D)` that returns the Hessian of the sum of the outputs weighted by `v`, as an `n x n` matrix. Without it, SciPy approximates the Hessian with a quasi-Newton (BFGS) update. |
 | `keep_feasible` | No | Whether the optimizer must keep every iterate inside the limits. The default is `False`. See the warning below. |
@@ -309,7 +309,7 @@ A linear constraint limits weighted sums of the stochastic variables, such as `Y
 | Key | Required | Meaning |
 |---|---|---|
 | `A` | Yes | Matrix with one row per output and one column per stochastic variable. The outputs are `A @ X`. |
-| `lb`, `ub` | Yes | Same as for a nonlinear constraint |
+| `lb`, `ub` | At least one | Same as for a nonlinear constraint |
 | `keep_feasible` | No | Same as for a nonlinear constraint |
 
 A sum that is linear in real space is not linear in standard normal space, where FORM and Inverse FORM search. Brinkpy therefore turns each linear constraint into a nonlinear one, with `fun` returning `A @ X` and `jac` returning `A`. The results and notes name it `linear_k`, where k is its position in the `constraints` list, starting at 1, and each row of `A` is one of its outputs. To limit a single variable, use the variable's `lb` and `ub` instead (see [Bounds and Truncation](#bounds-and-truncation)).
