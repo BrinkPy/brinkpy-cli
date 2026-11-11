@@ -25,6 +25,7 @@ Options for reliability calculations and related numerical settings. This sectio
 |--------|------|---------|--------|-------------|
 | `alpha_direction` | str | `"outward"` | `"outward"`, `"inward"` | Direction convention for the alpha vector |
 | `use_nearest_correlation` | bool | `false` | - | Controls fallback behavior when Cholesky decomposition of the correlation matrix fails. If `false`, the run stops with an error. If `true`, Brinkpy attempts to replace the matrix with a nearest positive semidefinite (PSD) correlation matrix using the methodology in [Rebonato and Jaeckel (2011)](https://ssrn.com/abstract=1969689) ([DOI](http://dx.doi.org/10.2139/ssrn.1969689)). |
+| `max_minimize_attempts` | int | `8` | [1, 12] | Maximum number of attempts for each FORM, Inverse FORM, and design optimization. An attempt that fails is followed by a new one from a random starting point, and a result that is not yet accurate enough is refined by a restart. Both count as attempts (see `min_tries` in [FORM Results](../problem-authoring/results-tables.md#form-results)). |
 
 ### FORM and Inverse FORM Settings
 
@@ -33,7 +34,7 @@ These settings apply to both FORM and Inverse FORM.
 Used by: `analyze`, `design`, and `simulate` when FORM runs.
 
 !!! info "Optimization algorithm"
-    Brinkpy CLI does not use the traditional Hasofer-Lind Rackwitz-Fiessler (HL-RF) algorithm found in many reliability textbooks and commercial tools. Instead, FORM and Inverse FORM rely on [`scipy.optimize.minimize`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html) as the optimizer, using the `method` parameter set to `"trust-constr"` for smooth limit-state functions and `"COBYQA"` for non-smooth ones. This provides access to the full scipy minimizer feature set, including variable bounds and general constraints, which the classical HL-RF cannot handle.
+    Brinkpy CLI does not use the traditional Hasofer-Lind Rackwitz-Fiessler (HL-RF) algorithm found in many reliability textbooks and commercial tools. Instead, FORM and Inverse FORM use SciPy's [`minimize`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html), which handles bounds and constraints that the classical HL-RF algorithm cannot. The problem's `LSFisSmooth` key chooses the optimizer (see [Smooth and Non-Smooth Functions](../problem-authoring/index.md#smooth-and-non-smooth-functions)).
 
 | Option | Type | Default | Range | Description |
 |--------|------|---------|-------|-------------|
@@ -215,6 +216,7 @@ reliability_options:
   # General
   alpha_direction: "outward"
   use_nearest_correlation: false
+  max_minimize_attempts: 8
 
   # FORM
   form_xtol: 0.0001

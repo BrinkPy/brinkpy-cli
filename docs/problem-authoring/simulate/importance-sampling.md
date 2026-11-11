@@ -70,7 +70,7 @@ This example uses the `default` profile. Importance sampling and Monte Carlo beh
     
     **Important:** Use the element-wise functions **`numpy.minimum()`** and **`numpy.maximum()`**. Do **not** use Python's built-in `min()` and `max()`, and do **not** use NumPy's reduction functions `numpy.min()` and `numpy.max()`, because during Monte Carlo simulation the component limit-state values are arrays of sample values and this operation requires element-wise comparison.
 
-    Because `numpy.minimum()` and `numpy.maximum()` create kinks where the component limit states meet, set `LSFisSmooth` to `False` for series and parallel systems. This does not affect Monte Carlo or importance sampling, but it lets FORM and SORM choose an optimizer suited to non-smooth functions.
+    Because `numpy.minimum()` and `numpy.maximum()` create kinks where the component limit states meet, set `LSFisSmooth` to `False` for series and parallel systems. This does not affect Monte Carlo or importance sampling, but it lets FORM choose an optimizer suited to non-smooth functions (see [Smooth and Non-Smooth Functions](../index.md#smooth-and-non-smooth-functions)).
 
 - `ISplot` key defined — required for IS diagnostics plots
 

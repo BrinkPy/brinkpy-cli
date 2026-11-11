@@ -28,7 +28,7 @@ When `DesignProblem` defines a `DesignObjectiveFunction`, Brinkpy runs objective
 |---|---|---|---|
 | `DesignObjectiveFunction` | Yes | callable | Objective function that the design optimizer minimizes (see [Design Objective Function Contract](#design-objective-function-contract)) |
 | `DOFisVectorized` | Yes | `bool` | Whether objective can process vectorized design inputs |
-| `DOFisSmooth` | Yes | `bool` | Signals smooth objective behavior for derivative-based optimization |
+| `DOFisSmooth` | Yes | `bool` | Whether the design objective function is smooth. Selects the optimizer for objective optimization (see [Smooth and Non-Smooth Functions](../index.md#smooth-and-non-smooth-functions)). |
 | `DOFreturnsGradient` | Yes | `bool` | If `True`, objective must return gradient in single-point mode |
 | `DOFreturnsHessian` | Yes | `bool` | If `True`, objective must return Hessian in single-point mode |
 | `DesignVariables` | Yes | `list[str]` | Names of deterministic design variables to optimize |
@@ -167,18 +167,15 @@ Expected shape behavior:
 
 Always return:
 
-- `f`: objective-function value(s) to be minimized
-- `g`: gradient placeholder (`[]` when `DOFreturnsGradient=False` or not evaluated)
-- `h`: Hessian placeholder (`[]` when `DOFreturnsHessian=False` or not evaluated)
+- `f`: the design objective function value to be minimized. It has one value per point.
+- `g`: the gradient of `f` with respect to the design variables (see [Gradient](#gradient-g-definition)).
+- `h`: the Hessian of `f` with respect to the design variables (see [Hessian](#hessian-h-definition)).
 
-The return signature remains:
+The function returns the same three values whatever the flags say: `return f, g, h`. When `DOFreturnsGradient` or `DOFreturnsHessian` is `False`, Brinkpy ignores the matching value, so return `[]` in its place. For example, without derivatives:
 
-- `return f, g, h`
+- `return f, [], []`
 
-Typical patterns are:
-
-- Without derivatives: `return f, [], []`
-- With derivatives in single-point mode: `return f, g, h`
+Brinkpy never uses `g` or `h` from a vectorized call, where `d` holds many points. Compute them only for a single point and return `[]` otherwise, because derivatives for many points can use a lot of memory.
 
 ### Gradient (`g`) definition
 
@@ -187,7 +184,7 @@ For a single point (`d.ndim == 1`):
 - `g` is the derivative vector `df/dd_i` in the same order as `DesignVariables`.
 - Shape should be `(n_design,)`.
 
-For vectorized evaluations, return `[]` unless your implementation explicitly supports batched derivatives. In the current examples, derivatives are only returned in single-point mode.
+For a vectorized call, return `[]`, as explained in [Required Return Values](#required-return-values).
 
 ### Hessian (`h`) definition
 
@@ -197,7 +194,7 @@ For a single point (`d.ndim == 1`):
 - Shape should be `(n_design, n_design)`.
 - Keep symmetry when mathematically expected.
 
-As with the gradient, `h` should only be returned for single-point evaluations in the standard pattern used by Brinkpy examples.
+As with the gradient, return `[]` for a vectorized call.
 
 ## DOF Derivative Return Modes
 
@@ -205,9 +202,9 @@ Use the flags to match what your objective function returns:
 
 | `DOFreturnsGradient` | `DOFreturnsHessian` | `DesignObjectiveFunction` expectation |
 |---|---|---|
-| `False` | `False` | Return placeholders for `g`, `h` (often empty lists) |
-| `True` | `False` | Return valid `g` in single-point mode. `h` can be a placeholder |
-| `True` | `True` | Return valid `g` and `h` in single-point mode |
+| `False` | `False` | Return `[]` for `g` and `h` |
+| `True` | `False` | Return `g` for a single point and `[]` for `h` |
+| `True` | `True` | Return `g` and `h` for a single point |
 
 Brinkpy does not check for the combination of `DOFreturnsGradient=False` with `DOFreturnsHessian=True`. Whether it works depends on whether SciPy's `minimize` method accepts a Hessian without a gradient. In practice, if you can derive the Hessian analytically, the gradient is usually straightforward, so provide both.
 
@@ -248,7 +245,7 @@ g = np.array([1.0])
 h = np.array([[0.0]])
 ```
 
-The `if d.ndim == 1` guard is important: it keeps vectorized objective evaluations lightweight while still providing derivatives when the optimizer needs them for single-point steps.
+The `if d.ndim == 1` check computes the derivatives only for a single point. Brinkpy never uses them from a vectorized call, so this keeps vectorized calls fast and light on memory.
 
 See [Objective Optimization Example](optimization.md) for a worked example and checklist.
 
@@ -262,4 +259,4 @@ See [Objective Optimization Example](optimization.md) for a worked example and c
 6. If analytic derivatives are advertised (`LSFreturnsGradient`/`LSFreturnsHessian`), `LSF` actually returns valid derivatives in single-point mode.
 7. For objective optimization, `DesignObjectiveFunction` accepts `(d, D)`, with `d` in `DesignVariables` order and `D` holding the remaining deterministic variables in `DeterministicVariables.name` order.
 8. For objective optimization, `DesignObjectiveFunction` and its derivative flags are consistent with the actual DOF return signature.
-9. If analytic objective derivatives are advertised (`DOFreturnsGradient`/`DOFreturnsHessian`), the DOF returns valid derivatives in single-point mode and placeholders otherwise.
+9. If analytic objective derivatives are advertised (`DOFreturnsGradient`/`DOFreturnsHessian`), the DOF returns them for a single point and `[]` otherwise.

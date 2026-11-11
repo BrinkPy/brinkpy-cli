@@ -51,8 +51,8 @@ The `bnds_mult` and `constr_mult` columns appear in several tables, with a diffe
 | `glsf_count` | Number of limit state function gradient calculations |
 | `hlsf_count` | Number of limit state function Hessian calculations |
 | `nit` | Number of iterations used by SciPy's `minimize` function |
-| `min_tries` | Number of attempts to find a solution. When an attempt fails, a new random starting point is tried. When the problem has bounds and the optimizer is SciPy's `trust-constr`, Brinkpy restarts it once from its first result to make the solution accurate near the bounds. The restart also counts as an attempt. |
-| `min_method` | SciPy `minimize` method used |
+| `min_tries` | Number of attempts to find a solution. When an attempt fails, Brinkpy tries again from a new random starting point. For a smooth function with bounds or constraints, an attempt can also succeed with a result that Brinkpy judges not yet accurate enough. Brinkpy then restarts the optimizer from that result, as many times as needed, and each restart counts as an attempt. So a `min_tries` above 1 doesn't by itself mean an attempt failed. The profile option `max_minimize_attempts` limits the total number of attempts (see [General Reliability Settings](../profiles/profile-reference.md#general-reliability-settings)). |
+| `min_method` | Optimizer used: `trust-constr` for a smooth function or `COBYQA` for a non-smooth one (see [Smooth and Non-Smooth Functions](index.md#smooth-and-non-smooth-functions)) |
 | `lsf_mult` | Lagrange multiplier for the limit state function |
 
 ### Stochastic Variable Inputs and FORM Failure Point Outputs
@@ -298,16 +298,16 @@ The **FORM Results (At Optimum)** table uses the same columns as [FORM Results](
 
 ## Lagrange Multipliers for Bounds and Constraints
 
-The `bnds_mult` and `constr_mult` columns show how strongly each bound or constraint limit affects the result. Both come from the Lagrange multipliers that SciPy's `trust-constr` optimizer reports, but Brinkpy scales them differently in each table, so that each value is a change in the quantity being minimized per unit change in the bound or limit:
+The `bnds_mult` and `constr_mult` columns show how strongly each bound or constraint limit affects the result. Both come from the Lagrange multipliers of the optimization, which Brinkpy reports only for smooth functions (see [Smooth and Non-Smooth Functions](index.md#smooth-and-non-smooth-functions)). Brinkpy scales them differently in each table, so that each value is a change in the quantity being minimized per unit change in the bound or limit:
 
 | Table | Column | Value | Change in, per unit change in the bound or limit |
 |---|---|---|---|
 | [Stochastic Variable Inputs and FORM Failure Point Outputs](#stochastic-variable-inputs-and-form-failure-point-outputs) | `bnds_mult` | Multiplier divided by 2\|β\|, since FORM minimizes β², and converted from standard normal space to the variable's units | Reliability index |
 | [Stochastic Variables Constraints](#stochastic-variables-constraints) | `constr_mult` | Multiplier divided by 2\|β\| | Reliability index |
 | [Inverse FORM Stochastic Variables](#inverse-form-stochastic-variables) | `bnds_mult` | Multiplier converted from standard normal space to the variable's units | Limit state function at the design point |
-| [Inverse FORM Stochastic Variables Constraints](#inverse-form-stochastic-variables-constraints) | `constr_mult` | Multiplier as SciPy reports it | Limit state function at the design point |
-| [Objective Optimization: Design Variables Result](#objective-optimization-design-variables-result) | `bnds_mult` | Multiplier as SciPy reports it | Design objective function |
-| [Objective Optimization: Design Constraints Result](#objective-optimization-design-constraints-result) | `constr_mult` | Multiplier as SciPy reports it | Design objective function |
+| [Inverse FORM Stochastic Variables Constraints](#inverse-form-stochastic-variables-constraints) | `constr_mult` | Multiplier as the optimizer reports it | Limit state function at the design point |
+| [Objective Optimization: Design Variables Result](#objective-optimization-design-variables-result) | `bnds_mult` | Multiplier as the optimizer reports it | Design objective function |
+| [Objective Optimization: Design Constraints Result](#objective-optimization-design-constraints-result) | `constr_mult` | Multiplier as the optimizer reports it | Design objective function |
 
 FORM and Inverse FORM search in standard normal space, so the multiplier of a bound on a stochastic variable is converted to the variable's units. A constraint limit applies to the output of the constraint function, in its own units, and design variables are deterministic, so the other values need no conversion.
 
@@ -316,4 +316,4 @@ The same rules apply in every table:
 - **Sign.** Negative for an active lower bound or limit, positive for an active upper one. Relaxing an active bound or limit lowers the quantity being minimized: the design objective function, the limit state function at the Inverse FORM design point, or a positive reliability index in FORM. A negative reliability index rises toward zero instead.
 - **Active or inactive.** Brinkpy decides from the distance to the bound, not from the size of the multiplier. A bound counts as active when the point lies within 1% of it, or within 0.01 when the bound is between −1 and 1 (see [Bounds and Truncation](index.md#bounds-and-truncation)). For a constraint, the same rule applies to the constraint's `value`. For an inactive bound or limit, the value is close to zero but not exactly zero. Brinkpy lists the active bounds and limits, with these values, in a note.
 - **Equalities.** A design constraint whose `lb` equals its `ub` is always active, so its multiplier is usually not zero. The note does not list it.
-- **Empty values.** The values are empty when the optimizer is not `trust-constr` (for example, FORM when `LSFisSmooth` is `False`), in FORM when β is zero, for a stochastic variable with no bounds other than the natural limits of its distribution, and for design variables when none has a finite bound.
+- **Empty values.** The values are empty when the function is not smooth (`LSFisSmooth` is `False` for the FORM and Inverse FORM tables, or `DOFisSmooth` is `False` for the design tables), in FORM when β is zero, for a stochastic variable with no bounds other than the natural limits of its distribution, and for design variables when none has a finite bound.

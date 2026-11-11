@@ -57,13 +57,13 @@ The sections below describe each key in detail.
 | Key | Required | Type | Purpose | Example (`AT610`) |
 |---|---|---|---|---|
 | `Name` | Yes | `str` | Human-readable problem name used in outputs | `"AT610"` |
-| `LimitStateFunction` | Yes | callable | Function implementing `g(X, D)` with return contract `g, gg, gh, L, R` (placeholders allowed; see Limit State Function Contract) | `LSF` |
+| `LimitStateFunction` | Yes | callable | Function implementing `g(X, D)` that returns `g, gg, gh, L, R` (see [Required Return Values](#required-return-values)) | `LSF` |
 | `LSFisVectorized` | Yes | `bool` | Whether `LSF` can process batched samples (`X` with shape `(n_var, n_samples)`) | `True` |
-| `LSFisSmooth` | Yes | `bool` | Signals smoothness for derivative-based reliability methods | `True` |
+| `LSFisSmooth` | Yes | `bool` | Whether the limit state function is smooth. Selects the optimizer for FORM and Inverse FORM (see [Smooth and Non-Smooth Functions](#smooth-and-non-smooth-functions)). | `True` |
 | `LSFisParallelizable` | No (default `False`) | `bool` | Signals that evaluations are safe for parallel execution | `True` |
-| `LSFreturnsGradient` | Yes | `bool` | If `True`, `LSF` should return gradient `gg` for 1-point evaluation; otherwise return placeholder `[]` | `True` |
-| `LSFreturnsHessian` | Yes | `bool` | If `True`, `LSF` should return Hessian `gh` for 1-point evaluation; otherwise return placeholder `[]` | `True` |
-| `LSFreturnsLandR` | Yes | `bool` | If `True`, `LSF` should return non-empty load/resistance values `(L, R)` for reporting and plots; otherwise return placeholders such as `[]`, `[]` | `True` |
+| `LSFreturnsGradient` | Yes | `bool` | Whether `LSF` returns the gradient `gg` for a single point. If `False`, Brinkpy ignores `gg`. | `True` |
+| `LSFreturnsHessian` | Yes | `bool` | Whether `LSF` returns the Hessian `gh` for a single point. If `False`, Brinkpy ignores `gh`. | `True` |
+| `LSFreturnsLandR` | Yes | `bool` | Whether `LSF` returns the load `L` and resistance `R`, used for the load and resistance histogram and partial factors. If `False`, Brinkpy ignores `L` and `R`. | `True` |
 | `DeterministicVariables` | Yes | `dict` | Deterministic variables and fixed values | empty in `AT610` |
 | `StochasticVariables` | Yes | `dict` | Random variable definition (names, distributions, moments, correlations) | `Y,Z,M` |
 | `LSFplot` | Optional | `dict` | Axis mapping and limits for limit state function (LSF) plots | present in `AT610` |
@@ -94,22 +94,19 @@ Expected shape behavior:
 
 ### Required return values
 
-Always return:
+Always return all five values, in this order:
 
-- `g`: limit state value(s), with failure when `g <= 0`.
-- `gg`: gradient placeholder (`[]` when `LSFreturnsGradient=False`).
-- `gh`: Hessian placeholder (`[]` when `LSFreturnsHessian=False`).
-- `L`: load placeholder/value (`[]` when `LSFreturnsLandR=False`).
-- `R`: resistance placeholder/value (`[]` when `LSFreturnsLandR=False`).
+- `g`: the limit state function value, with failure when `g <= 0`. It has one value per point.
+- `gg`: the gradient of `g` with respect to the stochastic variables (see [Gradient](#gradient-gg-definition)).
+- `gh`: the Hessian of `g` with respect to the stochastic variables (see [Hessian](#hessian-gh-definition)).
+- `L`: the load, or demand, with the same shape as `g`.
+- `R`: the resistance, or capacity, with the same shape as `g`. Brinkpy assumes `g = R - L`.
 
-The `LSFreturnsGradient`, `LSFreturnsHessian`, and `LSFreturnsLandR` flags change whether `gg`, `gh`, `L`, and `R` contain meaningful values or placeholders, but the return signature remains:
+The function returns the same five values whatever the flags say: `return g, gg, gh, L, R`. When a flag is `False`, Brinkpy ignores the matching values, so return `[]` in their place. For example, without load and resistance values:
 
-- `return g, gg, gh, L, R`
+- `return g, gg, gh, [], []`
 
-Typical patterns are:
-
-- Without load/resistance reporting: `return g, gg, gh, [], []`
-- With load/resistance reporting: `return g, gg, gh, L, R`
+Brinkpy never uses `gg` or `gh` from a vectorized call, where `X` holds many points. Compute them only for a single point and return `[]` otherwise, because derivatives for many points can use a lot of memory. `L` and `R` are needed in both cases.
 
 ### Gradient (`gg`) definition
 
@@ -118,7 +115,7 @@ For a single point (`X.ndim == 1`):
 - `gg` is the derivative vector `dg/dx_i` in the same variable order as `name`.
 - Shape should be `(n_var,)`.
 
-For vectorized evaluations, many examples return `[]` and only compute derivatives in single-point mode.
+For a vectorized call, return `[]`, as explained in [Required Return Values](#required-return-values).
 
 ### Hessian (`gh`) definition
 
@@ -128,7 +125,7 @@ For a single point (`X.ndim == 1`):
 - Shape should be `(n_var, n_var)`.
 - Keep symmetry when mathematically expected.
 
-As with the gradient, `gh` is typically only returned for single-point evaluations in the standard Brinkpy authoring pattern.
+As with the gradient, return `[]` for a vectorized call.
 
 ## LSF Derivative Return Modes
 
@@ -136,11 +133,37 @@ Use the flags to match what your function returns:
 
 | `LSFreturnsGradient` | `LSFreturnsHessian` | `LSF` expectation |
 |---|---|---|
-| `False` | `False` | Return placeholders for `gg`, `gh` (often empty lists), plus `L`, `R` placeholders or values |
-| `True` | `False` | Return valid `gg`; `gh` can be placeholder; still return `L`, `R` |
-| `True` | `True` | Return valid `gg` and `gh`; still return `L`, `R` |
+| `False` | `False` | Return `[]` for `gg` and `gh` |
+| `True` | `False` | Return `gg` for a single point and `[]` for `gh` |
+| `True` | `True` | Return `gg` and `gh` for a single point |
 
 There is no mode that returns the Hessian without the gradient. A user-provided Hessian is defined in real space, and Brinkpy needs the gradient to transform it into the standard normal space used by FORM and SORM. In practice, if you can derive the Hessian analytically, the gradient is usually straightforward.
+
+## Smooth and Non-Smooth Functions
+
+`LSFisSmooth` tells Brinkpy whether the limit state function is smooth, meaning that it has no kinks, steps, or jumps, so its gradient changes continuously. Brinkpy uses it to choose the optimizer for FORM and Inverse FORM:
+
+| `LSFisSmooth` | Optimizer | Kind |
+|---|---|---|
+| `True` | SciPy's [`trust-constr`](https://docs.scipy.org/doc/scipy/reference/optimize.minimize-trustconstr.html) | Uses gradients |
+| `False` | SciPy's [`COBYQA`](https://docs.scipy.org/doc/scipy/reference/optimize.minimize-cobyqa.html) | Derivative-free |
+
+`DOFisSmooth` makes the same choice for the design objective function in objective optimization (see [Design Keys](design/design-keys.md#additional-keys-for-objective-optimization)). In a design run, each flag applies to its own optimization: `DOFisSmooth` to the search for the optimal design, and `LSFisSmooth` to the FORM analysis inside it.
+
+Set the flag to `False` when the function has kinks or steps, for example from `numpy.minimum()` or `numpy.maximum()` in series and parallel systems, `abs()`, `if` branches, or table lookups. Otherwise leave it `True`, because the optimizer that uses gradients is usually faster and more accurate.
+
+The flag changes the following:
+
+| | Smooth (`True`) | Non-smooth (`False`) |
+|---|---|---|
+| Analytic derivatives (`gg`, `gh`, or `g`, `h` for the design objective function) | Used when the matching `returns` flag is `True` | Not used |
+| Bounds and constraints | Respected | Respected |
+| Lagrange multipliers (`bnds_mult`, `constr_mult`) | Reported | Empty |
+| Restarts to refine a result (counted in `min_tries`) | Can happen when there are bounds or constraints | None |
+| `min_method` in the results | `trust-constr` | `COBYQA` |
+
+!!! warning "SORM assumes a smooth limit state function"
+    SORM approximates the limit state surface at the most probable point (MPP) with its curvatures, which assumes the function is smooth there. With `LSFisSmooth = False`, SORM still runs, but if the MPP lies on a kink, the curvatures do not describe the surface and the SORM result can be wrong. Check it with Monte Carlo or importance sampling.
 
 ## Worked LSF Example (`AT610Problem.py`)
 
@@ -535,7 +558,8 @@ When a module is rejected, the API returns a validation error describing the dis
 
 - Variable order mismatch between `StochasticVariables.name` and `X` unpacking in `LSF`.
 - Returning scalar `g` for vectorized inputs when an array is expected.
-- Setting derivative flags to `True` but returning placeholders.
+- Setting derivative flags to `True` but returning `[]` for the derivatives.
+- Computing `gg` or `gh` in a vectorized call, which Brinkpy never uses.
 - Returning only `g, gg, gh` instead of the full `g, gg, gh, L, R` contract.
 - Defining `cor_list` pairs with variable names not present in `name`.
 - Defining a `cor` matrix with the wrong size or variable order.
