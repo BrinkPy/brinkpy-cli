@@ -229,8 +229,9 @@ class ReliabilityOptions(BaseEnumModel):
         Use a random starting point for design optimization. Default: False.
     - design_seed: int | None
         Random seed for design optimization random starts. Default: None.    
-    - max_minimize_attempts: int (excluded from public serialization)
-        Maximum attempts when calling the minimizer. Range: [1, 12]. Default: 8.
+    - max_minimize_attempts: int
+        Maximum number of attempts for each FORM, Inverse FORM, and design optimization, counting
+        new random starts after a failed attempt and restarts to refine a result. Range: [1, 12]. Default: 8.
     - max_workers: int (excluded from public serialization)
         Number of parallel workers (-1 means auto). Range: [-1, 12]. Default: 2.
     - alpha_direction: AlphaDirectionEnum
@@ -332,7 +333,7 @@ class ReliabilityOptions(BaseEnumModel):
     model_config = ConfigDict(extra="forbid", validate_assignment=True)
 
     PROFILE_GROUPS: ClassVar[tuple[tuple[str, tuple[str, ...]], ...]] = (
-        ("General", ("alpha_direction", "use_nearest_correlation")),
+        ("General", ("alpha_direction", "use_nearest_correlation", "max_minimize_attempts")),
         ("FORM", ("form_xtol", "form_gtol", "form_maxiter", "form_random_start", "form_seed")),
         ("Design", ("design_xtol", "design_gtol", "design_maxiter", "design_random_start", "design_seed")),
         (
@@ -394,7 +395,7 @@ class ReliabilityOptions(BaseEnumModel):
     design_maxiter: int = Field(default=1000, ge=1)
     design_random_start: bool = Field(default=False)
     design_seed: int | None = Field(default=None)
-    max_minimize_attempts: int = Field(default=8, ge=1, le=12, exclude=True)
+    max_minimize_attempts: int = Field(default=8, ge=1, le=12)
     max_workers: int = Field(default=2, ge=-1, le=12, exclude=True)
     alpha_direction: AlphaDirectionEnum = Field(default=AlphaDirectionEnum.outward)
     use_nearest_correlation: bool = Field(default=False)
