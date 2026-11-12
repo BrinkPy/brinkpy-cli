@@ -158,6 +158,7 @@ The flag changes the following:
 |---|---|---|
 | Analytic derivatives (`gg`, `gh`, or `g`, `h` for the design objective function) | Used when the matching `returns` flag is `True` | Not used |
 | Bounds and constraints | Respected | Respected |
+| `keep_feasible` on bounds and constraints | Used | No effect |
 | Lagrange multipliers (`bnds_mult`, `constr_mult`) | Reported | Empty |
 | Restarts to refine a result (counted in `min_tries`) | Can happen when there are bounds or constraints | None |
 | `min_method` in the results | `trust-constr` | `COBYQA` |
@@ -262,6 +263,7 @@ Advanced/optional fields can also be used depending on model needs:
 |---|---|---|---|
 | `lb` | Conditional | `list[float]` | Lower bounds per stochastic variable; required for some distributions and optional otherwise |
 | `ub` | Conditional | `list[float]` | Upper bounds per stochastic variable; required for some distributions and optional otherwise |
+| `keep_feasible` | No | `bool` or `list[bool]` | Whether FORM and Inverse FORM must keep every point they try inside `[lb, ub]`, either one value for all variables or one per variable (see [Keeping the Search Inside the Bounds](#keeping-the-search-inside-the-bounds)) |
 | `truncated` | No | `list[bool]` | Whether each variable distribution is truncated to `[lb, ub]` |
 | `constraints` | No | `list[dict]` | Linear or nonlinear constraints on functions of the stochastic variables (see [Constraints on Stochastic Variables](#constraints-on-stochastic-variables)) |
 
@@ -273,9 +275,9 @@ Rules:
 - `cor_list` references variable names from `name`.
 - `cor`, when used, should be an `n x n` correlation matrix in the same variable order as `name`.
 - Use either `cor_list` or `cor` to define correlation inputs.
-- If defined, `lb`, `ub`, and `truncated` must each have length `n`.
+- If defined, `lb`, `ub`, and `truncated` must each have length `n`. `keep_feasible` is either a single `bool` or a list of length `n`.
 - You can set individual bounds to `-np.inf` and `np.inf` to indicate no lower/upper bound for that variable.
-- If `lb`, `ub`, and/or `truncated` are omitted, defaults are used: no bounds and `truncated=False` for all variables.
+- If `lb`, `ub`, `keep_feasible`, and/or `truncated` are omitted, defaults are used: no bounds, `keep_feasible=False`, and `truncated=False` for all variables.
 - Bounds and truncation have different effects. See [Bounds and Truncation](#bounds-and-truncation).
 - `constraints`, when provided, is a list of constraint dictionaries. See [Constraints on Stochastic Variables](#constraints-on-stochastic-variables).
 
@@ -291,7 +293,7 @@ Setting `lb` and `ub` does not by itself change a variable's distribution. Wheth
 
 SORM uses the MPP found by FORM, so the bounds affect SORM results in the same way.
 
-Bounds without truncation are useful to keep the search for the MPP away from values where the limit state function is not defined, such as negative values inside a square root or logarithm, without changing the probability model.
+Bounds without truncation are useful to keep the MPP inside values that make physical sense without changing the probability model. On the way to the MPP, the search may still try points outside the bounds unless `keep_feasible` is `True` (see [Keeping the Search Inside the Bounds](#keeping-the-search-inside-the-bounds)).
 
 !!! warning "When the MPP lies on a bound"
     With `truncated[i] = False`, the bounds restrict only where FORM and Inverse FORM search. If the MPP ends up on a bound, the result describes the constrained search, not the full distribution, so the reliability index (from FORM or SORM) or the design point (from Inverse FORM) may not reflect the actual probability of failure. Brinkpy reports this in a note that lists each active bound, whether it is the lower or upper bound, and about how much it affects the result. A bound counts as active when the MPP lies within 1% of it, or within 0.01 when the bound is between −1 and 1. The same values appear in the `bnds_mult` column of the results (see [Lagrange Multipliers for Bounds and Constraints](results-tables.md#lagrange-multipliers-for-bounds-and-constraints)). When a bound is active, decide whether values of the variable outside the bounds are physically possible:
@@ -300,6 +302,22 @@ Bounds without truncation are useful to keep the search for the MPP away from va
     - If they are, widen or remove the bounds.
 
 For distributions that require `lb` and `ub` (beta, triangular, and uniform when defined by its bounds), the bounds are the limits of the distribution itself, so truncation does not change it.
+
+#### Keeping the Search Inside the Bounds
+
+By default, the optimizer may try points outside `[lb[i], ub[i]]` while it searches for the MPP, as long as the MPP it returns is inside. Most limit state functions can be evaluated at those points, so this does no harm. When the limit state function cannot be evaluated outside the bounds, for example when a negative value would go inside a square root or logarithm, set `keep_feasible[i] = True` so that every point the optimizer tries stays inside the bounds.
+
+`keep_feasible` and `truncated` answer different questions, and one does not imply the other:
+
+| | `truncated[i] = True` | `keep_feasible[i] = True` |
+|---|---|---|
+| What it changes | The probability model | Only the points the optimizer tries on the way to the MPP |
+| Distribution of the variable | Values outside the bounds have zero probability | Unchanged |
+| Monte Carlo and importance sampling | Sample from the truncated distribution | Not affected |
+| Results of FORM, SORM, and Inverse FORM | Can change, because the distribution changes | Unchanged |
+| When to set it | Values outside the bounds are physically impossible | Values outside the bounds are possible, but the limit state function cannot be evaluated there |
+
+When `truncated[i]` is `True`, `keep_feasible[i]` has no effect, because the truncated distribution already keeps every point the optimizer tries inside the bounds. Brinkpy starts the search at a point inside the bounds, so the starting point needs no change. Keeping every point inside the bounds can slow the search. `keep_feasible` is used only by the optimizer for smooth functions, so it has no effect when `LSFisSmooth` is `False` (see [Smooth and Non-Smooth Functions](#smooth-and-non-smooth-functions)).
 
 ### Constraints on Stochastic Variables
 
@@ -357,7 +375,7 @@ The results include a table of the constraint values at the MPP (see [Stochastic
     As with bounds, if the MPP ends up on a constraint limit, the result describes the constrained search, not the full distribution. Brinkpy reports this in a note that lists each active limit, whether it is the lower or upper limit, and about how much it affects the result, in the units of the constraint's output. A limit counts as active when the constraint's value lies within 1% of it, or within 0.01 when the limit is between −1 and 1. Equalities are not listed. Decide whether values beyond the limit are physically possible, and if they are, widen the limit.
 
 !!! warning "Setting `keep_feasible` to `True`"
-    With `keep_feasible` set to `True`, the starting point of the search must already satisfy the constraint, or SciPy stops with an error and the run fails. Every step of the search must then stay inside the limits, which can slow the search or stop it short of a solution that lies on a limit. Set it to `True` only when the problem's functions cannot be evaluated outside the limits, for example when a value inside a square root or logarithm would become negative. `keep_feasible` has no effect on equalities.
+    With `keep_feasible` set to `True`, the starting point of the search must already satisfy the constraint, or SciPy stops with an error and the run fails. Every step of the search must then stay inside the limits, which can slow the search or stop it short of a solution that lies on a limit. Set it to `True` only when the problem's functions cannot be evaluated outside the limits, for example when a value inside a square root or logarithm would become negative. `keep_feasible` has no effect on equalities, and no effect when the function is not smooth (see [Smooth and Non-Smooth Functions](#smooth-and-non-smooth-functions)).
 
 ## Supported Statistical Distributions
 

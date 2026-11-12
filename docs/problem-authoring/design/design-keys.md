@@ -33,13 +33,16 @@ When `DesignProblem` defines a `DesignObjectiveFunction`, Brinkpy runs objective
 | `DOFreturnsHessian` | Yes | `bool` | If `True`, objective must return Hessian in single-point mode |
 | `DesignVariables` | Yes | `list[str]` | Names of deterministic design variables to optimize |
 | `InitialGuess` | Yes | `list[float]` | Starting point for optimization |
-| `lb` | Yes | `list[float]` | Lower bounds for design variables |
-| `ub` | Yes | `list[float]` | Upper bounds for design variables |
+| `lb` | No | `list[float]` | Lower bounds for design variables. If it is missing, the design variables have no lower bounds (`-np.inf`). |
+| `ub` | No | `list[float]` | Upper bounds for design variables. If it is missing, the design variables have no upper bounds (`np.inf`). |
+| `keep_feasible` | No | `bool` or `list[bool]` | Whether the optimizer must keep every point it tries inside `[lb, ub]`, either one value for all design variables or one per design variable. The default is `False`. |
 | `DesignConstraints` | No | `list[dict]` | Constraints on functions of the design variables (see [Design Constraints](#design-constraints)) |
 
 `DesignVariables` must be selected from `DeterministicVariables.name`.
 
 If `InitialGuess` lies outside the bounds or does not satisfy `DesignConstraints`, Brinkpy first moves it to a nearby point that does, and starts the optimization from there.
+
+Set `keep_feasible` to `True` for a design variable when the design objective function or the limit state function cannot be evaluated outside its bounds, for example a thickness that must stay positive. It does not change the optimal design, only the points the optimizer tries on the way there, and it can slow the search. It has no effect when `DOFisSmooth` is `False`. The same option for stochastic variables is described in [Keeping the Search Inside the Bounds](../index.md#keeping-the-search-inside-the-bounds).
 
 When the optimum lies on a bound of a design variable, a note lists each active bound and about how much relaxing it would reduce the design objective function. The same values appear in the `bnds_mult` column of the results (see [Lagrange Multipliers for Bounds and Constraints](../results-tables.md#lagrange-multipliers-for-bounds-and-constraints)). A bound counts as active when the optimum lies within 1% of it, or within 0.01 when the bound is between −1 and 1.
 
@@ -92,7 +95,7 @@ Typical shape:
 
 Rules:
 
-- `len(DesignVariables) == len(InitialGuess) == len(lb) == len(ub)`.
+- `len(DesignVariables) == len(InitialGuess)`, and the same for `lb` and `ub` when given, and for `keep_feasible` when it is a list.
 - Every entry in `DesignVariables` must appear in `DeterministicVariables.name`.
 - Objective return contract must match `DOFreturnsGradient` and `DOFreturnsHessian` flags.
 - Reliability target (`TargetBeta` or `TargetPf`) is still required because optimization is reliability-constrained.
