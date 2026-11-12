@@ -102,7 +102,7 @@ Always return all five values, in this order:
 - `L`: the load, or demand, with the same shape as `g`.
 - `R`: the resistance, or capacity, with the same shape as `g`. Brinkpy assumes `g = R - L`.
 
-The function returns the same five values whatever the flags say: `return g, gg, gh, L, R`. When a flag is `False`, Brinkpy ignores the matching values, so return `[]` in their place. For example, without load and resistance values:
+The function returns the same five values whatever the flags say: `return g, gg, gh, L, R`. When a flag is `False`, return `[]` in place of the matching values. Before the run, Brinkpy checks the function at a single point and reports it in a note if it returns a value that its flag says it does not. The run continues and ignores that value, but the note usually means the flag should be `True`. For example, without load and resistance values:
 
 - `return g, gg, gh, [], []`
 
@@ -577,6 +577,7 @@ When a module is rejected, the API returns a validation error describing the dis
 - Variable order mismatch between `StochasticVariables.name` and `X` unpacking in `LSF`.
 - Returning scalar `g` for vectorized inputs when an array is expected.
 - Setting derivative flags to `True` but returning `[]` for the derivatives.
+- Returning derivatives, `L`, or `R` while the matching flag is `False`. Brinkpy ignores them and reports it in a note, so set the flag to `True` to use them, or return `[]`.
 - Computing `gg` or `gh` in a vectorized call, which Brinkpy never uses.
 - Returning only `g, gg, gh` instead of the full `g, gg, gh, L, R` contract.
 - Defining `cor_list` pairs with variable names not present in `name`.

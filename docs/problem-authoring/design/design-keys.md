@@ -174,7 +174,7 @@ Always return:
 - `g`: the gradient of `f` with respect to the design variables (see [Gradient](#gradient-g-definition)).
 - `h`: the Hessian of `f` with respect to the design variables (see [Hessian](#hessian-h-definition)).
 
-The function returns the same three values whatever the flags say: `return f, g, h`. When `DOFreturnsGradient` or `DOFreturnsHessian` is `False`, Brinkpy ignores the matching value, so return `[]` in its place. For example, without derivatives:
+The function returns the same three values whatever the flags say: `return f, g, h`. When `DOFreturnsGradient` or `DOFreturnsHessian` is `False`, return `[]` in place of the matching value. Before the run, Brinkpy checks the function at a single point and reports it in a note if it returns a derivative that its flag says it does not. The run continues and ignores that derivative. For example, without derivatives:
 
 - `return f, [], []`
 
@@ -262,4 +262,4 @@ See [Objective Optimization Example](optimization.md) for a worked example and c
 6. If analytic derivatives are advertised (`LSFreturnsGradient`/`LSFreturnsHessian`), `LSF` actually returns valid derivatives in single-point mode.
 7. For objective optimization, `DesignObjectiveFunction` accepts `(d, D)`, with `d` in `DesignVariables` order and `D` holding the remaining deterministic variables in `DeterministicVariables.name` order.
 8. For objective optimization, `DesignObjectiveFunction` and its derivative flags are consistent with the actual DOF return signature.
-9. If analytic objective derivatives are advertised (`DOFreturnsGradient`/`DOFreturnsHessian`), the DOF returns them for a single point and `[]` otherwise.
+9. If analytic objective derivatives are advertised (`DOFreturnsGradient`/`DOFreturnsHessian`), the DOF returns them for a single point and `[]` otherwise. If a flag is `False`, the DOF returns `[]` for that derivative.
