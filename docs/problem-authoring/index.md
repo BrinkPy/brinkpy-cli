@@ -305,7 +305,7 @@ For distributions that require `lb` and `ub` (beta, triangular, and uniform when
 
 #### Keeping the Search Inside the Bounds
 
-By default, the optimizer may try points outside `[lb[i], ub[i]]` while it searches for the MPP, as long as the MPP it returns is inside. Most limit state functions can be evaluated at those points, so this does no harm. When the limit state function cannot be evaluated outside the bounds, for example when a negative value would go inside a square root or logarithm, set `keep_feasible[i] = True` so that every point the optimizer tries stays inside the bounds.
+By default, the optimizer may try points outside `[lb[i], ub[i]]` while it searches for the MPP. Only the MPP it returns is guaranteed to be inside the bounds. Most limit state functions can be evaluated at those points, so this does no harm. When the limit state function cannot be evaluated outside the bounds, for example when a negative value would go inside a square root or logarithm, set `keep_feasible[i] = True` so that every point the optimizer tries stays inside the bounds.
 
 `keep_feasible` and `truncated` answer different questions, and one does not imply the other:
 
@@ -399,11 +399,11 @@ Example pattern (`None` marks the unused pair for that variable):
 ```python
 "StochasticVariables": {
         "name":   ["X1",    "X2",    "X3"],
-        "type":   ["normal", "gumbelmax", "uniform"],
+        "type":   ["normal", "gumbelmax", "weibull"],
         "mean":   [10.0,     None,     None],
         "std":    [2.0,      None,     None],
-        "param1": [None,     100.0,    0.0],
-        "param2": [None,     15.0,     20.0],
+        "param1": [None,     100.0,    20.0],
+        "param2": [None,     15.0,     2.0],
 }
 ```
 
@@ -414,22 +414,21 @@ Example pattern (`None` marks the unused pair for that variable):
 | `gumbelmax` | `gumbel_r` | Yes | Yes | `μ` | `β` | Optional |
 | `gumbelmin` | `gumbel_l` | Yes | Yes | `μ` | `β` | Optional |
 | `exponential` | `expon` | Yes | No | `λ` | `None` | Optional |
-| `gamma` | `gamma` | Yes | Yes | `κ` | `θ` | Optional |
-| `weibull` | `weibull_min` | Yes | Yes | `κ` | `λ` | Optional |
+| `gamma` | `gamma` | Yes | Yes | `θ` | `κ` | Optional |
+| `weibull` | `weibull_min` | Yes | Yes | `λ` | `κ` | Optional |
 | `beta` | `beta` | Yes | Yes | `α` | `β` | Required |
 | `triangular` | `triang` | Yes | No | `Mo` (mode) | `None` | Required |
-| `uniform` | `uniform` | Yes | Yes | `a` | `b` | `*` |
+| `uniform` | `uniform` | Yes | Yes | `None` | `None` | `*` |
 | `frechet` | `invweibull` | Yes | Yes | `s` | `α` | Optional |
 | `pareto` | `pareto` | Yes | Yes | `xm` | `α` | Optional |
 | `rayleigh` | `rayleigh` | Yes | No | `σ` | `None` | Optional |
 
 The `mean` and `std` columns show whether the distribution requires that value when it is defined by moments. The exponential, triangular, and Rayleigh distributions are fully defined by their mean, so they do not take `std`.
 
-`*` A uniform distribution can be defined in any of three ways:
+`*` A uniform distribution does not take `param1` and `param2`, so set both to `None`. Define it in one of two ways:
 
 - By `mean` and `std`. Set `lb` and `ub` to `None`.
-- By `param1` and `param2`, which are the lower and upper limits of the distribution. Set `lb` and `ub` to `None`.
-- By `lb` and `ub`, which are then the lower and upper limits. Set `param1` and `param2` to `None`.
+- By `lb` and `ub`, which are the lower and upper limits of the distribution. Set `mean` and `std` to `None`.
 
 Greek symbols shown for `param1` and `param2` follow the standard notation used in the linked Wikipedia references (where applicable).
 
