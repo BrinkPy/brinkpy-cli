@@ -46,3 +46,6 @@ problems2/
 profiles/*.yaml
 
 .env.local
+
+# Claude Code personal settings
+.claude/settings.local.json
