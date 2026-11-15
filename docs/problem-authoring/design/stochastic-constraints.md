@@ -20,8 +20,8 @@ Problem module:
 
 Recorded result sets:
 
-- Design: `results/2026-11-07/15-57-10/Pipe_Corrosion-3d4f9.xlsx`, `.json`, `.py`, and `profile-3d4f9.yaml`
-- Monte Carlo: `results/2026-11-07/15-57-45/Pipe_Corrosion-4f358.xlsx`, `.json`, `.py`, `.pickle`, `.pdf`, and `profile-4f358.yaml`
+- Design: `results/2026-11-14/22-29-27/Pipe_Corrosion-45372.xlsx`, `.json`, `.py`, and `profile-45372.yaml`
+- Monte Carlo: `results/2026-11-14/22-29-33/Pipe_Corrosion-00c2b.xlsx`, `.json`, `.py`, `.pickle`, `.pdf`, and `profile-00c2b.yaml`
 
 Profile and run modes from the saved profiles:
 
@@ -61,33 +61,61 @@ The resistance is the burst pressure, and the load is the operating pressure.
 
 ### Keys That Implement the Constraints
 
-The two ratios are limited to the range of the model:
+One constraint function, `ratios`, returns both ratios. `lb` and `ub` give one limit for each of its two outputs, in the same order:
 
 ```python
 "StochasticVariables": {
     "name": ["Xm", "Y", "t", "Do", "d", "l", "Po"],
     ...
     "constraints": [
-        {"fun": d_over_t, "lb": [0.1], "ub": [0.8], "jac": d_over_t_gradient},
-        {"fun": l_over_Do, "lb": [0.0], "ub": [1.5]},
+        {"fun": ratios, "lb": [0.1, 0.0], "ub": [0.8, 1.5], "jac": ratios_jacobian, "hess": ratios_hessian},
     ],
 },
 ```
 
-Each constraint function receives the stochastic variables `X` and the deterministic variables `D`, as the limit state function does:
+Each constraint function receives the stochastic variables `X` and the deterministic variables `D`, as the limit state function does. `ratios_jacobian` returns the gradient of each output with respect to `X`, one row per output, so a 2 × 7 matrix. `ratios_hessian` also receives `v`, which holds one Lagrange multiplier per output, and returns the 7 × 7 Hessian of `v[0] (d / t) + v[1] (l / Do)`:
 
 ```python
-def d_over_t(X, D):
-    Xm, Y, t, Do, d, l, Po = X
-    return d / t
+def ratios(X, D):
+    # X is a nxs matrix where n is the number of stochastic variables and s is the number of samples
+    # D is a (m,) array where m is the number of deterministic variables
+    _, _, t, Do, d, l, _ = X
+
+    g = np.array([d / t, l / Do])
+
+    return g  # (2,) or (2,s)
 
 
-def d_over_t_gradient(X, D):
-    Xm, Y, t, Do, d, l, Po = X
-    return np.array([0.0, 0.0, -d / (t**2), 0.0, 1.0 / t, 0.0, 0.0])
+def ratios_jacobian(X, D):
+    # Jacobian of the ratios constraint with respect to the stochastic variables
+    # X is a (n,) array of stochastic variables
+    # D is a (m,) deterministic variable array where m is the number of deterministic variables
+    _, _, t, Do, d, l, _ = X
+
+    gg = np.array([[0.0, 0.0, -d / (t**2), 0.0, 1.0 / t, 0.0, 0.0], [0.0, 0.0, 0.0, -l / (Do**2), 0.0, 1.0 / Do, 0.0]])
+
+    return gg  # (2,7)
+
+
+def ratios_hessian(X, v, D):
+    # Hessian of np.dot(ratios, v)
+    # X is a (n,) array of stochastic variables
+    # v is a (p,) Lagrange multiplier array where p is the number of outputs of the constraint (here 2)
+    # D is a (m,) deterministic variable array where m is the number of deterministic variables
+    _, _, t, Do, d, l, _ = X
+
+    H = np.zeros((7, 7))
+    H[2, 2] = v[0] * 2 * d / (t**3)
+    H[2, 4] = -v[0] / (t**2)
+    H[4, 2] = -v[0] / (t**2)
+    H[3, 3] = v[1] * 2 * l / (Do**3)
+    H[3, 5] = -v[1] / (Do**2)
+    H[5, 3] = -v[1] / (Do**2)
+
+    return H  # (7,7)
 ```
 
-`d_over_t` provides its gradient with `jac`, and `l_over_Do` does not, so SciPy approximates the gradient of `l_over_Do` with finite differences.
+Without `jac`, SciPy would approximate the Jacobian with finite differences, which takes extra constraint calls for each of the 7 variables. Without `hess`, it would approximate the Hessian with a quasi-Newton (BFGS) update. The results and notes identify each output of `ratios` by its number: output 1 is `d / t` and output 2 is `l / Do`.
 
 ### Design Keys
 
@@ -118,15 +146,15 @@ Bhardwaj et al. ran several FORM analyses to find the value of `Xr` that gives t
 
 ## Design Results
 
-The tables below are transcribed from the `Results` worksheet in `Pipe_Corrosion-3d4f9.xlsx`, with the two cases combined. For the meaning of each column, see [Results Tables Reference](../results-tables.md#design).
+The tables below are transcribed from the `Results` worksheet in `Pipe_Corrosion-45372.xlsx`, with the two cases combined. For the meaning of each column, see [Results Tables Reference](../results-tables.md#design).
 
 ### Header Information
 
 | Field | Value |
 |---|---|
 | Problem | `Pipe Corrosion` |
-| Request ID | `bbe20757c2d4412580f9f28021a3d4f9` |
-| Run time | `00 min 01.69 sec` |
+| Request ID | `b0b9efde143a4aca93ebfd1411f45372` |
+| Run time | `00 min 01.89 sec` |
 
 ### Design Data
 
@@ -165,74 +193,74 @@ The tables below are transcribed from the `Results` worksheet in `Pipe_Corrosion
 
 | case | beta | pf | beta_count | hbeta_count | lsf_count | glsf_count | hlsf_count | min_method |
 |---|---:|---:|---:|---:|---:|---:|---:|---|
-| Low Grade | 2.470 | 0.006760 | 156 | 156 | 150 | 150 | 0 | tr_interior_point |
-| Medium Grade | 2.470 | 0.006756 | 120 | 120 | 114 | 114 | 0 | tr_interior_point |
+| Low Grade | 2.470 | 0.006760 | 146 | 146 | 140 | 140 | 0 | tr_interior_point |
+| Medium Grade | 2.470 | 0.006756 | 192 | 192 | 186 | 186 | 0 | tr_interior_point |
 
 ### Stochastic Variables Constraints
 
-See [Stochastic Variables Constraints](../results-tables.md#stochastic-variables-constraints) for the columns.
+See [Stochastic Variables Constraints](../results-tables.md#stochastic-variables-constraints) for the columns. Each output of `ratios` has its own row. `constr_count` counts calls to the function, so it appears only on the first row.
 
 | case | constr_name | constr_row | lb | ub | value | constr_count |
 |---|---|---:|---:|---:|---:|---:|
-| Low Grade | d_over_t | 1 | 0.1 | 0.8 | 0.1608 | 150 |
-| Low Grade | l_over_Do | 1 | 0 | 1.5 | 0.2831 | 1200 |
-| Medium Grade | d_over_t | 1 | 0.1 | 0.8 | 0.1627 | 114 |
-| Medium Grade | l_over_Do | 1 | 0 | 1.5 | 0.1786 | 912 |
+| Low Grade | ratios | 1 | 0.1 | 0.8 | 0.1608 | 140 |
+| Low Grade | ratios | 2 | 0 | 1.5 | 0.2831 | |
+| Medium Grade | ratios | 1 | 0.1 | 0.8 | 0.1627 | 186 |
+| Medium Grade | ratios | 2 | 0 | 1.5 | 0.1786 | |
 
 ### Notes Reported by Brinkpy
 
 1. Validation: Stochastic variables definition and limit state function validation required 2 function calls.
 2. Validation: Design problem validation required 2 calls to the design objective function.
 3. Validation: Validation of the limit state function analytic gradient required 4 function calls.
-4. Validation: Validation of stochastic variables constraint function 'd_over_t' analytic gradient required 106 function calls.
-5. Validation: Validation of the design objective function analytic gradient and Hessian required 16 function calls.
+4. Validation: Validation of stochastic variables constraint function 'ratios' analytic gradient and Hessian required 624 function calls.
+5. Validation: Validation of the design objective function analytic gradient and Hessian required 37 function calls.
 
 ## Monte Carlo Results
 
-The `analyze` run uses the top-level `StochasticVariables`, which hold the Low Grade data, and the value of `Xr` in `DeterministicVariables`, 1.0. The tables below are transcribed from the `Results` worksheet in `Pipe_Corrosion-4f358.xlsx`.
+The `analyze` run uses the top-level `StochasticVariables`, which hold the Low Grade data, and the value of `Xr` in `DeterministicVariables`, 1.0. The tables below are transcribed from the `Results` worksheet in `Pipe_Corrosion-00c2b.xlsx`.
 
 ### Header Information
 
 | Field | Value |
 |---|---|
 | Problem | `Pipe Corrosion` |
-| Request ID | `1032c8bde91e4bc9958ef8087084f358` |
-| Run time | `00 min 01.31 sec` |
+| Request ID | `a87043aea307482195651425f7300c2b` |
+| Run time | `00 min 02.22 sec` |
 
 ### FORM Results
 
 | beta | pf | beta_count | hbeta_count | lsf_count | glsf_count | hlsf_count | nit | min_tries | min_method |
 |---:|---:|---:|---:|---:|---:|---:|---:|---:|---|
-| 2.555 | 0.005316 | 17 | 17 | 16 | 16 | 0 | 22 | 2 | tr_interior_point |
+| 2.555 | 0.005316 | 29 | 29 | 28 | 28 | 0 | 34 | 2 | tr_interior_point |
 
 ### Stochastic Variables Constraints
 
 | constr_name | constr_row | lb | ub | value | constr_count |
 |---|---:|---:|---:|---:|---:|
-| d_over_t | 1 | 0.1 | 0.8 | 0.1609 | 16 |
-| l_over_Do | 1 | 0 | 1.5 | 0.2836 | 128 |
+| ratios | 1 | 0.1 | 0.8 | 0.1609 | 28 |
+| ratios | 2 | 0 | 1.5 | 0.2836 | |
 
 ### Monte Carlo Results
 
 | beta | pf | cv | max_cv | size | %_removed | cycles | auto_size | mc_with_is |
 |---:|---:|---:|---:|---:|---:|---:|---|---|
-| 2.549 | 0.005399 | 0.02516 | 0.05 | 300000 | 3.000 | 3 | True | False |
+| 2.545 | 0.005468 | 0.02501 | 0.05 | 300000 | 3.072 | 3 | True | False |
 
 ### Notes Reported by Brinkpy
 
 1. Validation: Stochastic variables definition and limit state function validation required 2 function calls.
 2. Validation: Validation of the limit state function analytic gradient required 4 function calls.
-3. Validation: Validation of stochastic variables constraint function 'd_over_t' analytic gradient required 106 function calls.
+3. Validation: Validation of stochastic variables constraint function 'ratios' analytic gradient and Hessian required 624 function calls.
 4. Monte Carlo: Completed 3 cycles with 1.00e+05 samples per cycle.
-5. Monte Carlo: 2.94% and 0.06% of samples violated the following constraints: 'd_over_t' and 'l_over_Do' out of 3.00e+05 total samples. In total, 3.00% of the samples violated the constraints and were excluded from the Monte Carlo statistics.
+5. Monte Carlo: 3.01% and 0.06% of samples violated the following constraints: 'ratios' (output 1) and 'ratios' (output 2) out of 3.00e+05 total samples. In total, 3.07% of the samples violated the constraints and were excluded from the Monte Carlo statistics.
 6. Monte Carlo: If a large fraction of samples were not finite, out of bounds or violated constraints, consider adjusting the statistical distributions of the variables, truncating them to finite lower (lb) and upper (ub) bounds, and reviewing any constraints on the variables to make sure they are valid.
 
-The PDF result file for this run is saved as `results/2026-11-07/15-57-45/Pipe_Corrosion-4f358.pdf`.
+The PDF result file for this run is saved as `results/2026-11-14/22-29-33/Pipe_Corrosion-00c2b.pdf`.
 
 ## Interpretation Snapshot
 
 - Both steel grades reach the target reliability index of 2.47 within the 0.001 tolerance, with `Xr = 0.9867` for the Low Grade and `Xr = 1.033` for the Medium Grade.
 - At both design points, `d / t` and `l / Do` lie well inside the range of the model, so the reliability index comes from a region where the limit state function is valid. No limit is active, so Brinkpy reports no note about the constraints.
-- `l_over_Do` was called 8 times as often as `d_over_t` (1200 against 150 for the Low Grade), because SciPy approximates its gradient with finite differences over the 7 variables. Providing `jac` saves these calls.
-- Monte Carlo agrees with FORM (`beta = 2.549` against `2.555`) with `cv = 0.02516`, below the target of 0.05.
-- Monte Carlo removed 3.00% of the samples, almost all for `d_over_t`. With a mean wall thickness of 6.45 mm, a `d / t` below 0.1 means a defect shallower than about 0.65 mm, outside the range of the model. The statistics describe only the samples inside the range.
+- `ratios` provides its Jacobian and Hessian, so the design search needed one call to `ratios` per call to the limit state function (140 for the Low Grade). Checking both against finite differences before the run took 624 calls (note 4).
+- Monte Carlo agrees with FORM (`beta = 2.545` against `2.555`) with `cv = 0.02501`, below the target of 0.05.
+- Monte Carlo removed 3.07% of the samples, almost all for output 1 of `ratios`, `d / t` (3.01%). With a mean wall thickness of 6.45 mm, a `d / t` below 0.1 means a defect shallower than about 0.65 mm, outside the range of the model. The statistics describe only the samples inside the range.

@@ -321,14 +321,13 @@ When `truncated[i]` is `True`, `keep_feasible[i]` has no effect, because the tru
 
 ### Constraints on Stochastic Variables
 
-Bounds limit each variable on its own. Constraints limit functions of several variables, for example a ratio between two dimensions. In `PipecorrProblem.py`, the ratio of the defect depth to the wall thickness, `d / t`, must stay between 0.1 and 0.8, the range where the limit state function is valid (see [Stochastic Variable Constraints Example](design/stochastic-constraints.md)):
+Bounds limit each variable on its own. Constraints limit functions of several variables, for example a ratio between two dimensions. In `PipecorrProblem.py`, the ratio of the defect depth to the wall thickness, `d / t`, must stay between 0.1 and 0.8, and the ratio of the defect length to the outer diameter, `l / Do`, must stay below 1.5, the range where the limit state function is valid. One function, `ratios`, returns both ratios (see [Stochastic Variable Constraints Example](design/stochastic-constraints.md)):
 
 ```python
 "StochasticVariables": {
     ...
     "constraints": [
-        {"fun": d_over_t, "lb": [0.1], "ub": [0.8], "jac": d_over_t_gradient},
-        {"fun": l_over_Do, "lb": [0.0], "ub": [1.5]},
+        {"fun": ratios, "lb": [0.1, 0.0], "ub": [0.8, 1.5], "jac": ratios_jacobian, "hess": ratios_hessian},
     ],
 },
 ```
@@ -355,7 +354,7 @@ A linear constraint limits weighted sums of the stochastic variables, such as `Y
 
 A sum that is linear in real space is not linear in standard normal space, where FORM and Inverse FORM search. Brinkpy therefore turns each linear constraint into a nonlinear one, with `fun` returning `A @ X` and `jac` returning `A`. The results and notes name it `linear_k`, where k is its position in the `constraints` list, starting at 1, and each row of `A` is one of its outputs. To limit a single variable, use the variable's `lb` and `ub` instead (see [Bounds and Truncation](#bounds-and-truncation)).
 
-A constraint function can return several outputs, with one entry per output in `lb` and `ub`. The results and notes identify each output by its number, starting at 1.
+A constraint function can return several outputs, with one entry per output in `lb` and `ub`. The results and notes identify each output by its number, starting at 1. For example, `ratios` above has two outputs, and a Monte Carlo note reports the samples that violate each one as `'ratios' (output 1)` and `'ratios' (output 2)`.
 
 Both kinds of constraint are defined on the stochastic variables in real space. FORM and Inverse FORM search in standard normal space, so Brinkpy transforms each point of the search to real space before it evaluates the constraints.
 

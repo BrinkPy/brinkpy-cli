@@ -28,8 +28,7 @@ def Problem():
             "lb": np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]) + 0.0001,
             "ub": [np.inf, np.inf, np.inf, np.inf, np.inf, np.inf, np.inf],
             "constraints": [
-                {"fun": d_over_t, "lb": [0.1], "ub": [0.8], "jac": d_over_t_gradient},
-                {"fun": l_over_Do, "lb": [0.0], "ub": [1.5]},
+                {"fun": ratios, "lb": [0.1, 0.0], "ub": [0.8, 1.5], "jac": ratios_jacobian, "hess": ratios_hessian},
             ],
         },
         "DesignProblem": {
@@ -70,35 +69,43 @@ def Problem():
     return Problem
 
 
-def d_over_t(X, D):
-    # X is a nxm matrix where n is the number of stochatic variables and m is the number of samples
-    # D is a (n,) array where n is the number of deterministic variables
-    Xm, Y, t, Do, d, l, Po = X
-    Xr = D
+def ratios(X, D):
+    # X is a nxs matrix where n is the number of stochastic variables and s is the number of samples
+    # D is a (m,) array where m is the number of deterministic variables
+    _, _, t, Do, d, l, _ = X
 
-    g = d / t
+    g = np.array([d / t, l / Do])
 
-    return g
-
-
-def d_over_t_gradient(X, D):
-    Xm, Y, t, Do, d, l, Po = X
-    Xr = D
-
-    gg = np.array([0.0, 0.0, -d / (t**2), 0.0, 1.0 / t, 0.0, 0.0])
-
-    return gg
+    return g  # (2,) or (2,s)
 
 
-def l_over_Do(X, D):
-    # X is a nxm matrix where n is the number of stochatic variables and m is the number of samples
-    # D is a (n,) array where n is the number of deterministic variables
-    Xm, Y, t, Do, d, l, Po = X
-    Xr = D
+def ratios_jacobian(X, D):
+    # Jacobian of the ratios constraint with respect to the stochastic variables
+    # X is a (n,) array of stochastic variables
+    # D is a (m,) deterministic variable array where m is the number of deterministic variables
+    _, _, t, Do, d, l, _ = X
 
-    g = l / Do
+    gg = np.array([[0.0, 0.0, -d / (t**2), 0.0, 1.0 / t, 0.0, 0.0], [0.0, 0.0, 0.0, -l / (Do**2), 0.0, 1.0 / Do, 0.0]])
 
-    return g
+    return gg  # (2,7)
+
+
+def ratios_hessian(X, v, D):
+    # Hessian of np.dot(ratios, v)
+    # X is a (n,) array of stochastic variables
+    # v is a (p,) Lagrange multiplier array where p is the number of outputs of the constraint (here 2)
+    # D is a (m,) deterministic variable array where m is the number of deterministic variables
+    _, _, t, Do, d, l, _ = X
+
+    H = np.zeros((7, 7))
+    H[2, 2] = v[0] * 2 * d / (t**3)
+    H[2, 4] = -v[0] / (t**2)
+    H[4, 2] = -v[0] / (t**2)
+    H[3, 3] = v[1] * 2 * l / (Do**3)
+    H[3, 5] = -v[1] / (Do**2)
+    H[5, 3] = -v[1] / (Do**2)
+
+    return H  # (7,7)
 
 
 def DOF(d, D):
@@ -115,11 +122,9 @@ def DOF(d, D):
 
 
 def corrosion_func(X, D):
-    # X is a (n, m) matrix where n is the number of stochatic variables and
-    # m is the number of samples
-    # If X.ndim == 1 then X is a (n,) matrix where n is the number of
-    # stochastic variables
-    # D is a (n,) array where n is the number of deterministic variables
+    # X is a (n, s) matrix where n is the number of stochastic variables and s is the number of samples
+    # If X.ndim == 1 then X is a (n,) matrix where n is the number of stochastic variables
+    # D is a (m,) array where m is the number of deterministic variables
 
     Xm, Y, t, Do, d, l, Po = X
     Xr = D
