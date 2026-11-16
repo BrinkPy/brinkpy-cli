@@ -69,6 +69,12 @@ if ! version_gt "$NEW" "$CURRENT"; then
 fi
 
 if [ "$RELEASE" -eq 1 ]; then
+  # A release must ship the same models as the API.
+  if ! scripts/sync_data_models.sh --check; then
+    echo "Error: run scripts/sync_data_models.sh and commit the result before releasing." >&2
+    exit 1
+  fi
+
   # The release commit must match exactly what is being released, so refuse
   # if anything besides the version files has uncommitted changes.
   OTHER_CHANGES="$(git status --porcelain --untracked-files=no -- . \

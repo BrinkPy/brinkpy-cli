@@ -1,3 +1,4 @@
+# Generated from brinkpy-api/src/config/data_models.py by scripts/sync_data_models.sh. Do not edit by hand.
 # Copyright by Dr. Cesar Carrasco, (2025)
 from enum import StrEnum
 from typing import ClassVar, Tuple
@@ -217,8 +218,6 @@ class ReliabilityOptions(BaseEnumModel):
         Use a random starting point for FORM/Inverse FORM. Default: False.
     - form_seed: int | None
         Random seed for FORM/Inverse FORM random starts. Default: None.
-    - form_max_beta: float (excluded from public serialization)
-        Maximum reliability index allowed during FORM/Inverse FORM runs. Also used in design optimization and MC simulations. Range: [2.0, 12.0]. Default: 10.0.
     - design_xtol: float
         Tolerance for design optimization termination (variable changes). Range: [1e-8, 1e-2]. Default: 1e-3.
     - design_gtol: float
@@ -389,7 +388,6 @@ class ReliabilityOptions(BaseEnumModel):
     form_maxiter: int = Field(default=1000, ge=1)
     form_random_start: bool = Field(default=False)
     form_seed: int | None = Field(default=None)
-    form_max_beta : float = Field(default=10.0, ge=2.0, le=12.0, exclude=True)
     design_xtol: float = Field(default=1e-3, ge=1e-8, le=1e-2)
     design_gtol: float = Field(default=1e-3, ge=1e-8, le=1e-2)
     design_maxiter: int = Field(default=1000, ge=1)
