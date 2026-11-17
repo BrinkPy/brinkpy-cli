@@ -39,6 +39,10 @@ The few differences from published results have a known cause, and in each case 
 
 Each run saves a copy of the problem file, the profile with every setting used, a request ID, and the results in Excel, JSON, and PDF files. Another person can rerun the same problem with the same settings, or check exactly how a result was produced. See [CLI Result Files](cli/results-files.md).
 
+## Limitations
+
+- **One limit state function per problem.** Several failure modes can be combined into one function, in series with `numpy.minimum()` or in parallel with `numpy.maximum()`. FORM, Inverse FORM, and SORM find a single most probable point, so for such a system they describe only one failure mode, and design optimization reaches the target reliability for that mode only. Monte Carlo simulation, and importance sampling with a proposal built from samples, give the probability of failure of the whole system. See [Series and Parallel Systems](problem-authoring/index.md#series-and-parallel-systems).
+
 ## Who Benefits Most
 
 - **Students and instructors** can focus on the methods and the results instead of debugging an implementation. The [walkthrough examples](problem-authoring/index.md#how-this-section-is-organized) use problems from standard textbooks.

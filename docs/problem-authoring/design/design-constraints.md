@@ -1,6 +1,6 @@
 # Design Constraints Example: `CantileverBeamProblem.py`
 
-This page shows a design optimization with two failure modes in one limit state function, and then adds a constraint on the design variables. The example finds the cross section of a cantilever beam with the smallest volume for a target probability of failure, first as in the paper and then with the height at least twice the width. A Monte Carlo run then checks the probability of failure of the optimal design.
+This page shows a design optimization with two failure modes in one limit state function, and then adds a constraint on the design variables. The example finds the cross section of a cantilever beam with the smallest volume for a target probability of failure, first as Hu and Du (2019) define the problem and then with the height at least twice the width. A Monte Carlo run then checks the probability of failure of the optimal design.
 
 !!! note "About the tables on this page"
     - Table values are rounded to 4 significant figures for readability. Very small/large values use scientific notation. Refer to the Excel/JSON result files for full precision.
@@ -8,14 +8,16 @@ This page shows a design optimization with two failure modes in one limit state 
 
 ## The Modeling Problem
 
-A cantilever beam of length `L` carries a horizontal load `Px` and a vertical load `Py` at its free end. The beam fails if the bending stress at the fixed end exceeds the yield strength `Sy`, or if the deflection at the free end exceeds the allowed deflection `Do`. The design variables are the mean width `mb` and the mean height `mh` of the cross section, and the objective is the volume `mb mh L`.
+Hu and Du (2019) use this cantilever beam as an example of reliability-based design optimization, in which the design must reach a target probability of failure. They compare several methods, some based on FORM and some on second-order approximations. This page compares Brinkpy with their FORM results. The full reference is in [Problem File Used](#problem-file-used).
 
-A failure in either mode is a failure of the beam, so the limit state function returns the smaller of the two limit states, `g = min(g1, g2)`. This has two consequences:
+A cantilever beam of length `L` carries a horizontal load `Px` and a vertical load `Py` at its free end. The beam fails if the bending stress at the fixed end exceeds the yield strength `Sy`, or if the deflection at the free end exceeds the allowed deflection `Do`. The design variables are the mean width `mb` and the mean height `mh` of the cross section, and the objective is the volume `mb mh L`. Hu and Du (2019) call it the weight, which for a given material is proportional to the volume.
+
+Hu and Du (2019) treat the two failure modes as two separate reliability constraints. Brinkpy takes one limit state function, and a failure in either mode is a failure of the beam, so the beam is a series system. The limit state function returns the smaller of the two limit states, `g = min(g1, g2)`, written `numpy.minimum(g1, g2)` in the problem file (see [Series and Parallel Systems](../index.md#series-and-parallel-systems)). This has two consequences:
 
 - `g` has a kink where `g1 = g2`, so the problem sets `LSFisSmooth` to `False`. FORM then uses COBYQA, which does not need derivatives (see [Smooth and Non-Smooth Functions](../index.md#smooth-and-non-smooth-functions)).
 - `min` compares the values of `g1` and `g2`, so both must have similar scales. The problem file divides the stress limit state by `Sy` and the deflection limit state by `Do`, so that both are fractions of the capacity. Without the division, `g1` would be in psi and `g2` in inches, and `min` would pick a failure mode by its units instead of by how close it is to failure.
 
-FORM finds the most probable failure point of the mode with the smaller reliability index, so the reliability index of the design is that of its weakest mode. The [Monte Carlo Results](#monte-carlo-results) section shows what this means for the probability of failure of the beam.
+As in any series system, FORM gives the reliability index of the weakest mode only. The [Monte Carlo Results](#monte-carlo-results) section shows what this means for the probability of failure of the beam.
 
 ## Run Context
 
@@ -25,7 +27,7 @@ Problem module:
 
 Recorded result sets:
 
-- Design as in the paper: `results/2026-11-16/14-04-19/Cantilever_Beam-98cf1.xlsx`, `.json`, `.py`, and `profile-98cf1.yaml`
+- Design as defined by Hu and Du (2019): `results/2026-11-16/14-04-19/Cantilever_Beam-98cf1.xlsx`, `.json`, `.py`, and `profile-98cf1.yaml`
 - Design with the `h_over_b` constraint: `results/2026-11-16/14-04-36/Cantilever_Beam-14d53.xlsx`, `.json`, `.py`, and `profile-14d53.yaml`
 - Monte Carlo at the optimal design: `results/2026-11-16/14-53-51/Cantilever_Beam-d65a5.xlsx`, `.json`, `.py`, `.pickle`, `.pdf`, and `profile-d65a5.yaml`
 
@@ -52,9 +54,11 @@ This example uses the `default` profile, where `design_xtol` and `design_gtol` a
 
 ## Problem File Used
 
+The problem file follows Hu and Du (2019), the source of the variables, the target probability of failure, and the bounds of the design variables:
+
 **Source:** Hu, Z. and Du, X., "Efficient reliability-based design with second order approximations," *Engineering Optimization*, vol. 51, no. 1, 2019, pp. 101–119. [→](https://doi.org/10.1080/0305215X.2018.1440292)
 
-The stochastic variables are the deviations `b` and `h` of the width and height from their means (in), the loads `Px` and `Py` (lb), the modulus of elasticity `E` (psi), and the yield strength `Sy` (psi). All are normal and uncorrelated. The length `L` is 100 in and the allowed deflection `Do` is 2.25 in. With the actual width `mb + b` and height `mh + h`, written `B` and `H`, the limit state functions are:
+The stochastic variables are the deviations `b` and `h` of the width and height from their means (in), the loads `Px` and `Py` (lb), the modulus of elasticity `E` (psi), and the yield strength `Sy` (psi). All are normal and uncorrelated. Hu and Du (2019) give `b` and `h` a standard deviation of 0.01 in around the design values, so the problem file models them as deviations with a mean of 0 and adds them to `mb` and `mh`. The length `L` is 100 in and the allowed deflection `Do` is 2.25 in. With the actual width `mb + b` and height `mh + h`, written `B` and `H`, the limit state functions are:
 
 ```text
 g1 = (Sy - (6 L / (B H)) (Px / B + Py / H)) / Sy
@@ -64,7 +68,7 @@ g  = min(g1, g2)
 
 ### Design Keys
 
-`mb` and `mh` are deterministic variables, listed first in `DeterministicVariables`, and the design variables. `TargetPf` is the target probability of failure from the paper, which corresponds to a reliability index of 3:
+`mb` and `mh` are deterministic variables, listed first in `DeterministicVariables`, and the design variables. `TargetPf` and the bounds `lb` and `ub` are those of Hu and Du (2019). A target probability of failure of 1.35e-3 corresponds to a reliability index of 3:
 
 ```python
 "DesignProblem": {
@@ -132,11 +136,11 @@ The tables below are transcribed from the `Results` worksheet in `Cantilever_Bea
 3. Validation: Validation of the design objective function analytic gradient and Hessian required 37 function calls.
 
 !!! note "Comparison with the paper"
-    Hu and Du (2019) treat the two failure modes as separate reliability constraints, each with a target reliability index of 3. A FORM reliability index of 3 for `min(g1, g2)` means the same thing, since it is the reliability index of the weakest mode. With FORM, they report a volume of 890.77 at `mb = 2.2507` and `mh = 3.9577`. Brinkpy finds 890.96 at `mb = 2.2612` and `mh = 3.9402`, 0.02% more. At the published optimum, both failure modes have a reliability index of 3, so the optimum lies on the kink of `min(g1, g2)`. Brinkpy stops near it, where only the stress mode is at the target. Near the kink the gradient of the reliability constraint changes direction, which slows the design search. The exact stopping point can differ slightly between computers, and so can the results that depend on it, including the Lagrange multipliers in the Excel and JSON result files. Near the kink, the multiplier of a bound can be far from zero even when the bound is not active. In this run, `bnds_mult` for `mh` is −539, and on another computer the same problem gives −10.4.
+    Hu and Du (2019) require a reliability index of 3 for each failure mode. A FORM reliability index of 3 for `min(g1, g2)` means the same thing, since it is the reliability index of the weakest mode. With FORM, they report a volume of 890.77 at `mb = 2.2507` and `mh = 3.9577`. Brinkpy finds 890.96 at `mb = 2.2612` and `mh = 3.9402`, 0.02% more. At the published optimum, both failure modes have a reliability index of 3, so the optimum lies on the kink of `min(g1, g2)`. Brinkpy stops near it, where only the stress mode is at the target. Near the kink the gradient of the reliability constraint changes direction, which slows the design search. The exact stopping point can differ slightly between computers, and so can the results that depend on it, including the Lagrange multipliers in the Excel and JSON result files. Near the kink, the multiplier of a bound can be far from zero even when the bound is not active. In this run, `bnds_mult` for `mh` is −539, and on another computer the same problem gives −10.4.
 
 ## Adding a Design Constraint
 
-The paper does not limit the shape of the cross section. To require the height to be at least twice the width, add a `DesignConstraints` key to `DesignProblem` with the function `h_over_b`, which returns `mh / mb`, and raise the upper bounds so that they do not stop the search first. These are the only changes to the problem file:
+The constraint in this section is not part of Hu and Du (2019), who do not limit the shape of the cross section. It was chosen arbitrarily, only to show how `DesignConstraints` works, and its results can't be compared with the paper. To require the height to be at least twice the width, add a `DesignConstraints` key to `DesignProblem` with the function `h_over_b`, which returns `mh / mb`, and raise the upper bounds so that they do not stop the search first. These are the only changes to the problem file:
 
 ```python
 "ub": [10.0, 10.0],
@@ -234,8 +238,8 @@ The tables below are transcribed from the `Results` worksheet in `Cantilever_Bea
 
 ## Interpretation Snapshot
 
-- The design reaches the target reliability index of 3 within the 0.001 tolerance, with a volume within 0.02% of the published one.
+- The design reaches the target reliability index of 3 within the 0.001 tolerance, with a volume within 0.02% of the one Hu and Du (2019) report.
 - At the optimum, the most probable failure point is a stress failure: `Px` and `Py` are about 2 standard deviations above their means and `Sy` is below its mean, while `E` stays at its mean.
 - With the `h_over_b` constraint, the deeper section shifts the most probable failure to the deflection mode: `Sy` stays at its mean, because the stress limit state plays no part, and `Px` rises to almost 3 standard deviations above its mean. The constraint is active, and the volume rises from 891.0 to 927.7. Relaxing the limit of 2 by 0.1 would save about 17 (note 5).
 - The constrained run took 4 seconds instead of 40, because its optimum lies away from the kink of `min(g1, g2)`.
-- Monte Carlo gives a probability of failure of 0.002029 (`beta = 2.874`), about 1.5 times the FORM value. FORM accounts only for the weakest failure mode, while the beam fails in either mode, and at this design the deflection mode has a reliability index close to 3 too. A target for the probability of failure of the whole beam would need a higher target reliability index for each mode, or a system reliability method.
+- Monte Carlo gives a probability of failure of 0.002029 (`beta = 2.874`), about 1.5 times the FORM value. At this design the deflection mode also has a reliability index close to 3, and FORM leaves it out. To reach the target probability of failure for the whole beam, the design would need a higher target reliability index, checked with a simulation.

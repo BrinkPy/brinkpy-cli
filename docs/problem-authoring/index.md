@@ -152,7 +152,7 @@ There is no mode that returns the Hessian without the gradient. A user-provided 
 
 `DOFisSmooth` makes the same choice for the design objective function in objective optimization (see [Design Keys](design/design-keys.md#additional-keys-for-objective-optimization)). In a design run, each flag applies to its own optimization: `DOFisSmooth` to the search for the optimal design, and `LSFisSmooth` to the FORM analysis inside it.
 
-Set the flag to `False` when the function has kinks or steps, for example from `numpy.minimum()` or `numpy.maximum()` in series and parallel systems, `abs()`, `if` branches, or table lookups. Otherwise leave it `True`, because the optimizer that uses gradients is usually faster and more accurate.
+Set the flag to `False` when the function has kinks or steps, for example from `numpy.minimum()` or `numpy.maximum()` in [series and parallel systems](#series-and-parallel-systems), `abs()`, `if` branches, or table lookups. Otherwise leave it `True`, because the optimizer that uses gradients is usually faster and more accurate.
 
 The flag changes the following:
 
@@ -167,6 +167,26 @@ The flag changes the following:
 
 !!! warning "SORM assumes a smooth limit state function"
     SORM approximates the limit state surface at the most probable point (MPP) with its curvatures, which assumes the function is smooth there. With `LSFisSmooth = False`, SORM still runs, but if the MPP lies on a kink, the curvatures do not describe the surface and the SORM result can be wrong. Check it with Monte Carlo or importance sampling.
+
+## Series and Parallel Systems
+
+A problem file defines one limit state function, which returns one value of `g` per point. A structure with several failure modes, such as a beam that fails in bending or in deflection, still fits in one function: combine the limit states of the modes into one value.
+
+| System | Fails when | Limit state function |
+|---|---|---|
+| Series | Any mode fails | `g = numpy.minimum(g1, g2)` |
+| Parallel | All modes fail | `g = numpy.maximum(g1, g2)` |
+
+The two can be nested for more complex systems. Use the element-wise functions `numpy.minimum()` and `numpy.maximum()`, not Python's `min()` and `max()` or the NumPy reductions `numpy.min()` and `numpy.max()`, because in a vectorized call `g1` and `g2` hold one value per sample. When the modes have different units, scale each limit state first, for example as a fraction of its capacity, so that the comparison picks the mode closest to failure (see the [cantilever beam example](design/design-constraints.md#the-modeling-problem)). The combination creates kinks where the modes meet, so set `LSFisSmooth` to `False` (see [Smooth and Non-Smooth Functions](#smooth-and-non-smooth-functions)).
+
+!!! warning "Only simulation gives the probability of failure of a system"
+    FORM, Inverse FORM, and SORM find a single most probable point (MPP), so they describe only the failure mode around it:
+
+    - For a series system, FORM and SORM give the probability of failure of the weakest mode and leave out the others, so they underestimate the probability of failure of the system.
+    - For a parallel system, FORM and SORM approximate the failure region around one point where the modes meet, so they can underestimate or overestimate the probability of failure of the system.
+    - Inverse FORM, Inverse SORM, and design optimization reach the target reliability for that one mode, not for the system.
+
+    Monte Carlo simulation counts every sample that fails, whatever the mode, so it gives the probability of failure of the system. Importance sampling does too with the `kde`, `mixture`, and `mcmc` proposals, which are built from samples of the whole failure region. The `mpp_normal` proposal is centered on the single MPP and has the same limitation as FORM (see [Importance Sampling Settings](../profiles/profile-reference.md#importance-sampling-settings)). For a system, check FORM, SORM, and design results with a simulation. In the [cantilever beam example](design/design-constraints.md#monte-carlo-results), Monte Carlo gives a probability of failure 1.5 times the FORM value at the optimal design.
 
 ## Worked LSF Example (`AT610Problem.py`)
 

@@ -66,11 +66,7 @@ This example uses the `default` profile. Importance sampling and Monte Carlo beh
   - Component 2: `g2 = c**2/2 - T1*T2`
 
 !!! info "Limit states in series and parallel"
-    Brinkpy handles multiple limit states combined using **`numpy.minimum()` (series)** and **`numpy.maximum()` (parallel)** and any combination of both. This example demonstrates the series pattern with `numpy.minimum()`. Use `numpy.maximum()` for parallel (redundant) components where the system fails only when all components fail.
-    
-    **Important:** Use the element-wise functions **`numpy.minimum()`** and **`numpy.maximum()`**. Do **not** use Python's built-in `min()` and `max()`, and do **not** use NumPy's reduction functions `numpy.min()` and `numpy.max()`, because during Monte Carlo simulation the component limit-state values are arrays of sample values and this operation requires element-wise comparison.
-
-    Because `numpy.minimum()` and `numpy.maximum()` create kinks where the component limit states meet, set `LSFisSmooth` to `False` for series and parallel systems. This does not affect Monte Carlo or importance sampling, but it lets FORM choose an optimizer suited to non-smooth functions (see [Smooth and Non-Smooth Functions](../index.md#smooth-and-non-smooth-functions)).
+    This example combines two limit states in series with `numpy.minimum()`. Use `numpy.maximum()` for a parallel system, which fails only when all modes fail. FORM and SORM describe only one failure mode of such a system, so use Monte Carlo or importance sampling for its probability of failure. See [Series and Parallel Systems](../index.md#series-and-parallel-systems).
 
 - `ISplot` key defined — required for IS diagnostics plots
 
