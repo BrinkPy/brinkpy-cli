@@ -52,7 +52,7 @@ def LSF(X, D):
 
 ## Top-Level Problem Keys
 
-The sections below describe each key in detail.
+The sections below describe each key in detail. The keys of type `bool` are called flags on these pages.
 
 | Key | Required | Type | Purpose | Example (`AT610`) |
 |---|---|---|---|---|
@@ -94,19 +94,21 @@ Expected shape behavior:
 
 ### Required return values
 
-Always return all five values, in this order:
+The function always returns five values, in this order: `return g, gg, gh, L, R`. Three flags tell Brinkpy which of them hold results. When a flag is `False`, return `[]` in place of the matching values:
 
-- `g`: the limit state function value, with failure when `g <= 0`. It has one value per point.
-- `gg`: the gradient of `g` with respect to the stochastic variables (see [Gradient](#gradient-gg-definition)).
-- `gh`: the Hessian of `g` with respect to the stochastic variables (see [Hessian](#hessian-gh-definition)).
-- `L`: the load, or demand, with the same shape as `g`.
-- `R`: the resistance, or capacity, with the same shape as `g`. Brinkpy assumes `g = R - L`.
+| Value | Meaning | Return it when | Otherwise return |
+|---|---|---|---|
+| `g` | The limit state function value, with failure when `g <= 0`. It has one value per point. | Always | |
+| `gg` | The gradient of `g` with respect to the stochastic variables (see [Gradient](#gradient-gg-definition)) | `LSFreturnsGradient` is `True` and `X` is a single point | `[]` |
+| `gh` | The Hessian of `g` with respect to the stochastic variables (see [Hessian](#hessian-gh-definition)) | `LSFreturnsHessian` is `True` and `X` is a single point | `[]` |
+| `L` | The load, or demand, with the same shape as `g` | `LSFreturnsLandR` is `True` | `[]` |
+| `R` | The resistance, or capacity, with the same shape as `g`. Brinkpy assumes `g = R - L`. | `LSFreturnsLandR` is `True` | `[]` |
 
-The function returns the same five values whatever the flags say: `return g, gg, gh, L, R`. When a flag is `False`, return `[]` in place of the matching values. Before the run, Brinkpy checks the function at a single point and reports it in a note if it returns a value that its flag says it does not. The run continues and ignores that value, but the note usually means the flag should be `True`. For example, without load and resistance values:
+For example, a function with a gradient, but without a Hessian or load and resistance values, returns `g, gg, [], [], []` for a single point and `g, [], [], [], []` for many points.
 
-- `return g, gg, gh, [], []`
+Brinkpy never uses `gg` or `gh` from a vectorized call, where `X` holds many points, because derivatives for many points can use a lot of memory. `L` and `R` are needed in both cases.
 
-Brinkpy never uses `gg` or `gh` from a vectorized call, where `X` holds many points. Compute them only for a single point and return `[]` otherwise, because derivatives for many points can use a lot of memory. `L` and `R` are needed in both cases.
+Before the run, Brinkpy checks the function at a single point and reports it in a note if it returns a value that its flag says it does not. The run continues and ignores that value, but the note usually means the flag should be `True`.
 
 ### Gradient (`gg`) definition
 
@@ -129,7 +131,7 @@ As with the gradient, return `[]` for a vectorized call.
 
 ## LSF Derivative Return Modes
 
-Use the flags to match what your function returns:
+Set `LSFreturnsGradient` and `LSFreturnsHessian` to match what your function returns:
 
 | `LSFreturnsGradient` | `LSFreturnsHessian` | `LSF` expectation |
 |---|---|---|
@@ -275,7 +277,7 @@ Rules:
 - `cor_list` references variable names from `name`.
 - `cor`, when used, should be an `n x n` correlation matrix in the same variable order as `name`.
 - Use either `cor_list` or `cor` to define correlation inputs.
-- If defined, `lb`, `ub`, and `truncated` must each have length `n`. `keep_feasible` is either a single `bool` or a list of length `n`.
+- If defined, `lb`, `ub`, and `truncated` must each have length `n`. `keep_feasible` is either a single `bool` or a list of `bool` values of length `n`. Any other value, such as the string `"False"`, stops the run with an error before it starts.
 - You can set individual bounds to `-np.inf` and `np.inf` to indicate no lower/upper bound for that variable.
 - If `lb`, `ub`, `keep_feasible`, and/or `truncated` are omitted, defaults are used: no bounds, `keep_feasible=False`, and `truncated=False` for all variables.
 - Bounds and truncation have different effects. See [Bounds and Truncation](#bounds-and-truncation).
@@ -342,7 +344,7 @@ A nonlinear constraint uses these keys:
 | `lb`, `ub` | At least one | Lists with the lower and upper limit of each output. A missing `lb` means no lower limits (`-np.inf`) and a missing `ub` means no upper limits (`np.inf`). Inside a list, use `-np.inf` or `np.inf` for an output with no limit on that side, and the same value in `lb` and `ub` for an equality. |
 | `jac` | No | Function `jac(X, D)` that returns the gradient of each output with respect to `X`, one row per output. Without it, SciPy approximates the gradient with finite differences. |
 | `hess` | No | Function `hess(X, v, D)` that returns the Hessian of the sum of the outputs weighted by `v`, as an `n x n` matrix. Without it, SciPy approximates the Hessian with a quasi-Newton (BFGS) update. |
-| `keep_feasible` | No | Whether the optimizer must keep every iterate inside the limits. The default is `False`. See the warning below. |
+| `keep_feasible` | No | Whether the optimizer must keep every iterate inside the limits, either one `bool` for all outputs or a list with one `bool` per output. Values for outputs that are equalities are ignored. The default is `False`. See the warning below. |
 
 A linear constraint limits weighted sums of the stochastic variables, such as `Y - 2 Po >= 0`. It uses these keys:
 
@@ -350,7 +352,7 @@ A linear constraint limits weighted sums of the stochastic variables, such as `Y
 |---|---|---|
 | `A` | Yes | Matrix with one row per output and one column per stochastic variable. The outputs are `A @ X`. |
 | `lb`, `ub` | At least one | Same as for a nonlinear constraint |
-| `keep_feasible` | No | Same as for a nonlinear constraint |
+| `keep_feasible` | No | Same as for a nonlinear constraint, with one value per row of `A` when it is a list |
 
 A sum that is linear in real space is not linear in standard normal space, where FORM and Inverse FORM search. Brinkpy therefore turns each linear constraint into a nonlinear one, with `fun` returning `A @ X` and `jac` returning `A`. The results and notes name it `linear_k`, where k is its position in the `constraints` list, starting at 1, and each row of `A` is one of its outputs. To limit a single variable, use the variable's `lb` and `ub` instead (see [Bounds and Truncation](#bounds-and-truncation)).
 

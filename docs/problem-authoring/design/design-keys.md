@@ -1,6 +1,6 @@
 # `DesignProblem` Keys Reference
 
-This page documents design-specific dictionary keys that are required in addition to the common problem keys described in [Problem Definition](../index.md).
+This page documents the design-specific dictionary keys, which a design problem uses in addition to the common problem keys described in [Problem Definition](../index.md). The Required column of each table shows which keys must be defined.
 
 Additional helper code is allowed, but design problems must remain self-contained in the same problem module file. See [Problem Definition](../index.md).
 
@@ -22,7 +22,7 @@ If `cases` is omitted, Brinkpy builds a `default` case from the top-level `Stoch
 
 ## Additional Keys For Objective Optimization
 
-When `DesignProblem` defines a `DesignObjectiveFunction`, Brinkpy runs objective optimization (as in `Sorensen81Problem.py`), and the following keys are required in `DesignProblem`. Keys that start with `DOF` refer to the design objective function (DOF).
+When `DesignProblem` defines a `DesignObjectiveFunction`, Brinkpy runs objective optimization (as in `Sorensen81Problem.py`), and `DesignProblem` also takes the keys below, in addition to the [core keys](#core-designproblem-keys). The Required column shows which keys must be defined. Keys that start with `DOF` refer to the design objective function (DOF).
 
 | Key | Required | Type | Meaning |
 |---|---|---|---|
@@ -35,7 +35,7 @@ When `DesignProblem` defines a `DesignObjectiveFunction`, Brinkpy runs objective
 | `InitialGuess` | Yes | `list[float]` | Starting point for optimization |
 | `lb` | No | `list[float]` | Lower bounds for design variables. If it is missing, the design variables have no lower bounds (`-np.inf`). |
 | `ub` | No | `list[float]` | Upper bounds for design variables. If it is missing, the design variables have no upper bounds (`np.inf`). |
-| `keep_feasible` | No | `bool` or `list[bool]` | Whether the optimizer must keep every point it tries inside `[lb, ub]`, either one value for all design variables or one per design variable. The default is `False`. |
+| `keep_feasible` | No | `bool` or `list[bool]` | Whether the optimizer must keep every point it tries inside `[lb, ub]`, either one `bool` for all design variables or a list with one `bool` per design variable. Any other value stops the run with an error. The default is `False`. |
 | `DesignConstraints` | No | `list[dict]` | Constraints on functions of the design variables (see [Design Constraints](#design-constraints)) |
 
 `DesignVariables` must be selected from `DeterministicVariables.name`.
@@ -170,17 +170,19 @@ Expected shape behavior:
 
 ### Required return values
 
-Always return:
+The function always returns three values, in this order: `return f, g, h`. Two flags tell Brinkpy which of them hold results. When a flag is `False`, return `[]` in place of the matching value:
 
-- `f`: the design objective function value to be minimized. It has one value per point.
-- `g`: the gradient of `f` with respect to the design variables (see [Gradient](#gradient-g-definition)).
-- `h`: the Hessian of `f` with respect to the design variables (see [Hessian](#hessian-h-definition)).
+| Value | Meaning | Return it when | Otherwise return |
+|---|---|---|---|
+| `f` | The design objective function value to be minimized. It has one value per point. | Always | |
+| `g` | The gradient of `f` with respect to the design variables (see [Gradient](#gradient-g-definition)) | `DOFreturnsGradient` is `True` and `d` is a single point | `[]` |
+| `h` | The Hessian of `f` with respect to the design variables (see [Hessian](#hessian-h-definition)) | `DOFreturnsHessian` is `True` and `d` is a single point | `[]` |
 
-The function returns the same three values whatever the flags say: `return f, g, h`. When `DOFreturnsGradient` or `DOFreturnsHessian` is `False`, return `[]` in place of the matching value. Before the run, Brinkpy checks the function at a single point and reports it in a note if it returns a derivative that its flag says it does not. The run continues and ignores that derivative. For example, without derivatives:
+For example, a function without derivatives returns `f, [], []`.
 
-- `return f, [], []`
+Brinkpy never uses `g` or `h` from a vectorized call, where `d` holds many points, because derivatives for many points can use a lot of memory.
 
-Brinkpy never uses `g` or `h` from a vectorized call, where `d` holds many points. Compute them only for a single point and return `[]` otherwise, because derivatives for many points can use a lot of memory.
+Before the run, Brinkpy checks the function at a single point and reports it in a note if it returns a derivative that its flag says it does not. The run continues and ignores that derivative.
 
 ### Gradient (`g`) definition
 
