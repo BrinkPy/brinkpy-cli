@@ -52,7 +52,7 @@ def LSF(X, D):
 
 ## Top-Level Problem Keys
 
-The sections below describe each key in detail. The keys of type `bool` are called flags on these pages.
+The sections below describe each key in detail. The keys of type `bool` are called flags on these pages. A flag must be `True` or `False`. Any other value, such as the string `"False"`, stops the run with an error.
 
 | Key | Required | Type | Purpose | Example (`AT610`) |
 |---|---|---|---|---|
@@ -60,7 +60,7 @@ The sections below describe each key in detail. The keys of type `bool` are call
 | `LimitStateFunction` | Yes | callable | Function implementing `g(X, D)` that returns `g, gg, gh, L, R` (see [Required Return Values](#required-return-values)) | `LSF` |
 | `LSFisVectorized` | Yes | `bool` | Whether `LSF` can process batched samples (`X` with shape `(n_var, n_samples)`) | `True` |
 | `LSFisSmooth` | Yes | `bool` | Whether the limit state function is smooth. Selects the optimizer for FORM and Inverse FORM (see [Smooth and Non-Smooth Functions](#smooth-and-non-smooth-functions)). | `True` |
-| `LSFisParallelizable` | No (default `False`) | `bool` | Signals that evaluations are safe for parallel execution | `True` |
+| `LSFisParallelizable` | No (default `False`) | `bool` | Whether simulations may evaluate a function that is not vectorized at several samples at the same time (see [Vectorized and Parallel Evaluation](#vectorized-and-parallel-evaluation)) | `True` |
 | `LSFreturnsGradient` | Yes | `bool` | Whether `LSF` returns the gradient `gg` for a single point. If `False`, Brinkpy ignores `gg`. | `True` |
 | `LSFreturnsHessian` | Yes | `bool` | Whether `LSF` returns the Hessian `gh` for a single point. If `False`, Brinkpy ignores `gh`. | `True` |
 | `LSFreturnsLandR` | Yes | `bool` | Whether `LSF` returns the load `L` and resistance `R`, used for the load and resistance histogram and partial factors. If `False`, Brinkpy ignores `L` and `R`. | `True` |
@@ -140,6 +140,32 @@ Set `LSFreturnsGradient` and `LSFreturnsHessian` to match what your function ret
 | `True` | `True` | Return `gg` and `gh` for a single point |
 
 There is no mode that returns the Hessian without the gradient. A user-provided Hessian is defined in real space, and Brinkpy needs the gradient to transform it into the standard normal space used by FORM and SORM. In practice, if you can derive the Hessian analytically, the gradient is usually straightforward.
+
+## Vectorized and Parallel Evaluation
+
+Monte Carlo simulation and importance sampling evaluate the limit state function at many samples. `LSFisVectorized` and `LSFisParallelizable` decide how:
+
+| `LSFisVectorized` | `LSFisParallelizable` | How Brinkpy evaluates the samples |
+|---|---|---|
+| `True` | Ignored | In one call, with `X` holding all the samples |
+| `False` | `True` | One sample per call, with the calls spread over several processes that run at the same time |
+| `False` | `False` | One sample per call, one call after another |
+
+FORM, Inverse FORM, SORM, and design runs don't use `LSFisParallelizable`. Parallel here means running calls at the same time. It is unrelated to [parallel systems](#series-and-parallel-systems).
+
+Choose in this order:
+
+1. Vectorize the function if you can. One call with NumPy array operations is usually by far the fastest option.
+2. If you can't, set `LSFisParallelizable` to `True` when each call is slow. A function often can't be vectorized when each point needs its own numerical solution computed inside the module (see [Module Self-Containment](#module-self-containment)), for example:
+    - Solving an equation for each point with `scipy.optimize`, such as `brentq` or `fsolve`.
+    - Integrating numerically for each point with `scipy.integrate`, such as `quad` or `solve_ivp`.
+    - Assembling and solving a small finite element or finite difference model written in the module.
+    - Iterating until a result converges, with a number of iterations that differs from point to point.
+3. Leave `LSFisParallelizable` as `False` when each call is fast. Starting the processes and sending the samples to them then takes longer than the parallel calls save.
+
+Set `LSFisParallelizable` to `True` only when every call is independent of the others. The function must not change global variables or other values that later calls read, such as a cache of earlier results or a starting guess carried from one call to the next. Each process has its own copy of those values, so a change in one process is not seen by the others, and the results can depend on how the samples were split between the processes.
+
+When `LSFisVectorized` is `False` and `LSFisParallelizable` is missing, a simulation reports a note suggesting `LSFisParallelizable`. Set it to `True` or `False` to show you have made the choice.
 
 ## Smooth and Non-Smooth Functions
 
@@ -584,13 +610,23 @@ If `x_lim` and `y_lim` are omitted, the axis limits are set automatically to sho
 
 Problem modules may define additional variables, arrays, dictionaries, helper functions, and preprocessing logic beyond the required contracts such as `LimitStateFunction` and (for design runs) `DesignObjectiveFunction`.
 
-All data structures and helper logic used by the problem must be defined inside the same problem module (`*.py`). External data files are not supported for problem execution.
+All data structures and helper logic used by the problem must be defined inside the same problem module (`*.py`). External data files are not supported for problem execution. A problem module also can't run external programs or read or write files.
+
+A problem module can import only these modules and their submodules:
+
+| Group | Modules |
+|---|---|
+| NumPy and automatic differentiation | `numpy`, `autograd` |
+| SciPy | `scipy.stats`, `scipy.optimize`, `scipy.special`, `scipy.linalg`, `scipy.integrate`, `scipy.interpolate`, `scipy.sparse`, `scipy.fft` |
+| Python standard library | `math`, `cmath`, `statistics`, `fractions`, `decimal`, `numbers`, `itertools`, `functools`, `operator`, `collections`, `bisect`, `heapq`, `copy`, `enum`, `typing`, `dataclasses` |
+
+Import SciPy through its submodules, for example `from scipy.stats import norm`, `import scipy.stats as st`, or `from scipy import stats`. `import scipy` on its own is not allowed.
+
+Functions that read or write files, such as `numpy.loadtxt` and `numpy.save`, are blocked, even in allowed modules.
 
 ## Submission Safety Validation
 
-For platform safety, submitted problem modules are validated and may be rejected if they contain unsafe execution patterns.
-
-When a module is rejected, the API returns a validation error describing the disallowed category.
+For platform safety, Brinkpy checks each problem module before running it and rejects it if it contains unsafe patterns. When a module is rejected, the error names what was rejected. Keep problem modules to plain numerical code: use f-strings, such as `f"{x:.3f}"`, rather than `str.format`, and don't use `eval`, `exec`, or `getattr`.
 
 ## Common Authoring Pitfalls
 
@@ -599,6 +635,8 @@ When a module is rejected, the API returns a validation error describing the dis
 - Setting derivative flags to `True` but returning `[]` for the derivatives.
 - Returning derivatives, `L`, or `R` while the matching flag is `False`. Brinkpy ignores them and reports it in a note, so set the flag to `True` to use them, or return `[]`.
 - Computing `gg` or `gh` in a vectorized call, which Brinkpy never uses.
+- Setting `LSFisParallelizable` to `True` for a function that changes global values that later calls read.
+- Setting a flag to a string such as `"False"`. Flags must be `True` or `False`, and any other value stops the run with an error.
 - Returning only `g, gg, gh` instead of the full `g, gg, gh, L, R` contract.
 - Defining `cor_list` pairs with variable names not present in `name`.
 - Defining a `cor` matrix with the wrong size or variable order.
