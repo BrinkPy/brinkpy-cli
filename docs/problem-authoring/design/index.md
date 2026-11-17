@@ -15,7 +15,7 @@ Brinkpy chooses the workflow automatically. If `DesignProblem` defines a `Design
 Packaged examples for each workflow (see [Packaged Examples](../../examples.md)):
 
 - Inverse FORM: `AT624Problem`, `AT625Problem`
-- Objective optimization: `AT622Problem`, `Ji1Problem`, `Ji2Problem`, `PipecorrProblem`, `Sorensen81Problem`
+- Objective optimization: `AT622Problem`, `CantileverBeamProblem`, `Ji1Problem`, `Ji2Problem`, `PipecorrProblem`, `Sorensen81Problem`
 
 ## Design Documentation Layout
 
@@ -24,6 +24,7 @@ Packaged examples for each workflow (see [Packaged Examples](../../examples.md))
 - [Objective Optimization Example](optimization.md): worked objective optimization example (`Sorensen81Problem`) including additional optimization keys.
 - [Random Design Parameters Example](random-design-parameters.md): how to model a design parameter that is also a random variable (`Ji1Problem`), with limitations and exceptions.
 - [Stochastic Variable Constraints Example](stochastic-constraints.md): how to keep the search for the design point inside the range where the limit state function is valid, with constraints on the stochastic variables (`PipecorrProblem`), including a Monte Carlo run.
+- [Design Constraints Example](design-constraints.md): a design with two failure modes in one limit state function, and a constraint on the design variables (`CantileverBeamProblem`), including a Monte Carlo run.
 
 ## Notes On Cases
 

@@ -108,6 +108,11 @@ class DesignTypeEnum(StrEnum):
     InverseFORM = "InverseFORM"
 
 
+class DesignReliabilityMethodEnum(StrEnum):
+    PMA = "PMA"  # Performance measure approach: inverse FORM constraint g(u*) = 0 on ||u|| = TargetBeta
+    RIA = "RIA"  # Reliability index approach: FORM constraint beta = TargetBeta
+
+
 class BaseEnumModel(BaseModel):
     @classmethod
     def validate_str_enum_field(cls, value: str, info: ValidationInfo, enum_class: StrEnum) -> str:
@@ -228,6 +233,11 @@ class ReliabilityOptions(BaseEnumModel):
         Use a random starting point for design optimization. Default: False.
     - design_seed: int | None
         Random seed for design optimization random starts. Default: None.    
+    - design_reliability_method: DesignReliabilityMethodEnum (excluded from public serialization)
+        How the target reliability enters a design with an objective function. "PMA" (performance measure
+        approach) requires the lowest limit state value on the sphere ||u|| = TargetBeta, found with inverse
+        FORM, to be 0. "RIA" (reliability index approach) requires the FORM reliability index to equal
+        TargetBeta. RIA is always used when SORM is requested. Default: "PMA".
     - max_minimize_attempts: int
         Maximum number of attempts for each FORM, Inverse FORM, and design optimization, counting
         new random starts after a failed attempt and restarts to refine a result. Range: [1, 12]. Default: 8.
@@ -393,6 +403,7 @@ class ReliabilityOptions(BaseEnumModel):
     design_maxiter: int = Field(default=1000, ge=1)
     design_random_start: bool = Field(default=False)
     design_seed: int | None = Field(default=None)
+    design_reliability_method: DesignReliabilityMethodEnum = Field(default=DesignReliabilityMethodEnum.PMA, exclude=True)
     max_minimize_attempts: int = Field(default=8, ge=1, le=12)
     max_workers: int = Field(default=2, ge=-1, le=12, exclude=True)
     alpha_direction: AlphaDirectionEnum = Field(default=AlphaDirectionEnum.outward)
@@ -440,6 +451,11 @@ class ReliabilityOptions(BaseEnumModel):
     is_mcmc_burnin: int = Field(default=200, ge=100, le=1000)
     is_mcmc_fit_method: MCMCFitMethodEnum = Field(default=MCMCFitMethodEnum.kde)
     
+
+    @field_validator("design_reliability_method", mode="before")
+    @classmethod
+    def validate_design_reliability_method(cls, v: str, info: ValidationInfo) -> str:
+        return cls.validate_str_enum_field(v, info, DesignReliabilityMethodEnum)
 
     @field_validator("sor_method", mode="before")
     @classmethod

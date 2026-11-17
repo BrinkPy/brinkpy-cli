@@ -40,7 +40,7 @@ When `DesignProblem` defines a `DesignObjectiveFunction`, Brinkpy runs objective
 
 `DesignVariables` must be selected from `DeterministicVariables.name`.
 
-If `InitialGuess` lies outside the bounds or does not satisfy `DesignConstraints`, Brinkpy first moves it to a nearby point that does, and starts the optimization from there.
+`InitialGuess` must lie within `lb` and `ub`. If it does not satisfy `DesignConstraints`, Brinkpy first moves it to a nearby point that does, and starts the optimization from there.
 
 Set `keep_feasible` to `True` for a design variable when the design objective function or the limit state function cannot be evaluated outside its bounds, for example a thickness that must stay positive. It does not change the optimal design, only the points the optimizer tries on the way there, and it can slow the search. It has no effect when `DOFisSmooth` is `False`. The same option for stochastic variables is described in [Keeping the Search Inside the Bounds](../index.md#keeping-the-search-inside-the-bounds).
 
@@ -137,6 +137,8 @@ When `jac` or `hess` is provided, Brinkpy checks it against finite differences b
 The results include a table of the constraint values at the optimum (see [Design Constraints Result](../results-tables.md#objective-optimization-design-constraints-result)). When the optimum lies on a limit, a note lists each active limit and about how much relaxing it would reduce the design objective function, using the same 1% rule as for the bounds of design variables (see [Additional Keys For Objective Optimization](#additional-keys-for-objective-optimization)). Equalities are always active, so the note does not list them.
 
 The warning about [setting `keep_feasible` to `True`](../index.md#constraints-on-stochastic-variables) also applies here, except that Brinkpy first moves an infeasible `InitialGuess` to a point that satisfies the constraints.
+
+See [Design Constraints Example](design-constraints.md) for a worked example.
 
 ## Design Objective Function Contract
 
@@ -263,3 +265,5 @@ See [Objective Optimization Example](optimization.md) for a worked example and c
 7. For objective optimization, `DesignObjectiveFunction` accepts `(d, D)`, with `d` in `DesignVariables` order and `D` holding the remaining deterministic variables in `DeterministicVariables.name` order.
 8. For objective optimization, `DesignObjectiveFunction` and its derivative flags are consistent with the actual DOF return signature.
 9. If analytic objective derivatives are advertised (`DOFreturnsGradient`/`DOFreturnsHessian`), the DOF returns them for a single point and `[]` otherwise. If a flag is `False`, the DOF returns `[]` for that derivative.
+10. `InitialGuess` lies within `lb` and `ub`.
+11. If `DesignConstraints` is provided, each function accepts `(d, D)` (`hess` accepts `(d, v, D)`), and `lb` and `ub` give one limit for each of its outputs.
