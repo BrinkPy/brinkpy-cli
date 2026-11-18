@@ -610,7 +610,7 @@ If `x_lim` and `y_lim` are omitted, the axis limits are set automatically to sho
 
 Problem modules may define additional variables, arrays, dictionaries, helper functions, and preprocessing logic beyond the required contracts such as `LimitStateFunction` and (for design runs) `DesignObjectiveFunction`.
 
-All data structures and helper logic used by the problem must be defined inside the same problem module (`*.py`). External data files are not supported for problem execution. A problem module also can't run external programs or read or write files.
+All data structures and helper logic used by the problem must be defined inside the same problem module (`*.py`). External data files are not supported for problem execution. A problem module also can't run external programs, read or write files, or connect to the network.
 
 A problem module can import only these modules and their submodules:
 

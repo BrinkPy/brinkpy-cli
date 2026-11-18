@@ -115,11 +115,11 @@ When a run also includes Monte Carlo simulation, Brinkpy draws a histogram of th
 brinkpy analyze -m -p
 ```
 
-The result set for this run is in `results/2026-11-04/11-31-58/`, with files named `AT68-a3efd`. The probability density function plots are again Figures 2 to 4, now with the histograms:
+The result set for this run is in `results/2026-11-17/22-17-53/`, with files named `AT68-efa18`. The probability density function plots are again Figures 2 to 4, now with the histograms:
 
-![AT68 probability density function of Y with the Monte Carlo histogram](../images/at68-a3efd-02-Y-pdf-mc.png)
+![AT68 probability density function of Y with the Monte Carlo histogram](../images/at68-efa18-02-Y-pdf-mc.png)
 
-The histogram (blue) shows the 300,000 samples of `Y` from three Monte Carlo cycles of 100,000 samples. It follows the black curve closely, which confirms that the samples come from the distribution defined in the problem file. With fewer samples the histogram is rougher, but it should still follow the curve. The figures for `Z` and `M` look the same.
+The histogram (blue) shows the 180,000 samples of `Y` from three Monte Carlo cycles of 60,000 samples, the number the FORM probability of failure calls for (see [Monte Carlo Settings](../../profiles/profile-reference.md#monte-carlo-settings)). It follows the black curve closely, which confirms that the samples come from the distribution defined in the problem file. With fewer samples the histogram is rougher, but it should still follow the curve. The figures for `Z` and `M` look the same.
 
 The PDF result file also contains the Monte Carlo histograms of the limit state function and of the load and resistance (Figures 5 and 6). See [Classic Monte Carlo](../simulate/classic-monte-carlo.md) for those.
 
