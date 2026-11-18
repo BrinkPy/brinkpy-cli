@@ -87,7 +87,7 @@ The tables below are transcribed from the `Results` worksheet in `Chan3-26e7a.xl
 
 ### SORM Results
 
-| beta | pf | minR | Ravg | maxR | minabsR | Ks | lsf_class | sor_method | sor_approx | sor_fit_meth | fit_radius | lsf_count |
+| beta | pf | minR | Ravg | maxR | minabsR | Ks | lsf_class | sor_method | sor_approximation | sor_fit_method | fit_radius | lsf_count |
 |---:|---:|---:|---:|---:|---:|---:|---|---|---|---|---:|---:|
 | 1.1671 | 0.1216 | 2.6167 | 3.9465 | 8.0246 | 2.6167 | 0.5068 | Convex ellipsoid | SOSPA_H | Paraboloid | Kiureghian | 1 | 20 |
 

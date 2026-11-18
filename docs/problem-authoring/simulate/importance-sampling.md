@@ -38,7 +38,7 @@ brinkpy simulate -i
 The `-i` flag enables **importance sampling (IS)**, which drastically reduces the number of samples needed to estimate very small failure probabilities by concentrating samples near the failure region.
 
 !!! tip "Other proposal methods"
-    This example uses the default proposal method, kernel density estimation (KDE). For the same problem with a Markov chain Monte Carlo (MCMC) proposal distribution, see [MCMC Importance Sampling](importance-sampling-mcmc.md).
+    This example uses the default proposal method, kernel density estimation (KDE). For a Markov chain Monte Carlo (MCMC) proposal distribution, see [MCMC Importance Sampling](importance-sampling-mcmc.md), which also runs this problem in a [short section](importance-sampling-mcmc.md#parts-at-the-same-distance-au2).
 
 ## Profile Customization
 
@@ -85,7 +85,7 @@ This example uses the `default` profile. Importance sampling and Monte Carlo beh
 ```
 
 !!! note "Comparison with the paper"
-    Au and Beck (1999) build the importance sampling proposal with Markov chain Monte Carlo (MCMC). Brinkpy's estimate differs from the published one for a known reason. See [MCMC Importance Sampling](importance-sampling-mcmc.md#problem-file-used) for the comparison.
+    Au and Beck (1999) build the importance sampling proposal with Markov chain Monte Carlo (MCMC). Brinkpy's estimate differs from the published one for a known reason. See [MCMC Importance Sampling](importance-sampling-mcmc.md#parts-at-the-same-distance-au2) for the comparison.
 
 ## Extracted Results Worksheet Tables
 

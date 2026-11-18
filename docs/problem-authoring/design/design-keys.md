@@ -102,44 +102,6 @@ Rules:
 - Keep naming and order consistent with how `D` is used in `LSF(X, D)`.
 - `cases` can also be used here for multi-scenario optimization. If omitted, a `default` case is created from `StochasticVariables`.
 
-## Design Constraints
-
-`DesignConstraints` limits functions of the design variables, for example a minimum ratio between two dimensions. It is a list of constraint dictionaries with the same keys as [Constraints on Stochastic Variables](../index.md#constraints-on-stochastic-variables), with two differences:
-
-- The functions take the design variables: `fun(d, D)`, `jac(d, D)`, and `hess(d, v, D)`, with `d` and `D` as in the [Design Objective Function Contract](#design-objective-function-contract). The design variables are deterministic, so the constraints are evaluated directly, with no transformation.
-- For a linear constraint, `A` has one column per design variable, and the outputs are `A @ d`. Design variables are in real space, so SciPy evaluates the constraint directly. The results and notes name it `linear_k`, where k is its position in the `DesignConstraints` list, starting at 1.
-
-For example, a function that returns two outputs, `2 z2 - z1 >= 0` and `z1 - 5 = 0`:
-
-```python
-"DesignConstraints": [
-    {
-        "fun": dsgn_constr,
-        "lb": [0.0, 0.0],
-        "ub": [np.inf, 0.0],
-        "jac": dsgn_constr_jac,
-    },
-],
-```
-
-```python
-def dsgn_constr(d, D):
-    z1, z2 = d
-    return np.array([2 * z2 - z1, z1 - 5.0])
-
-
-def dsgn_constr_jac(d, D):
-    return np.array([[-1.0, 2.0], [1.0, 0.0]])
-```
-
-When `jac` or `hess` is provided, Brinkpy checks it against finite differences before the optimization. The profile options `check_dcf_diffs` and `dcf_diffs_check_method` control the check (see [Derivative Checking](../../profiles/profile-reference.md#derivative-checking)).
-
-The results include a table of the constraint values at the optimum (see [Design Constraints Result](../results-tables.md#objective-optimization-design-constraints-result)). When the optimum lies on a limit, a note lists each active limit and about how much relaxing it would reduce the design objective function, using the same 1% rule as for the bounds of design variables (see [Additional Keys For Objective Optimization](#additional-keys-for-objective-optimization)). Equalities are always active, so the note does not list them.
-
-The warning about [setting `keep_feasible` to `True`](../index.md#constraints-on-stochastic-variables) also applies here, except that Brinkpy first moves an infeasible `InitialGuess` to a point that satisfies the constraints.
-
-See [Design Constraints Example](design-constraints.md) for a worked example.
-
 ## Design Objective Function Contract
 
 !!! warning "Brinkpy always minimizes the objective function"
@@ -255,6 +217,44 @@ h = np.array([[0.0]])
 The `if d.ndim == 1` check computes the derivatives only for a single point. Brinkpy never uses them from a vectorized call, so this keeps vectorized calls fast and light on memory.
 
 See [Objective Optimization Example](optimization.md) for a worked example and checklist.
+
+## Design Constraints
+
+`DesignConstraints` limits functions of the design variables, for example a minimum ratio between two dimensions. It is a list of constraint dictionaries with the same keys as [Constraints on Stochastic Variables](../index.md#constraints-on-stochastic-variables), with two differences:
+
+- The functions take the design variables: `fun(d, D)`, `jac(d, D)`, and `hess(d, v, D)`, with `d` and `D` as in the [Design Objective Function Contract](#design-objective-function-contract). The design variables are deterministic, so the constraints are evaluated directly, with no transformation.
+- For a linear constraint, `A` has one column per design variable, and the outputs are `A @ d`. Design variables are in real space, so SciPy evaluates the constraint directly. The results and notes name it `linear_k`, where k is its position in the `DesignConstraints` list, starting at 1.
+
+For example, a function that returns two outputs, `2 z2 - z1 >= 0` and `z1 - 5 = 0`:
+
+```python
+"DesignConstraints": [
+    {
+        "fun": dsgn_constr,
+        "lb": [0.0, 0.0],
+        "ub": [np.inf, 0.0],
+        "jac": dsgn_constr_jac,
+    },
+],
+```
+
+```python
+def dsgn_constr(d, D):
+    z1, z2 = d
+    return np.array([2 * z2 - z1, z1 - 5.0])
+
+
+def dsgn_constr_jac(d, D):
+    return np.array([[-1.0, 2.0], [1.0, 0.0]])
+```
+
+When `jac` or `hess` is provided, Brinkpy checks it against finite differences before the optimization. The profile options `check_dcf_diffs` and `dcf_diffs_check_method` control the check (see [Derivative Checking](../../profiles/profile-reference.md#derivative-checking)).
+
+The results include a table of the constraint values at the optimum (see [Design Constraints Result](../results-tables.md#objective-optimization-design-constraints-result)). When the optimum lies on a limit, a note lists each active limit and about how much relaxing it would reduce the design objective function, using the same 1% rule as for the bounds of design variables (see [Additional Keys For Objective Optimization](#additional-keys-for-objective-optimization)). Equalities are always active, so the note does not list them.
+
+The warning about [setting `keep_feasible` to `True`](../index.md#constraints-on-stochastic-variables) also applies here, except that Brinkpy first moves an infeasible `InitialGuess` to a point that satisfies the constraints.
+
+See [Design Constraints Example](design-constraints.md) for a worked example.
 
 ## Validation Checklist
 

@@ -46,7 +46,7 @@ To see the files copied into your project folder, open `problems/` directly.
 
 ## Available Examples
 
-Every example works with `analyze` and `simulate`. Examples marked in the **Design** column also define a `DesignProblem` and work with `design`. Ten examples have a step-by-step walkthrough in the documentation.
+Every example works with `analyze` and `simulate`. Examples marked in the **Design** column also define a `DesignProblem` and work with `design`. Eleven examples have a step-by-step walkthrough in the documentation.
 
 | Example | Source | Design | Walkthrough |
 |---|---|:-:|---|
@@ -62,7 +62,7 @@ Every example works with `analyze` and `simulate`. Examples marked in the **Desi
 | `Chan1Problem` | [Chan and Low (2012)](https://onlinelibrary.wiley.com/doi/full/10.1002/nag.1057), Problem 1 | | |
 | `Chan2Problem` | [Chan and Low (2012)](https://onlinelibrary.wiley.com/doi/full/10.1002/nag.1057), Problem 2 | | [Classic Monte Carlo](problem-authoring/simulate/classic-monte-carlo.md) |
 | `Chan3Problem` | [Chan and Low (2012)](https://onlinelibrary.wiley.com/doi/full/10.1002/nag.1057), Problem 3 | | [SORM + Monte Carlo](problem-authoring/analyze/sorm-monte-carlo.md) |
-| `Dai1Problem` | [Dai et al. (2014)](https://www.sciencedirect.com/science/article/pii/S0167473014000162), Example 1 | | |
+| `Dai1Problem` | [Dai et al. (2015)](https://doi.org/10.1016/j.strusafe.2014.02.003), Example 1 | | [MCMC Importance Sampling](problem-authoring/simulate/importance-sampling-mcmc.md) |
 | `Ji1Problem` | [Ji et al. (2023)](https://onlinelibrary.wiley.com/doi/10.1002/nag.3524), Problem 1 | ✓ | [Random Design Parameters](problem-authoring/design/random-design-parameters.md) |
 | `Ji2Problem` | [Ji et al. (2023)](https://onlinelibrary.wiley.com/doi/10.1002/nag.3524), Problem 2 | ✓ | |
 | `PipecorrProblem` | [Netto et al. (2005)](https://www.sciencedirect.com/science/article/pii/S0143974X05000453) | ✓ | [Stochastic Variable Constraints](problem-authoring/design/stochastic-constraints.md) |

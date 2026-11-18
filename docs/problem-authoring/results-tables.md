@@ -87,7 +87,12 @@ FORM transforms the variables to standard normal space with the Nataf transforma
 | `cor_x` | The correlation defined in the problem, in real space (an input) |
 | `cor_z` | The equivalent correlation in standard normal space, calculated by the Nataf transformation (a result). It differs from `cor_x` for a pair in which at least one variable is not normal or is truncated (see [Bounds and Truncation](index.md#bounds-and-truncation)). When every correlated pair consists of normal variables that are not truncated, the two are equal and the results show only `cor_x`. |
 
-When all the variables are normal, `cor_z` equals `cor_x`, so Brinkpy does not calculate it. The correlation matrix then appears instead as columns of the variable table: a `cor_x` column with the row variable's name, followed by one column per variable.
+The Excel file shows the correlations in one of two layouts, depending on their size:
+
+- As columns of the variable table, when the correlation matrices fit in six columns: up to five variables with `cor_x` only, or two variables with `cor_x` and `cor_z`. Each matrix starts with a `cor_x` or `cor_z` column with the row variable's name, followed by one column per variable.
+- Otherwise, as the table above, with one row per correlated pair.
+
+When no variables are correlated, neither appears.
 
 ### Stochastic Variables Constraints
 
@@ -115,8 +120,8 @@ This table appears when `StochasticVariables` defines `constraints` (see [Constr
 | `Ks` | Sum of the curvatures |
 | `lsf_class` | Shape classification of the limit state surface (for example, `Convex ellipsoid`) |
 | `sor_method` | SORM method used (profile option `sor_method`) |
-| `sor_approx` | SORM approximation used (profile option `sor_approximation`) |
-| `sor_fit_meth` | Fit method used (profile option `sor_fit_method`) |
+| `sor_approximation` | SORM approximation used (profile option `sor_approximation`) |
+| `sor_fit_method` | Fit method used (profile option `sor_fit_method`) |
 | `fit_radius` | Distance from the most probable point to the sampled points, in every direction, when fitting the limit state surface by points. Used when `sor_fit_method` is `Kiureghian` or `ZhaoPF`. |
 | `lsf_count` | Number of limit state function calls during SORM |
 
@@ -151,7 +156,7 @@ With importance sampling, more columns appear. Which ones depend on the proposal
 | `burn_in` | `mcmc` | Number of initial steps discarded from each chain (profile option `is_mcmc_burnin`) |
 | `thinning` | `mcmc` | Thinning interval: after burn-in, every `thinning`-th step of each chain is kept (profile option `is_mcmc_thinning`) |
 
-With `mpp_normal`, Brinkpy first runs FORM to find the most probable point (MPP), so the worksheet also includes a [FORM Results](#form-results) table.
+The `mpp_normal` method adds no columns to this table. Its proposal distribution is a normal distribution centered at the most probable point (MPP), so Brinkpy first runs FORM to find the MPP, and the worksheet also includes a [FORM Results](#form-results) table.
 
 ### Stochastic Variables Definition
 
@@ -202,7 +207,9 @@ With `mcmc`, the section has one table of statistics for the norm of the MCMC sa
 | `r_hat` | Convergence measure that compares the variation within each chain to the variation between chains. Values close to 1 mean the chains agree. Values below 1.01 are often recommended. |
 | `mcse_mean`, `mcse_sd` | Monte Carlo standard errors of `mean` and `sd` |
 
-Brinkpy reports these values but does not enforce a limit. If `r_hat` is too high or the effective sample sizes are too low, increase `is_mcmc_chain_length`, `is_mcmc_burnin`, or `is_mcmc_chains` in the profile and run again. For a worked example, see [MCMC Importance Sampling](simulate/importance-sampling-mcmc.md).
+Brinkpy reports these values but does not enforce a limit. The chains start from points spread over the failure region. When the failure region has several separate parts at different distances from the origin, chains that start in different parts can stay there, and `r_hat` then stays above 1 however long the chains run, as in the [MCMC Importance Sampling](simulate/importance-sampling-mcmc.md) example. That alone doesn't make the result wrong. The MCMC samples only build the proposal distribution, and the coefficient of variation `cv` in the [Monte Carlo Results](#monte-carlo-results) measures the precision of the probability of failure. If `r_hat` is high because a chain drifts or moves slowly (see the trace plots), or the effective sample sizes are too low, increase `is_mcmc_chain_length`, `is_mcmc_burnin`, or `is_mcmc_chains` in the profile and run again.
+
+`r_hat` also can't show whether the chains found every part of the failure region. Parts at about the same distance from the origin give similar norms, so they don't raise `r_hat`. The importance sampling proposal diagnostic figures show which parts the samples cover (see [`ISplot`](index.md#isplot)). In the [AU2 run](simulate/importance-sampling-mcmc.md#parts-at-the-same-distance-au2), the three parts of the failure region are all about 5 from the origin, and `r_hat` comes from one slowly drifting chain instead.
 
 ## Design
 

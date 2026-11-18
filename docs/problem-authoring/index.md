@@ -175,12 +175,12 @@ When `LSFisVectorized` is `False` and `LSFisParallelizable` is missing, a simula
 
 | `LSFisSmooth` | Optimizer | Kind |
 |---|---|---|
-| `True` | SciPy's [`trust-constr`](https://docs.scipy.org/doc/scipy/reference/optimize.minimize-trustconstr.html) | Uses gradients |
+| `True` | SciPy's [`trust-constr`](https://docs.scipy.org/doc/scipy/reference/optimize.minimize-trustconstr.html) | Uses gradients and Hessians. Those the function does not return are approximated: gradients with finite differences and Hessians with BFGS updates. |
 | `False` | SciPy's [`COBYQA`](https://docs.scipy.org/doc/scipy/reference/optimize.minimize-cobyqa.html) | Derivative-free |
 
 `DOFisSmooth` makes the same choice for the design objective function in objective optimization (see [Design Keys](design/design-keys.md#additional-keys-for-objective-optimization)). In a design run, each flag applies to its own optimization: `DOFisSmooth` to the search for the optimal design, and `LSFisSmooth` to the FORM analysis inside it.
 
-Set the flag to `False` when the function has kinks or steps, for example from `numpy.minimum()` or `numpy.maximum()` in [series and parallel systems](#series-and-parallel-systems), `abs()`, `if` branches, or table lookups. Otherwise leave it `True`, because the optimizer that uses gradients is usually faster and more accurate.
+Set the flag to `False` when the function has kinks or steps, for example from `numpy.minimum()` or `numpy.maximum()` in [series and parallel systems](#series-and-parallel-systems), `abs()`, `if` branches, or table lookups. Otherwise leave it `True`, because the optimizer that uses derivatives is usually faster and more accurate.
 
 The flag changes the following:
 
@@ -662,7 +662,7 @@ For platform safety, Brinkpy checks each problem module before running it and re
 - [Objective Optimization](design/optimization.md): objective optimization example and checklist.
 - [Classic Monte Carlo](simulate/classic-monte-carlo.md): simulation example using plain Monte Carlo (Chan2).
 - [Importance Sampling](simulate/importance-sampling.md): simulation example using importance sampling (AU2).
-- [MCMC Importance Sampling](simulate/importance-sampling-mcmc.md): the same problem with a Markov chain Monte Carlo (MCMC) proposal distribution (AU2).
+- [MCMC Importance Sampling](simulate/importance-sampling-mcmc.md): simulation example using importance sampling with a Markov chain Monte Carlo (MCMC) proposal distribution, for a failure region with four separate parts (Dai1), with a short comparison for AU2.
 - [Probability Density Functions](plots/probability-density-functions.md): plots of the probability density function of each stochastic variable (`AT68`).
 - [Limit State Function](plots/limit-state-function.md): plots of the limit state function in x-space and u-space, with the profile options that control them (`AT68`).
 - [Failure Assessment Diagram](plots/rfad.md): reliability-based failure assessment diagram (RFAD) plots of the probability of failure, the reliability index, and the alpha values over a grid of mean resistance and mean load (`AT68`).
