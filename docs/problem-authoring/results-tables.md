@@ -61,8 +61,8 @@ The `bnds_mult` and `constr_mult` columns appear in several tables, with a diffe
 |---|---|
 | `var_name` | Stochastic variable name |
 | `var_type` | Distribution type |
-| `mean`, `std` | Mean and standard deviation of the distribution |
-| `param1`, `param2` | Natural parameters of the distribution |
+| `mean`, `std` | Mean and standard deviation of the distribution. For a truncated variable, of the distribution before truncation, as entered in the problem (see [Bounds and Truncation](index.md#bounds-and-truncation)). |
+| `param1`, `param2` | Natural parameters of the distribution. For a truncated variable, of the distribution before truncation. |
 | `lb`, `ub` | Lower and upper bounds of the variable. If the problem does not define them, the defaults are `-inf` and `inf`. |
 | `truncated` | Whether the distribution is truncated to `[lb, ub]`. If the problem does not define it, the default is `False`. |
 | `x` | Failure point in real space |
@@ -85,7 +85,7 @@ FORM transforms the variables to standard normal space with the Nataf transforma
 |---|---|
 | `var 1`, `var 2` | The pair of correlated variables |
 | `cor_x` | The correlation defined in the problem, in real space (an input) |
-| `cor_z` | The equivalent correlation in standard normal space, calculated by the Nataf transformation (a result) |
+| `cor_z` | The equivalent correlation in standard normal space, calculated by the Nataf transformation (a result). It differs from `cor_x` for a pair in which at least one variable is not normal or is truncated (see [Bounds and Truncation](index.md#bounds-and-truncation)). When every correlated pair consists of normal variables that are not truncated, the two are equal and the results show only `cor_x`. |
 
 When all the variables are normal, `cor_z` equals `cor_x`, so Brinkpy does not calculate it. The correlation matrix then appears instead as columns of the variable table: a `cor_x` column with the row variable's name, followed by one column per variable.
 
@@ -158,8 +158,8 @@ With `mpp_normal`, Brinkpy first runs FORM to find the most probable point (MPP)
 | Column | Meaning |
 |---|---|
 | `var_name`, `var_type` | Stochastic variable name and distribution type |
-| `mean`, `std` | Mean and standard deviation of the distribution |
-| `param1`, `param2` | Natural parameters of the distribution |
+| `mean`, `std` | Mean and standard deviation of the distribution. For a truncated variable, of the distribution before truncation, as entered in the problem (see [Bounds and Truncation](index.md#bounds-and-truncation)). |
+| `param1`, `param2` | Natural parameters of the distribution. For a truncated variable, of the distribution before truncation. |
 | `lb`, `ub` | Lower and upper bounds of the variable. If the problem does not define them, the defaults are `-inf` and `inf`. |
 | `truncated` | Whether the distribution is truncated to `[lb, ub]`. If the problem does not define it, the default is `False`. |
 
@@ -168,7 +168,7 @@ With `mpp_normal`, Brinkpy first runs FORM to find the most probable point (MPP)
 | Column | Meaning |
 |---|---|
 | `var_name` | Stochastic variable name |
-| `mean`, `std` | Mean and standard deviation of the samples |
+| `mean`, `std` | Mean and standard deviation of the samples. For a truncated variable, these are after truncation, so they differ from the entered `mean` and `std`, and a note below the table names the truncated variables. With importance sampling, a note below the table says that the statistics differ from the original distributions. |
 | `%_oob` | Percentage of that variable's samples outside its bounds |
 | `cor_x` and the columns after it | The sample correlation matrix, in real space. `cor_x` repeats the row variable's name, and each following column is named after a variable. Each cell is the sample correlation between the row variable and the column variable. |
 

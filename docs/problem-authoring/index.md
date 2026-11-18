@@ -12,6 +12,8 @@ The rest of the section teaches by example. The pages under **Analyze**, **Desig
 
 The [Results Tables Reference](results-tables.md) explains every column in the result files, and the example pages link to it. The **Design** group also has its own overview and a reference of the `DesignProblem` keys.
 
+Besides the tables, each result set has notes: short messages about the run, such as the checks Brinkpy made, the settings it chose, and the limits a result reached. They appear in the Notes section at the end of the `Results` worksheet of the Excel file and in the `Info` list of the JSON file. The example pages list them under **Notes Reported by Brinkpy**.
+
 ## Minimal File Pattern
 
 A problem module should expose `Problem()` (or `problem()`) and return a dictionary.
@@ -341,6 +343,14 @@ Setting `lb` and `ub` does not by itself change a variable's distribution. Wheth
 
 SORM uses the MPP found by FORM, so the bounds affect SORM results in the same way.
 
+With `truncated[i] = True`, the values that define the distribution (`mean` and `std`, or `param1` to `param4`) describe it before truncation. Brinkpy then truncates it to `[lb[i], ub[i]]`, so the variable has a different mean and standard deviation. The results keep the values entered, so they can be related to the problem file:
+
+- The stochastic variables tables list the entered `mean`, `std`, and parameters, with `truncated` set to `True` (see [Stochastic Variables Definition](results-tables.md#stochastic-variables-definition)).
+- The plots of the probability density functions show the truncated density, and their subtitle gives the entered parameters followed by `[Un-Truncated Parameters]`.
+- The Monte Carlo statistics describe the samples, so for a truncated variable they show the mean and standard deviation after truncation.
+
+Correlations (`cor` or `cor_list`) refer to the variables after truncation.
+
 Bounds without truncation are useful to keep the MPP inside values that make physical sense without changing the probability model. On the way to the MPP, the search may still try points outside the bounds unless `keep_feasible` is `True` (see [Keeping the Search Inside the Bounds](#keeping-the-search-inside-the-bounds)).
 
 !!! warning "When the MPP lies on a bound"
@@ -400,9 +410,9 @@ A linear constraint limits weighted sums of the stochastic variables, such as `Y
 | `lb`, `ub` | At least one | Same as for a nonlinear constraint |
 | `keep_feasible` | No | Same as for a nonlinear constraint, with one value per row of `A` when it is a list |
 
-A sum that is linear in real space is not linear in standard normal space, where FORM and Inverse FORM search. Brinkpy therefore turns each linear constraint into a nonlinear one, with `fun` returning `A @ X` and `jac` returning `A`. The results and notes name it `linear_k`, where k is its position in the `constraints` list, starting at 1, and each row of `A` is one of its outputs. To limit a single variable, use the variable's `lb` and `ub` instead (see [Bounds and Truncation](#bounds-and-truncation)).
+A sum that is linear in real space is not linear in standard normal space, where FORM and Inverse FORM search. Brinkpy therefore turns each linear constraint into a nonlinear one, with `fun` returning `A @ X` and `jac` returning `A`. The results name it `linear_k`, where k is its position in the `constraints` list, starting at 1, and each row of `A` is one of its outputs. To limit a single variable, use the variable's `lb` and `ub` instead (see [Bounds and Truncation](#bounds-and-truncation)).
 
-A constraint function can return several outputs, with one entry per output in `lb` and `ub`. The results and notes identify each output by its number, starting at 1. For example, `ratios` above has two outputs, and a Monte Carlo note reports the samples that violate each one as `'ratios' (output 1)` and `'ratios' (output 2)`.
+A constraint function can return several outputs, with one entry per output in `lb` and `ub`. The results number the outputs from 1, so the two outputs of `ratios` above are output 1 and output 2.
 
 Both kinds of constraint are defined on the stochastic variables in real space. FORM and Inverse FORM search in standard normal space, so Brinkpy transforms each point of the search to real space before it evaluates the constraints.
 
