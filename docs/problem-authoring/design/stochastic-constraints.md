@@ -21,7 +21,7 @@ Problem module:
 Recorded result sets:
 
 - Design: `results/2026-11-14/22-29-27/Pipe_Corrosion-45372.xlsx`, `.json`, `.py`, and `profile-45372.yaml`
-- Monte Carlo: `results/2026-11-14/22-29-33/Pipe_Corrosion-00c2b.xlsx`, `.json`, `.py`, `.pickle`, `.pdf`, and `profile-00c2b.yaml`
+- Monte Carlo: `results/2026-11-17/18-30-35/Pipe_Corrosion-a94bc.xlsx`, `.json`, `.py`, `.pickle`, `.pdf`, and `profile-a94bc.yaml`
 
 Profile and run modes from the saved profiles:
 
@@ -217,50 +217,50 @@ See [Stochastic Variables Constraints](../results-tables.md#stochastic-variables
 
 ## Monte Carlo Results
 
-The `analyze` run uses the top-level `StochasticVariables`, which hold the Low Grade data, and the value of `Xr` in `DeterministicVariables`, 1.0. The tables below are transcribed from the `Results` worksheet in `Pipe_Corrosion-00c2b.xlsx`.
+The `analyze` run uses the top-level `StochasticVariables`, which hold the Low Grade data, and the value of `Xr` in `DeterministicVariables`, 1.0. The tables below are transcribed from the `Results` worksheet in `Pipe_Corrosion-a94bc.xlsx`.
 
 ### Header Information
 
 | Field | Value |
 |---|---|
 | Problem | `Pipe Corrosion` |
-| Request ID | `a87043aea307482195651425f7300c2b` |
-| Run time | `00 min 02.22 sec` |
+| Request ID | `998481a2283f4488ac59c231dd8a94bc` |
+| Run time | `00 min 02.08 sec` |
 
 ### FORM Results
 
 | beta | pf | beta_count | hbeta_count | lsf_count | glsf_count | hlsf_count | nit | min_tries | min_method |
 |---:|---:|---:|---:|---:|---:|---:|---:|---:|---|
-| 2.555 | 0.005316 | 29 | 29 | 28 | 28 | 0 | 34 | 2 | tr_interior_point |
+| 2.555 | 0.005316 | 26 | 26 | 25 | 25 | 0 | 31 | 2 | tr_interior_point |
 
 ### Stochastic Variables Constraints
 
 | constr_name | constr_row | lb | ub | value | constr_count |
 |---|---:|---:|---:|---:|---:|
-| ratios | 1 | 0.1 | 0.8 | 0.1609 | 28 |
+| ratios | 1 | 0.1 | 0.8 | 0.1609 | 25 |
 | ratios | 2 | 0 | 1.5 | 0.2836 | |
 
 ### Monte Carlo Results
 
 | beta | pf | cv | max_cv | size | %_removed | cycles | auto_size | mc_with_is |
 |---:|---:|---:|---:|---:|---:|---:|---|---|
-| 2.545 | 0.005468 | 0.02501 | 0.05 | 300000 | 3.072 | 3 | True | False |
+| 2.540 | 0.005541 | 0.04533 | 0.05 | 90000 | 2.947 | 3 | True | False |
 
 ### Notes Reported by Brinkpy
 
 1. Validation: Stochastic variables definition and limit state function validation required 2 function calls.
 2. Validation: Validation of the limit state function analytic gradient required 4 function calls.
 3. Validation: Validation of stochastic variables constraint function 'ratios' analytic gradient and Hessian required 624 function calls.
-4. Monte Carlo: Completed 3 cycles with 1.00e+05 samples per cycle.
-5. Monte Carlo: 3.01% and 0.06% of samples violated the following constraints: 'ratios' (output 1) and 'ratios' (output 2) out of 3.00e+05 total samples. In total, 3.07% of the samples violated the constraints and were excluded from the Monte Carlo statistics.
+4. Monte Carlo: Completed 3 cycles with 3.00e+04 samples per cycle.
+5. Monte Carlo: 2.88% and 0.07% of samples violated the following constraints: 'ratios' (output 1) and 'ratios' (output 2) out of 9.00e+04 total samples. In total, 2.95% of the samples violated the constraints and were excluded from the Monte Carlo statistics.
 6. Monte Carlo: If a large fraction of samples were not finite, out of bounds or violated constraints, consider adjusting the statistical distributions of the variables, truncating them to finite lower (lb) and upper (ub) bounds, and reviewing any constraints on the variables to make sure they are valid.
 
-The PDF result file for this run is saved as `results/2026-11-14/22-29-33/Pipe_Corrosion-00c2b.pdf`.
+The PDF result file for this run is saved as `results/2026-11-17/18-30-35/Pipe_Corrosion-a94bc.pdf`.
 
 ## Interpretation Snapshot
 
 - Both steel grades reach the target reliability index of 2.47 within the 0.001 tolerance, with `Xr = 0.9867` for the Low Grade and `Xr = 1.033` for the Medium Grade.
 - At both design points, `d / t` and `l / Do` lie well inside the range of the model, so the reliability index comes from a region where the limit state function is valid. No limit is active, so Brinkpy reports no note about the constraints.
 - `ratios` provides its Jacobian and Hessian, so the design search needed one call to `ratios` per call to the limit state function (140 for the Low Grade). Checking both against finite differences before the run took 624 calls (note 4).
-- Monte Carlo agrees with FORM (`beta = 2.545` against `2.555`) with `cv = 0.02501`, below the target of 0.05.
-- Monte Carlo removed 3.07% of the samples, almost all for output 1 of `ratios`, `d / t` (3.01%). With a mean wall thickness of 6.45 mm, a `d / t` below 0.1 means a defect shallower than about 0.65 mm, outside the range of the model. The statistics describe only the samples inside the range.
+- Monte Carlo agrees with FORM (`beta = 2.540` against `2.555`) with `cv = 0.04533`, below the target of 0.05.
+- Monte Carlo removed 2.95% of the samples, almost all for output 1 of `ratios`, `d / t` (2.88%). With a mean wall thickness of 6.45 mm, a `d / t` below 0.1 means a defect shallower than about 0.65 mm, outside the range of the model. The statistics describe only the samples inside the range.

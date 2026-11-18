@@ -134,10 +134,17 @@ Used by: `analyze --include-mc` and `simulate`.
 
 | Option | Type | Default | Range | Description |
 |--------|------|---------|-------|-------------|
-| `mc_n` | float or null | `null` | [1e3, 1e8] or `null` (auto) | Monte Carlo sample size (null means automatic) |
-| `mc_max_cv` | float | `0.05` | [0.01, 1.0] | If `mc_n` is `null`, Monte Carlo runs in cycles until the coefficient of variation (CV) of the estimated failure probability is <= `mc_max_cv` |
+| `mc_n` | float or null | `null` | [1e3, 1e8] or `null` (auto) | Total number of Monte Carlo samples, spread over at least three cycles. `null` chooses the number of samples automatically (see below) |
+| `mc_max_cv` | float | `0.05` | [0.01, 1.0] | If `mc_n` is `null`, Monte Carlo runs in cycles until the coefficient of variation (CV) of the estimated failure probability is <= `mc_max_cv` and at least three cycles have run. Halving `mc_max_cv` takes about four times as many samples |
 | `mc_seed` | int or null | `null` | - | Random seed for Monte Carlo simulations. Set a value for repeatable results, or leave as `null` to allow small run-to-run differences |
 | `mc_remove_oob` | bool | `true` | - | Remove out-of-bounds samples during Monte Carlo simulation (bounds or constraint violations) |
+
+When `mc_n` is `null`, Brinkpy chooses the number of samples from `mc_max_cv`:
+
+- With an estimate of the probability of failure from FORM or SORM, as in `analyze -m`, it computes the number of samples needed and spreads them over three cycles.
+- Without one, as in `simulate`, it starts with 10,000 samples and sizes each next cycle from the probability of failure estimated so far.
+
+In both cases the run continues with more cycles until the CV is at most `mc_max_cv`. The memory available on the server also limits the size of each cycle. Importance sampling chooses its sample sizes differently (see [Importance Sampling Settings](#importance-sampling-settings)).
 
 ### Importance Sampling Settings
 

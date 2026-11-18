@@ -29,7 +29,7 @@ Recorded result sets:
 
 - Design as defined by Hu and Du (2019): `results/2026-11-16/14-04-19/Cantilever_Beam-98cf1.xlsx`, `.json`, `.py`, and `profile-98cf1.yaml`
 - Design with the `h_over_b` constraint: `results/2026-11-16/14-04-36/Cantilever_Beam-14d53.xlsx`, `.json`, `.py`, and `profile-14d53.yaml`
-- Monte Carlo at the optimal design: `results/2026-11-16/14-53-51/Cantilever_Beam-d65a5.xlsx`, `.json`, `.py`, `.pickle`, `.pdf`, and `profile-d65a5.yaml`
+- Monte Carlo at the optimal design: `results/2026-11-17/18-30-27/Cantilever_Beam-19a15.xlsx`, `.json`, `.py`, `.pickle`, `.pdf`, and `profile-19a15.yaml`
 
 Profile and run modes from the saved profiles:
 
@@ -216,7 +216,7 @@ To check the probability of failure of the optimal design, set `mb` and `mh` in 
 },
 ```
 
-The tables below are transcribed from the `Results` worksheet in `Cantilever_Beam-d65a5.xlsx`. The run took `00 min 03.00 sec`.
+The tables below are transcribed from the `Results` worksheet in `Cantilever_Beam-19a15.xlsx`. The run took `00 min 01.79 sec`.
 
 ### FORM Results
 
@@ -228,12 +228,12 @@ The tables below are transcribed from the `Results` worksheet in `Cantilever_Bea
 
 | beta | pf | cv | max_cv | size | %_removed | cycles | auto_size | mc_with_is |
 |---:|---:|---:|---:|---:|---:|---:|---|---|
-| 2.874 | 0.002029 | 0.02024 | 0.05 | 1200000 | 0 | 3 | True | False |
+| 2.866 | 0.002077 | 0.04002 | 0.05 | 300000 | 0 | 3 | True | False |
 
 ### Notes Reported by Brinkpy
 
 1. Validation: Stochastic variables definition and limit state function validation required 2 function calls.
-2. Monte Carlo: Completed 3 cycles with 4.00e+05 samples per cycle.
+2. Monte Carlo: Completed 3 cycles with 1.00e+05 samples per cycle.
 3. Monte Carlo: Load and resistance histograms are not available since the limit state function does not return load and resistance values.
 
 ## Interpretation Snapshot
@@ -242,4 +242,4 @@ The tables below are transcribed from the `Results` worksheet in `Cantilever_Bea
 - At the optimum, the most probable failure point is a stress failure: `Px` and `Py` are about 2 standard deviations above their means and `Sy` is below its mean, while `E` stays at its mean.
 - With the `h_over_b` constraint, the deeper section shifts the most probable failure to the deflection mode: `Sy` stays at its mean, because the stress limit state plays no part, and `Px` rises to almost 3 standard deviations above its mean. The constraint is active, and the volume rises from 891.0 to 927.7. Relaxing the limit of 2 by 0.1 would save about 17 (note 5).
 - The constrained run took 4 seconds instead of 40, because its optimum lies away from the kink of `min(g1, g2)`.
-- Monte Carlo gives a probability of failure of 0.002029 (`beta = 2.874`), about 1.5 times the FORM value. At this design the deflection mode also has a reliability index close to 3, and FORM leaves it out. To reach the target probability of failure for the whole beam, the design would need a higher target reliability index, checked with a simulation.
+- Monte Carlo gives a probability of failure of 0.002077 (`beta = 2.866`), about 1.5 times the FORM value. At this design the deflection mode also has a reliability index close to 3, and FORM leaves it out. To reach the target probability of failure for the whole beam, the design would need a higher target reliability index, checked with a simulation.

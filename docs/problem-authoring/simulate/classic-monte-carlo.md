@@ -13,12 +13,12 @@ Problem module:
 
 Recorded result set:
 
-- `results/2026-11-02/18-41-23/Chan2-97017.xlsx`
-- `results/2026-11-02/18-41-23/Chan2-97017.json`
-- `results/2026-11-02/18-41-23/Chan2-97017.py`
-- `results/2026-11-02/18-41-23/Chan2-97017.pickle`
-- `results/2026-11-02/18-41-23/Chan2-97017.pdf`
-- `results/2026-11-02/18-41-23/profile-97017.yaml`
+- `results/2026-11-17/20-36-47/Chan2-04cd2.xlsx`
+- `results/2026-11-17/20-36-47/Chan2-04cd2.json`
+- `results/2026-11-17/20-36-47/Chan2-04cd2.py`
+- `results/2026-11-17/20-36-47/Chan2-04cd2.pickle`
+- `results/2026-11-17/20-36-47/Chan2-04cd2.pdf`
+- `results/2026-11-17/20-36-47/profile-04cd2.yaml`
 
 Profile and run mode from saved profile:
 
@@ -79,15 +79,15 @@ Because `LSFreturnsLandR: True`, Brinkpy generates a **Load and Resistance Histo
 
 ## Extracted Results Worksheet Tables
 
-The tables below are transcribed from the `Results` worksheet in `Chan2-97017.xlsx`. For the meaning of each column, see [Results Tables Reference](../results-tables.md#monte-carlo).
+The tables below are transcribed from the `Results` worksheet in `Chan2-04cd2.xlsx`. For the meaning of each column, see [Results Tables Reference](../results-tables.md#monte-carlo).
 
 ### Header Information
 
 | Field | Value |
 |---|---|
 | Problem | `Chan2` |
-| Request ID | `92b28648238746f78e126b5570897017` |
-| Run time | `00 min 01.87 sec` |
+| Request ID | `134a2ed44d87475f8a545d2258a04cd2` |
+| Run time | `00 min 00.49 sec` |
 
 ### Deterministic Variables
 
@@ -112,7 +112,7 @@ The tables below are transcribed from the `Results` worksheet in `Chan2-97017.xl
 
 | beta | pf | cv | max_cv | size | %_removed | cycles | auto_size | mc_with_is |
 |---:|---:|---:|---:|---:|---:|---:|---|---|
-| 1.5419 | 0.06155 | 0.002254 | 0.05 | 3,000,000 | 0.0009 | 3 | True | False |
+| 1.5426 | 0.06147 | 0.02256 | 0.05 | 30,000 | 0 | 3 | True | False |
 
 ### Monte Carlo Variable Statistics and Correlations
 
@@ -120,57 +120,57 @@ The sampled statistics confirm the input distributions and correlation structure
 
 | var_name | mean | std | %_oob | cor_x | cp | fp | g | Ph | Pv |
 |---|---:|---:|---:|---|---:|---:|---:|---:|---:|
-| cp | 15.0018 | 4.5031 | 0 | cp | 1.0000 | −0.5002 | −0.0008 | −0.0004 | −0.0007 |
-| fp | 24.9951 | 4.9987 | 0 | fp | −0.5002 | 1.0000 | 0.5000 | 0.0002 | 0.0006 |
-| g | 19.9985 | 1.9993 | 0 | g | −0.0008 | 0.5000 | 1.0000 | 0.0007 | 0.0002 |
-| Ph | 399.988 | 40.024 | 0 | Ph | −0.0004 | 0.0002 | 0.0007 | 1.0000 | 0.5003 |
-| Pv | 799.940 | 79.986 | 0 | Pv | −0.0007 | 0.0006 | 0.0002 | 0.5003 | 1.0000 |
+| cp | 14.9539 | 4.4972 | 0 | cp | 1.0000 | −0.5016 | −0.0056 | −0.0005 | −0.0105 |
+| fp | 25.0458 | 4.9987 | 0 | fp | −0.5016 | 1.0000 | 0.5011 | −0.0051 | 0.0104 |
+| g | 20.0136 | 2.0055 | 0 | g | −0.0056 | 0.5011 | 1.0000 | −0.0122 | 0.0002 |
+| Ph | 399.854 | 39.929 | 0 | Ph | −0.0005 | −0.0051 | −0.0122 | 1.0000 | 0.4943 |
+| Pv | 799.981 | 79.488 | 0 | Pv | −0.0105 | 0.0104 | 0.0002 | 0.4943 | 1.0000 |
 
 ### Notes Reported by Brinkpy
 
-1. Validation: Stochastic variables definition and limit state function validation required 1 function call.
-2. Monte Carlo: Completed 3 cycles with `1.00e+06` samples per cycle.
-3. Monte Carlo: Detected 27 NaN values in the limit state function out of `3.00e+06` samples. Review the list of code warnings and update the limit state function to address their source.
-4. Monte Carlo: If a large fraction of values are invalid, consider adjusting the statistical distributions of the variables, truncating them to finite lower (`lb`) and upper (`ub`) bounds, and defining constraints on the variables to avoid invalid results.
+1. Validation: Stochastic variables definition and limit state function validation required 2 function calls.
+2. Monte Carlo: Completed 3 cycles with `3.00e+04` samples in total, sizing each cycle from the pf estimated so far.
 
 ## Interpretation Snapshot
 
-- `beta = 1.542`, `pf = 6.16%` — a relatively low reliability index for a bearing-capacity problem with correlated soil parameters.
-- The coefficient of variation (`cv = 0.00225`) is well below `max_cv = 0.05`, indicating high Monte Carlo precision with 3 million samples.
-- The sampled correlation matrix closely matches the targets: `cor(cp, fp) ≈ −0.500`, `cor(fp, g) ≈ 0.500`, `cor(Ph, Pv) ≈ 0.500`.
-- A small number of NaN results (27 out of 3,000,000) were detected. These come from the inclination factors. When `1 - Ph / (Pv + B'L'cp / tan(fp))` is not positive, the limit state function returns NaN by design. They do not invalidate the result at this sample size.
-- Brinkpy also reported that if invalid values become more frequent, finite `lb` and `ub` bounds or explicit variable constraints are the first things to revisit.
+- `beta = 1.543`, `pf = 6.15%`: a relatively low reliability index for a bearing-capacity problem with correlated soil parameters.
+- The coefficient of variation (`cv = 0.0226`) is below `max_cv = 0.05`. A `simulate` run has no FORM estimate of pf, so Brinkpy starts with 10,000 samples and sizes the next cycles from the pf estimated so far (note 2). A pf of about 6% needs only about 9,000 samples for the target, so the second and third cycles also use 10,000 samples, the least needed to reach the minimum of three cycles.
+- The sampled correlations match the targets within the sampling error of 30,000 samples: `cor(cp, fp) ≈ −0.502`, `cor(fp, g) ≈ 0.501`, `cor(Ph, Pv) ≈ 0.494`.
+- The limit state function returns NaN by design when `1 - Ph / (Pv + B'L'cp / tan(fp))` is not positive, in the inclination factors. This happens in about 1 of 100,000 samples, so this run had none. When it happens, Brinkpy reports the number of NaN values in a note and leaves those samples out of the statistics.
+
+!!! note "Precision of the default settings"
+    With the `default` profile, `mc_n` is `null` and `mc_max_cv` is 0.05, so Monte Carlo stops as soon as the coefficient of variation of pf is at most 0.05 and at least three cycles have run. For a more precise pf, set a smaller `mc_max_cv` in a custom profile. The number of samples grows with 1 / `mc_max_cv`², so halving `mc_max_cv` takes about four times as many samples. See [Monte Carlo Settings](../../profiles/profile-reference.md#monte-carlo-settings).
 
 ## Generated Figures
 
-The PDF result file for this run is saved as `results/2026-11-02/18-41-23/Chan2-97017.pdf`.
+The PDF result file for this run is saved as `results/2026-11-17/20-36-47/Chan2-04cd2.pdf`.
 
 ### Figure 1: Monte Carlo Histogram — `cp`
 
-![Chan2 Monte Carlo histogram for cp](../images/chan2-97017-01-cp-histogram.png)
+![Chan2 Monte Carlo histogram for cp](../images/chan2-04cd2-01-cp-histogram.png)
 
 ### Figure 2: Monte Carlo Histogram — `fp`
 
-![Chan2 Monte Carlo histogram for fp](../images/chan2-97017-02-fp-histogram.png)
+![Chan2 Monte Carlo histogram for fp](../images/chan2-04cd2-02-fp-histogram.png)
 
 ### Figure 3: Monte Carlo Histogram — `g`
 
-![Chan2 Monte Carlo histogram for g](../images/chan2-97017-03-g-histogram.png)
+![Chan2 Monte Carlo histogram for g](../images/chan2-04cd2-03-g-histogram.png)
 
 ### Figure 4: Monte Carlo Histogram — `Ph`
 
-![Chan2 Monte Carlo histogram for Ph](../images/chan2-97017-04-Ph-histogram.png)
+![Chan2 Monte Carlo histogram for Ph](../images/chan2-04cd2-04-Ph-histogram.png)
 
 ### Figure 5: Monte Carlo Histogram — `Pv`
 
-![Chan2 Monte Carlo histogram for Pv](../images/chan2-97017-05-Pv-histogram.png)
+![Chan2 Monte Carlo histogram for Pv](../images/chan2-04cd2-05-Pv-histogram.png)
 
 ### Figure 6: Histogram of Limit State Function Values
 
-![Chan2 limit state function histogram](../images/chan2-97017-06-lsf-histogram.png)
+![Chan2 limit state function histogram](../images/chan2-04cd2-06-lsf-histogram.png)
 
 ### Figure 7: Load and Resistance Histogram
 
 Generated because `LSFreturnsLandR: True` in the problem file.
 
-![Chan2 load and resistance histogram](../images/chan2-97017-07-load-resistance.png)
+![Chan2 load and resistance histogram](../images/chan2-04cd2-07-load-resistance.png)

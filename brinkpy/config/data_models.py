@@ -292,9 +292,11 @@ class ReliabilityOptions(BaseEnumModel):
     - qn_epsilon: float
         Tolerance used by quasi-Newton routines. Range: [1e-8, 1e-2]. Default: 1e-8.
     - mc_n: float | None
-        Monte Carlo sample size (None means automatic). Must be in [1e3, 1e8] if specified. Default: None.
+        Total Monte Carlo samples, spread over at least mc_min_cycles cycles. None sizes the run automatically from
+        mc_max_cv (from the FORM or SORM pf when available, otherwise adaptively from a first cycle of 10,000
+        samples). Must be in [1e3, 1e8] if specified. Default: None.
     - mc_n_max: float (excluded from public serialization)
-        Maximum allowed MC samples. Range: [1e3, 1e8]. Default: 1e7.
+        Maximum allowed MC samples. Range: [1e3, 1e9]. Default: 5e8.
     - mc_n_min: float (excluded from public serialization)
         Minimum allowed MC samples. Range: [1e3, 1e7]. Default: 1e3.
     - mc_n_min_per_cycle: float (excluded from public serialization)
@@ -310,7 +312,8 @@ class ReliabilityOptions(BaseEnumModel):
     - mc_max_cycles: int (excluded from public serialization)
         Maximum MC cycles when using cycle-based MC stopping. Range: [1, 1000]. Default: 500.
     - mc_max_mb_per_cycle: int (excluded from public serialization)
-        Maximum memory (MB) per MC cycle. Range: [1, 1000]. Default: 100.
+        Maximum memory (MB) per MC cycle. The API workers also keep each cycle below half the memory left under
+        their memory limit. Range: [1, 1000]. Default: 400.
     - is_method: IsMethodEnum
         Importance sampling proposal method (kde / mixture / mcmc / mpp_normal). Default: kde.
     - is_kde_bandwidth: KDEBandwidthMethodEnum | float
