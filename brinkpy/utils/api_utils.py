@@ -197,19 +197,120 @@ def serialize_obj(obj: Any) -> Any:
     return str(obj)
 
 
-def get_exception_source(e: BaseException) -> str:
+# The folder of the brinkpy package, whose code is not the user's
+_BRINKPY_PACKAGE_DIR = Path(__file__).resolve().parent.parent
+
+# How many lines of the user's module a message shows: where the error happened and the calls that led there
+MAX_USER_FRAMES_SHOWN = 3
+
+
+def _exception_chain(e: BaseException) -> list[BaseException]:
     """
-    Return a short single-line description of where an exception occurred.
+    The exception and the exceptions it was raised from or while handling, outermost first, following the same
+    rules as Python's traceback printing (__cause__, or __context__ unless suppressed).
     """
-    tb_exc = traceback.TracebackException.from_exception(e)
-    if tb_exc.stack:
-        last_frame = tb_exc.stack[-1]
-        filename = pathlib.Path(last_frame.filename).name
-        lineno = last_frame.lineno
-        func = last_frame.name
-        line = last_frame.line or ""
-        return f'File "{filename}", line {lineno}, in {func}: {line} {type(e).__name__}: {e}'
-    return f"{type(e).__name__}: {e}"
+    chain = []
+    seen = set()
+    current = e
+    while current is not None and id(current) not in seen:
+        chain.append(current)
+        seen.add(id(current))
+        if current.__cause__ is not None:
+            current = current.__cause__
+        elif not current.__suppress_context__:
+            current = current.__context__
+        else:
+            current = None
+    return chain
+
+
+def _same_file(filename: str | None, module_path: Path) -> bool:
+    if not filename or filename.startswith("<"):
+        return False
+    try:
+        return Path(filename).resolve() == module_path
+    except (OSError, ValueError):
+        return False
+
+
+def _code_owner(filename: str) -> str:
+    """The name of the library a file belongs to (for example numpy), "Brinkpy" or "Python"."""
+    if filename.startswith("<"):  # <frozen importlib._bootstrap>
+        return "Python"
+    try:
+        path = Path(filename).resolve()
+    except (OSError, ValueError):
+        return "Python"
+    if path.is_relative_to(_BRINKPY_PACKAGE_DIR):
+        return "Brinkpy"
+    parts = path.parts
+    for packages_dir in ("site-packages", "dist-packages"):
+        if packages_dir in parts:
+            index = parts.index(packages_dir)
+            return parts[index + 1].removesuffix(".py") if index + 1 < len(parts) else "Python"
+    return "Python"
+
+
+def _describe_frame(frame: traceback.FrameSummary) -> str:
+    code = (frame.line or "").strip()
+    location = f"line {frame.lineno}" if frame.name == "<module>" else f"line {frame.lineno}, in {frame.name}"
+    return location + (f": {code}" if code else "")
+
+
+def get_exception_source(e: BaseException, module_path: Path | None = None) -> str:
+    """
+    One-line description of an exception for the user, without a final period.
+
+    With module_path, the user's problem module: if the module appears in the traceback of the exception or of the
+    exceptions it was raised from, the description is the error type and message, then the line of the module where
+    the error happened and up to two lines that called it. When the error was raised in a library called from the
+    module (for example numpy.linalg), it says so. A syntax error gives the line it reports.
+
+    Otherwise, or without module_path, the description is only the error type and message. Brinkpy's own file names
+    and code are left out, since the user can't act on them.
+
+    Args:
+        e (BaseException): The exception.
+        module_path (Path | None, optional): The user's problem module.
+
+    Returns:
+        str: The description for the user.
+    """
+    chain = _exception_chain(e)
+    exc, frames = e, []
+    if module_path is not None:
+        module_path = Path(module_path).resolve()
+        # The innermost exception that passed through the user's module is the one the user can fix
+        for candidate in reversed(chain):
+            candidate_frames = [
+                frame for frame in traceback.extract_tb(candidate.__traceback__) if _same_file(frame.filename, module_path)
+            ]
+            if isinstance(candidate, SyntaxError) and _same_file(candidate.filename, module_path) and candidate.lineno:
+                text = (candidate.text or "").strip()
+                candidate_frames.append(traceback.FrameSummary(str(module_path), candidate.lineno, "<module>", line=text))
+            if candidate_frames:
+                exc, frames = candidate, candidate_frames
+                break
+
+    # A SyntaxError's message ends with "(file, line n)", which the location below replaces
+    message = exc.msg if isinstance(exc, SyntaxError) and frames and exc.msg else str(exc)
+    message = message.strip()
+    description = f"{type(exc).__name__}: {message}" if message else type(exc).__name__
+    if not frames:
+        return description.rstrip(".")
+
+    separator = " " if description.endswith((".", "!", "?")) else ". "
+    last_frame = traceback.extract_tb(exc.__traceback__)[-1] if exc.__traceback__ else None
+    if isinstance(exc, SyntaxError) or last_frame is None or _same_file(last_frame.filename, module_path):
+        location = "In your problem module: "
+    else:
+        location = f"Raised in {_code_owner(last_frame.filename)}, called from your problem module: "
+
+    shown = frames[::-1][:MAX_USER_FRAMES_SHOWN]  # Innermost first
+    location += "; called from ".join(_describe_frame(frame) for frame in shown)
+    if len(frames) > MAX_USER_FRAMES_SHOWN:
+        location += "; ..."
+    return description + separator + location
 
 
 def _print_panel(body: Text, title: str, border_style: str) -> None:
@@ -578,14 +679,15 @@ def load_problem_from_module(problem_file_path: Path) -> Dict | None:
         module = importlib.util.module_from_spec(module_spec)
         module_spec.loader.exec_module(module)
 
-        if hasattr(module, "Problem"):
-            return module.Problem()
-        if hasattr(module, "problem"):
-            return module.problem()
-
-        raise AttributeError(f"The problem module '{problem_file_path.name}' does not contain Problem() or problem()")
+        problem_function = getattr(module, "Problem", None) or getattr(module, "problem", None)
+        if problem_function is None:
+            console.print(
+                f"{ICON_ERR} The problem module {problem_file_path.name} does not define a Problem() (or problem()) function.\n"
+            )
+            return None
+        return problem_function()
     except Exception as e:
-        src = get_exception_source(e)
+        src = get_exception_source(e, problem_file_path)
         console.print(f"{ICON_ERR} Error loading problem module {problem_file_path.name}: {src}\n")
         return None
     finally:
