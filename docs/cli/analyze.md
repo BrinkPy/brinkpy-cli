@@ -69,6 +69,24 @@ Replace `myprofile` with the name of a profile you created. See [Profile Managem
 	```
 	Both forms are valid. The expanded form is easier to read, and the combined form is faster to type.
 
+## Terminal Output
+
+The command first prints the profile it uses and a table of the command options of the run. With `brinkpy analyze default -s -r`:
+
+```text
+ℹ️  Using default profile. Specify a profile name to use a custom profile.
+🚀 Running reliability analysis with 'default' profile
++--------------+------------+------------+-----------+----------+-----------+--------------+
+| include_sorm | include_mc | mc_with_is | plot_rfad | plot_lsf | plot_pdfs | open_results |
++--------------+------------+------------+-----------+----------+-----------+--------------+
+| True         | False      | False      | True      | False    | False     | False        |
++--------------+------------+------------+-----------+----------+-----------+--------------+
+```
+
+Each column is one of the options above, named without the leading `--` and with underscores: `include_sorm` is `--include-sorm`, and so on. With `--mc-with-is` alone, the command prints `Warning: 'mc_with_is' is set to True but 'include_mc' is False. Enabling 'include_mc'.` and the table shows both as `True`.
+
+For the progress lines that follow, see [What the Terminal Shows](index.md#what-the-terminal-shows).
+
 ## Notes
 
 - Monte Carlo sample size is configured in the profile. See [Monte Carlo Settings](../profiles/profile-reference.md#monte-carlo-settings).

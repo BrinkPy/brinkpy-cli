@@ -73,6 +73,25 @@ Replace `myprofile` with the name of a profile you created. See [Profile Managem
 	```
 	Both forms are valid. The expanded form is easier to read, and the combined form is faster to type.
 
+## Terminal Output
+
+The command first prints the profile it uses and a table of the command options of the run. With `brinkpy simulate default -i -s`:
+
+```text
+ℹ️  Using default profile. Specify a profile name to use a custom profile.
+Warning: 'include_sorm' is set to True but 'include_form' is False. Enabling 'include_form'.
+🚀 Running Monte Carlo simulation with 'default' profile
++------------+--------------+--------------+----------+-----------+--------------+
+| mc_with_is | include_form | include_sorm | plot_lsf | plot_pdfs | open_results |
++------------+--------------+--------------+----------+-----------+--------------+
+| True       | True         | True         | False    | False     | False        |
++------------+--------------+--------------+----------+-----------+--------------+
+```
+
+Each column is one of the options above, named without the leading `--` and with underscores: `include_form` is `--include-form`, and so on. In this example `--include-sorm` needs FORM, so the command turned on `include_form` and printed a warning. The cases in the Notes below print a similar warning.
+
+For the progress lines that follow, see [What the Terminal Shows](index.md#what-the-terminal-shows).
+
 ## Notes
 
 - If `--include-sorm` is specified without `--include-form`, FORM is automatically enabled

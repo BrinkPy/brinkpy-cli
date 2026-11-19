@@ -53,6 +53,24 @@ Replace `myprofile` with the name of a profile you created. See [Profile Managem
 	```
 	Both forms are valid. The expanded form is easier to read, and the combined form is faster to type.
 
+## Terminal Output
+
+The command first prints the profile it uses and a table of the command options of the run. With `brinkpy design default -s`:
+
+```text
+ℹ️  Using default profile. Specify a profile name to use a custom profile.
+🚀 Running design optimization with 'default' profile
++----------+--------------+
+| use_sorm | open_results |
++----------+--------------+
+| True     | False        |
++----------+--------------+
+```
+
+`use_sorm` is `--use-sorm`, and `open_results` is `--open-results`. The same line and table appear for calibration with Inverse FORM or Inverse SORM and for objective optimization.
+
+For the progress lines that follow, see [What the Terminal Shows](index.md#what-the-terminal-shows). A design run without plots downloads only the Excel workbook.
+
 ## Design Problem Requirements
 
 Design optimization requires design-specific definitions in the selected problem module (the `DesignProblem` dictionary).

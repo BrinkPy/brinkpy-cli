@@ -60,6 +60,57 @@ brinkpy analyze default --include-sorm --plot-rfad
 
     The first time you run an analysis, Brinkpy asks you to sign in through your browser.
 
+## What the Terminal Shows
+
+The `analyze`, `design`, and `simulate` commands print the same kind of output while they run. This is a first analysis with the `default` profile and the packaged `AT68Problem.py`. The terminal draws the table with solid lines, shown here with `+`, `-`, and `|`:
+
+```text
+ℹ️  Using default profile. Specify a profile name to use a custom profile.
+🚀 Running reliability analysis with 'default' profile
++--------------+------------+------------+-----------+----------+-----------+--------------+
+| include_sorm | include_mc | mc_with_is | plot_rfad | plot_lsf | plot_pdfs | open_results |
++--------------+------------+------------+-----------+----------+-----------+--------------+
+| False        | False      | False      | False     | False    | False     | False        |
++--------------+------------+------------+-----------+----------+-----------+--------------+
+ℹ️  Please select a problem file from the popup menu
+
+✅ Successfully validated problem module: AT68Problem.py
+✅ Analyze run completed for problem: AT68 with Request ID: 4f7ab1a5f78f4943b060617d50469be5
+
+✅ Result files, a copy of the problem file, and the profile will be saved to:
+results/2026-11-18/20-57-18
+
+✅ Saved problem JSON: AT68-69be5.json
+⬇️  Downloading xlsx ...
+✅ Saved AT68-69be5.xlsx
+⬇️  Downloading pdf ...
+✅ Saved AT68-69be5.pdf
+⬇️  Downloading pickle ...
+✅ Saved AT68-69be5.pickle
+
+✅ Copied problem file to results: AT68-69be5.py
+✅ Saved configuration profile: profile-69be5.yaml
+
+ℹ️  Results are ready in: results/2026-11-18/20-57-18. Use --open-results or -o to open them
+automatically when running the command.
+```
+
+From top to bottom:
+
+1. **Profile notice.** Shown only with the `default` profile, as a reminder that you can name a profile of your own (see [Profiles](../profiles/index.md)).
+2. **Command and profile.** The command that runs and the profile it uses.
+3. **Options table.** The command options of this run: `True` for each option that is on, `False` for the others. These options come from the command line, not from the profile. When an option needs another one, Brinkpy turns the other one on, prints a warning above the table, and shows it as `True`. The columns depend on the command (see [Analyze](analyze.md#terminal-output), [Design](design.md#terminal-output), and [Simulate](simulate.md#terminal-output)).
+4. **Sign-in.** On your first run, Brinkpy asks you to sign in through your browser. Later, when your sign-in has expired, it prints `Refreshing access token...` and renews it.
+5. **Problem file.** A file picker opens in the `problems/` folder. If the folder has no problem files, or you close the picker without choosing one, Brinkpy stops with a message.
+6. **Validated problem module.** Before sending the problem, Brinkpy loads the module and calls its `Problem()` function. If that fails, the message points to the line of your module that caused the error, and nothing is sent.
+7. **Run completed.** The problem name and the request ID of the run. The last five characters of the request ID end the names of the result files. Include the request ID when you contact support about a run.
+8. **Results folder.** The timestamped folder in `results/` where the files are saved.
+9. **Saved and downloaded files.** The problem JSON file, then the files downloaded from Brinkpy: the Excel workbook, and the PDF and pickle files when the run produced figures. A run without figures, such as a design without plots, has no PDF or pickle file. See [Result Files](results-files.md).
+10. **Copied problem file and profile.** The copies of your problem module and of the profile, kept with the results.
+11. **Results are ready.** Shown when you didn't use `--open-results` (`-o`). With `-o`, Brinkpy opens the Excel and PDF files instead, and shows the plots until you press Enter.
+
+If the run fails, Brinkpy prints an error message instead of the lines after the failure and stops.
+
 ## Understanding Outputs
 
 Brinkpy saves run outputs in timestamped folders inside `results/` in your project folder.
