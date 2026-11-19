@@ -52,3 +52,27 @@
 .md-typeset__scrollwrap table:not([class]) {
   background-color: transparent;
 }
+/* Paper can't scroll, so in print a wide table fits the page width instead:
+   a smaller font, and long names and numbers wrap. Without this, the columns
+   past the page edge are cut off. */
+@media print {
+  .md-typeset__scrollwrap {
+    overflow: visible;
+    background: none;
+  }
+  .md-typeset__table {
+    display: block;
+  }
+  .md-typeset table:not([class]) {
+    display: table;
+    width: 100%;
+    font-size: 0.55rem;
+  }
+  .md-typeset table:not([class]) th,
+  .md-typeset table:not([class]) td {
+    min-width: 0; /* Material gives headers 5rem, too wide for 12 columns */
+    padding: 0.4em 0.5em;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}
