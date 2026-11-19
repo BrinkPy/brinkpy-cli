@@ -1,3 +1,7 @@
+---
+description: "Getting started with the Brinkpy command line: install Brinkpy, copy the example problems, run a first reliability analysis, and read what the terminal shows."
+---
+
 # CLI Basics for Brinkpy Users
 
 This page is for users who are new to command-line tools.

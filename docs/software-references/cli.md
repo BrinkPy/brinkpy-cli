@@ -1,3 +1,7 @@
+---
+description: "The Python packages that Brinkpy CLI depends on, with their citations, and how to cite Brinkpy itself through its Zenodo software record."
+---
+
 # CLI Dependencies and Citations
 
 This page lists the top-level Python packages that Brinkpy CLI depends on. Use it if you need dependency-level software attribution in papers, reports, or technical notes.

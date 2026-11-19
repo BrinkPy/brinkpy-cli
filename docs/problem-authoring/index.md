@@ -1,3 +1,8 @@
+---
+title: "Problem Definition"
+description: "How to write a Brinkpy problem module in Python: the limit state function, stochastic and deterministic variables, distributions, bounds, constraints, and plot settings."
+---
+
 # Problem Definition
 
 This section explains how to define a Brinkpy problem module (`*.py`) that can be selected from the `problems/` directory and solved by `analyze`, `design`, or `simulate` commands.

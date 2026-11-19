@@ -1,3 +1,8 @@
+---
+title: "CLI Command Overview"
+description: "An overview of the Brinkpy CLI commands: analyze for forward reliability assessment, design for factor calibration and RBDO, simulate for Monte Carlo, and plots."
+---
+
 # CLI Command Overview
 
 Brinkpy CLI provides three primary run commands:

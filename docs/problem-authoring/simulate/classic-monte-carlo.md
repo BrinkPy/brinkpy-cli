@@ -1,3 +1,8 @@
+---
+title: "Simulate Example: Chan2 (Classic Monte Carlo)"
+description: "A worked classic Monte Carlo example with the Chan2 problem: the brinkpy simulate run, the failure probability estimate, its coefficient of variation, and the plots."
+---
+
 # Simulate Example: Chan2 (Classic Monte Carlo)
 
 This page documents a simulate run in plain Monte Carlo mode (without importance sampling).

@@ -1,3 +1,8 @@
+---
+title: "Stochastic Variable Constraints Example: PipecorrProblem.py"
+description: "How to keep the design point search inside the valid range of a limit state function with constraints on the stochastic variables, shown on corroded pipelines."
+---
+
 # Stochastic Variable Constraints Example: `PipecorrProblem.py`
 
 This page shows how to keep the search for the design point inside the range where a limit state function is valid, with constraints on the stochastic variables. The example finds the model strength factor of corroded pipelines of two steel grades for a target reliability index, and then checks the reliability with Monte Carlo simulation.

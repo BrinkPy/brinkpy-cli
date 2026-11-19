@@ -1,3 +1,8 @@
+---
+title: "Analyze Example: Chan3 (SORM and Monte Carlo)"
+description: "A worked example with the Chan3 problem that compares the FORM, SORM, and Monte Carlo estimates of the failure probability from one brinkpy analyze run."
+---
+
 # Analyze Example: Chan3 (SORM + Monte Carlo)
 
 This page documents an `analyze` run with both SORM and Monte Carlo enabled (`-s -m`).

@@ -1,3 +1,8 @@
+---
+title: "Simulate: Monte Carlo Simulation"
+description: "Run brinkpy simulate to estimate the failure probability, including rare events, with Monte Carlo simulation, optional importance sampling, and FORM and SORM for comparison."
+---
+
 # Simulate: Monte Carlo Simulation
 
 Run Monte Carlo simulation to estimate the failure probability, including rare events. Importance sampling is optional, and the First-Order and Second-Order Reliability Methods (FORM and SORM) can be included for comparison.

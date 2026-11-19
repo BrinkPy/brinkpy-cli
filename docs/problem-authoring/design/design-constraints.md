@@ -1,3 +1,8 @@
+---
+title: "Design Constraints Example: CantileverBeamProblem.py"
+description: "A design optimization of a cantilever beam with two failure modes, first as Hu and Du (2019) define it and then with a constraint on the design variables."
+---
+
 # Design Constraints Example: `CantileverBeamProblem.py`
 
 This page shows a design optimization with two failure modes in one limit state function, and then adds a constraint on the design variables. The example finds the cross section of a cantilever beam with the smallest volume for a target probability of failure, first as Hu and Du (2019) define the problem and then with the height at least twice the width. A Monte Carlo run then checks the probability of failure of the optimal design.

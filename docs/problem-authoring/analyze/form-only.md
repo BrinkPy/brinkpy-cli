@@ -1,3 +1,8 @@
+---
+title: "Analyze Example: AT610 (FORM Only)"
+description: "A worked first-order reliability method (FORM) example: the AT610 problem file, the brinkpy analyze run, and the reliability index and failure probability it reports."
+---
+
 # Analyze Example: AT610 (FORM Only)
 
 This page documents a basic `analyze` run without SORM or Monte Carlo.

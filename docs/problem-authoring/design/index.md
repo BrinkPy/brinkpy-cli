@@ -1,3 +1,8 @@
+---
+title: "Design Problem Definition"
+description: "How to define a Brinkpy design problem, for partial factor calibration with inverse FORM or inverse SORM, or for reliability-based design optimization with an objective."
+---
+
 # Design Problem Definition
 
 This section covers problem definition for the `design` command. Design problems extend the base problem dictionary with `DesignProblem` keys and can follow two distinct workflows:

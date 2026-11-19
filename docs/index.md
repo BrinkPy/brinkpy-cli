@@ -1,3 +1,8 @@
+---
+title: "FORM, SORM, RBDO, and Monte Carlo Simulation in Python"
+description: "Brinkpy CLI is a Python command-line tool for reliability analysis with FORM and SORM, reliability-based design optimization (RBDO), and Monte Carlo simulation."
+---
+
 # Brinkpy CLI: FORM, SORM, RBDO, and Monte Carlo Simulation in Python
 
 Brinkpy CLI is a Python command-line tool for reliability analysis, reliability-based design optimization, and simulation workflows using profile-based configuration.

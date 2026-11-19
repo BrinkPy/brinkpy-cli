@@ -1,3 +1,8 @@
+---
+title: "Software and Library References"
+description: "The Python packages that Brinkpy CLI and the Brinkpy API depend on, listed for software attribution and citation."
+---
+
 # Software and Library References
 
 This section covers the Python packages that Brinkpy CLI and its backing API depend on. The two pages below are kept separate because they serve different purposes.

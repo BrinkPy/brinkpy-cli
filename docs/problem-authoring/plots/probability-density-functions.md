@@ -1,3 +1,8 @@
+---
+title: "Plot Example: AT68 (Probability Density Functions)"
+description: "How to plot the probability density function of each stochastic variable with the --plot-pdfs flag of brinkpy analyze or simulate, and how to read the plots."
+---
+
 # Plot Example: AT68 (Probability Density Functions)
 
 This page shows how to plot the probability density function of each stochastic variable and how to read the plots. Brinkpy has no separate plotting command, so the plots come from an `analyze` or `simulate` run with the `--plot-pdfs` (`-p`) flag. This page covers only the plots. For the reliability results of an `analyze` run, see [FORM Only](../analyze/form-only.md).

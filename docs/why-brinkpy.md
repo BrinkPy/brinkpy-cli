@@ -1,3 +1,7 @@
+---
+description: "Why use Brinkpy for reliability analysis: the checks that run on every analysis, many methods from one problem file, verification against published results, and its limitations."
+---
+
 # Why Use Brinkpy
 
 Every result Brinkpy produces can, in principle, be reproduced with general scientific libraries and your own code. A first-order reliability method (FORM) analysis of a simple problem takes a few dozen lines with SciPy. Scripts like that are easier than ever to write, including with AI assistants.

@@ -1,4 +1,5 @@
 site_name: Brinkpy CLI
+site_description: Brinkpy CLI is a Python command-line tool for reliability analysis with FORM and SORM, reliability-based design optimization (RBDO), and Monte Carlo simulation.
 site_url: !ENV [SITE_URL, https://brinkpy.app]
 repo_url: https://github.com/BrinkPy/brinkpy-cli
 repo_name: !ENV [BRINKPY_DOCS_REPO_NAME, GitHub]

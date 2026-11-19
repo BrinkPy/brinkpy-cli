@@ -1,3 +1,8 @@
+---
+title: "Random Design Parameters Example: Ji1Problem.py"
+description: "How to model a design parameter that is also a random variable, such as a dimension whose mean is chosen by the designer while its scatter stays random."
+---
+
 # Random Design Parameters Example: `Ji1Problem.py`
 
 This page shows how to model a design problem where the design parameter is also a random variable. The usual case is a variable whose mean is chosen by the designer while its scatter stays random, for example a dimension or a material property with a fixed coefficient of variation.

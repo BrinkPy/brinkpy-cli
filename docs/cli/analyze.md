@@ -1,3 +1,8 @@
+---
+title: "Analyze: Forward Reliability Assessment"
+description: "Run a forward reliability analysis with brinkpy analyze: the failure probability, reliability index, and most probable point from FORM, with optional SORM and Monte Carlo."
+---
+
 # Analyze: Forward Reliability Assessment
 
 Run forward reliability analysis to estimate the failure probability, the reliability index (β), and the most probable point (MPP). The First-Order Reliability Method (FORM) always runs. The Second-Order Reliability Method (SORM) and Monte Carlo simulation are optional.

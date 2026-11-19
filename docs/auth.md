@@ -1,3 +1,8 @@
+---
+title: "Authentication"
+description: "How Brinkpy CLI signs you in to the Brinkpy API through your browser with Auth0, how to check your sign-in status, and how to fix sign-in problems."
+---
+
 # Authentication
 
 Brinkpy CLI requires authentication with the Brinkpy API to run analyses, design workflows, and simulations.

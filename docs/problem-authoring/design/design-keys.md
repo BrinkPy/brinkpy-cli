@@ -1,3 +1,8 @@
+---
+title: "DesignProblem Keys Reference"
+description: "A reference of the DesignProblem keys of a Brinkpy design problem: the target reliability, the design variables, the design objective function, and design constraints."
+---
+
 # `DesignProblem` Keys Reference
 
 This page documents the design-specific dictionary keys, which a design problem uses in addition to the common problem keys described in [Problem Definition](../index.md). The Required column of each table shows which keys must be defined.

@@ -1,3 +1,7 @@
+---
+description: "A reference of every option in a Brinkpy YAML profile: the analysis, design, and simulation settings, plotting options, and reporting settings."
+---
+
 # Profile Options Reference
 
 This page provides a complete reference for all options available in YAML profile files. Profiles control configuration for analysis, design, and simulation runs, including plotting options and reporting settings.

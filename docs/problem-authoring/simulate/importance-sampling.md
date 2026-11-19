@@ -1,3 +1,8 @@
+---
+title: "Simulate Example: AU2 (Importance Sampling)"
+description: "A worked importance sampling example with the AU2 problem: a brinkpy simulate run that estimates a small failure probability around the design point."
+---
+
 # Simulate Example: AU2 (Importance Sampling)
 
 This page documents a simulate run with importance sampling enabled (`-i`).

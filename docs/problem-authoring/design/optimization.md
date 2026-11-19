@@ -1,3 +1,8 @@
+---
+title: "Objective Optimization Example: Sorensen81Problem.py"
+description: "A worked reliability-based design optimization example that minimizes a design objective function subject to a target reliability index with brinkpy design."
+---
+
 # Objective Optimization Example: `Sorensen81Problem.py`
 
 This page documents a full `design` run where the objective function is minimized subject to a target reliability constraint.

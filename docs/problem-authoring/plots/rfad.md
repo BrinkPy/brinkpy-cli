@@ -1,3 +1,8 @@
+---
+title: "Plot Example: AT68 (Reliability-Based Failure Assessment Diagram)"
+description: "How to plot a reliability-based failure assessment diagram (RFAD), which shows how the reliability changes with the parameters of two stochastic variables."
+---
+
 # Plot Example: AT68 (Reliability-Based Failure Assessment Diagram)
 
 This page shows how to plot a reliability-based failure assessment diagram (RFAD) and how to read it. An RFAD shows how the reliability changes when the parameters of two stochastic variables change, for example the mean load and the mean resistance. Brinkpy has no separate plotting command, so the plots come from an `analyze` run with the `--plot-rfad` (`-r`) flag. This page covers only the plots. For the reliability results of an `analyze` run, see [FORM Only](../analyze/form-only.md).

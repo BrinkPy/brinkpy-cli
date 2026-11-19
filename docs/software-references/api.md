@@ -1,3 +1,7 @@
+---
+description: "The Python packages used by the Brinkpy API, with their published citations, listed for software attribution and citation."
+---
+
 # API Library Credits
 
 This page lists the top-level Python packages used by the Brinkpy API. These are documented for software attribution and citation purposes only — they are not installation requirements for the CLI.

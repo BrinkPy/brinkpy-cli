@@ -1,3 +1,7 @@
+---
+description: "The meaning of each column in the Results worksheet of the Brinkpy Excel result file, for FORM, SORM, Monte Carlo, and design results."
+---
+
 # Results Tables Reference
 
 This page explains the columns of the tables in the `Results` worksheet of the Excel result file. The worked example pages in this section show these tables for specific runs and link here for the column meanings.

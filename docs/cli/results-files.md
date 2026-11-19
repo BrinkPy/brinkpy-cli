@@ -1,3 +1,7 @@
+---
+description: "Where Brinkpy saves the results of each run and what each file contains: the Excel workbook, the problem JSON file, the PDF of the plots, and the pickle file."
+---
+
 # Result Files
 
 Every run of `analyze`, `design`, or `simulate` saves its output files in a new folder inside `results/` in your project folder.

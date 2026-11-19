@@ -1,3 +1,7 @@
+---
+description: "The example problems packaged with Brinkpy CLI for reliability analysis, design, and Monte Carlo simulation, and how to copy them into your project folder to use as templates."
+---
+
 # Packaged Example Problems
 
 Brinkpy CLI includes packaged example problems to help you get started with reliability analysis, design optimization, and Monte Carlo simulation.

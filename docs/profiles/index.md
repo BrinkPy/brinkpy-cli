@@ -1,3 +1,7 @@
+---
+description: "How to create, edit, view, validate, copy, rename, and delete Brinkpy profiles, the YAML files in your project folder that hold the run options."
+---
+
 # Profile Management
 
 Profiles are YAML configuration files that control run options for analysis, design, and simulation. The `default` profile is built-in and cannot be modified.

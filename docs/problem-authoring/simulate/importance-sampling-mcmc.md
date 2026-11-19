@@ -1,3 +1,8 @@
+---
+title: "Simulate Example: Dai 1 (MCMC Importance Sampling)"
+description: "Importance sampling with a proposal built by Markov chain Monte Carlo (MCMC), on a problem whose failure region has four parts, and how to read the MCMC diagnostics."
+---
+
 # Simulate Example: Dai 1 (MCMC Importance Sampling)
 
 This page documents a simulate run with importance sampling (`-i`) where the proposal distribution is built with Markov chain Monte Carlo (MCMC). The failure region of this problem has four separate parts, which shows how to read the MCMC diagnostics when the chains sample different parts. A short section at the end runs the `AU2` problem from the [Importance Sampling](importance-sampling.md) example, whose failure region has parts at the same distance from the origin.

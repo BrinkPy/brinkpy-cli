@@ -1,3 +1,8 @@
+---
+title: "Design: Factor Calibration and Reliability-Based Design Optimization"
+description: "Run brinkpy design to calibrate partial factors with inverse FORM or inverse SORM, or to minimize an objective with reliability-based design optimization (RBDO)."
+---
+
 # Design: Factor Calibration and Reliability-Based Design Optimization
 
 Run design workflows that support two distinct modes depending on the problem definition: code calibration and partial factor derivation using Inverse FORM or Inverse SORM when no objective function is defined, or reliability-based design optimization (RBDO) when an objective function is defined to minimize cost, weight, or another performance metric while satisfying reliability constraints.

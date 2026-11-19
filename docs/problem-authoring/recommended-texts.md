@@ -1,3 +1,7 @@
+---
+description: "Recommended textbooks and references on structural reliability, the first-order and second-order reliability methods, and probabilistic analysis."
+---
+
 # Recommended Texts and References
 
 This page lists commonly used references for reliability methods and probabilistic analysis.

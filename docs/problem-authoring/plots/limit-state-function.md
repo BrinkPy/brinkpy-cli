@@ -1,3 +1,8 @@
+---
+title: "Plot Example: AT68 (Limit State Function)"
+description: "How to plot a limit state function over two stochastic variables with the --plot-lsf flag of brinkpy analyze or simulate, and how to read the plots."
+---
+
 # Plot Example: AT68 (Limit State Function)
 
 This page shows how to plot the limit state function over two stochastic variables and how to read the plots. Brinkpy has no separate plotting command, so the plots come from an `analyze` or `simulate` run with the `--plot-lsf` (`-l`) flag. This page covers only the plots. For the reliability results of an `analyze` run, see [FORM Only](../analyze/form-only.md).
