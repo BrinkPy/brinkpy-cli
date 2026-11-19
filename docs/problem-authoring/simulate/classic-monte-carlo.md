@@ -51,7 +51,7 @@ This example uses the `default` profile. Monte Carlo behavior can be adjusted in
 - Correlation: full 5 × 5 matrix defined using the `cor` key (see note below)
 - Deterministic variables: `B = 5.0`, `L = 25.0`, `D = 1.8`, `h = 2.5`
 - `LSFreturnsGradient: False`, `LSFreturnsHessian: False`, `LSFreturnsLandR: True`
-- Limit state returns load ($P_v / B'$) and resistance (bearing-capacity formula)
+- Limit state returns load (`Pv / Bp`, where `Bp = B - 2 * eb` is the effective width) and resistance (bearing-capacity formula)
 
 !!! note "Using `cor` vs `cor_list`"
     `Chan2Problem.py` specifies the correlation matrix as a full **n × n list of lists** under the `cor` key.

@@ -34,9 +34,6 @@ theme:
     - search.highlight
     - content.code.copy
     - toc.follow
-extra:
-  math:
-    provider: mathjax
 nav:
   - Home: index.md
   - Why Use Brinkpy: why-brinkpy.md
@@ -86,7 +83,6 @@ markdown_extensions:
   - md_in_html
   - pymdownx.details
   - pymdownx.superfences
-  - pymdownx.arithmatex
   - pymdownx.highlight
   - pymdownx.inlinehilite
   - pymdownx.tabbed:
