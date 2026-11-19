@@ -13,12 +13,12 @@ Problem module:
 
 Recorded result set:
 
-- `results/2026-11-18/15-23-33/Dai_1-16964.xlsx`
-- `results/2026-11-18/15-23-33/Dai_1-16964.json`
-- `results/2026-11-18/15-23-33/Dai_1-16964.py`
-- `results/2026-11-18/15-23-33/Dai_1-16964.pickle`
-- `results/2026-11-18/15-23-33/Dai_1-16964.pdf`
-- `results/2026-11-18/15-23-33/profile-16964.yaml`
+- `results/2026-11-18/19-28-40/Dai_1-c9a73.xlsx`
+- `results/2026-11-18/19-28-40/Dai_1-c9a73.json`
+- `results/2026-11-18/19-28-40/Dai_1-c9a73.py`
+- `results/2026-11-18/19-28-40/Dai_1-c9a73.pickle`
+- `results/2026-11-18/19-28-40/Dai_1-c9a73.pdf`
+- `results/2026-11-18/19-28-40/profile-c9a73.yaml`
 
 Profile and run mode from saved profile:
 
@@ -91,15 +91,15 @@ The problem also defines the `ISplot` key, which turns on the importance samplin
 
 ## Extracted Results Worksheet Tables
 
-The tables below are transcribed from the `Results` worksheet in `Dai_1-16964.xlsx`. For the meaning of each column, see [Results Tables Reference](../results-tables.md#monte-carlo).
+The tables below are transcribed from the `Results` worksheet in `Dai_1-c9a73.xlsx`. For the meaning of each column, see [Results Tables Reference](../results-tables.md#monte-carlo).
 
 ### Header Information
 
 | Field | Value |
 |---|---|
 | Problem | `Dai 1` |
-| Request ID | `96a8028f21914f9ab5bbcc5610216964` |
-| Run time | `00 min 02.97 sec` |
+| Request ID | `522419e5262046348c20e5cf39dc9a73` |
+| Run time | `00 min 03.10 sec` |
 
 ### Stochastic Variables Definition
 
@@ -112,19 +112,19 @@ The tables below are transcribed from the `Results` worksheet in `Dai_1-16964.xl
 
 | beta | pf | cv | max_cv | size | %_removed | cycles | auto_size | mc_with_is | method | bandwidth | chains | length | burn_in | thinning |
 |---:|---:|---:|---:|---:|---:|---:|---|---|---|---:|---:|---:|---:|---:|
-| 2.8411 | 2.248e−3 | 0.02479 | 0.05 | 6,000 | 0 | 3 | True | True | mcmc+kde | 0.2510 | 8 | 500 | 200 | 3 |
+| 2.8469 | 2.207e−3 | 0.01676 | 0.05 | 6,000 | 0 | 3 | True | True | mcmc+kde | 0.2510 | 8 | 500 | 200 | 3 |
 
 The `method` value `mcmc+kde` combines the sampling method (`is_method`) and the fitting method (`is_mcmc_fit_method`). The columns `chains`, `length`, `burn_in`, and `thinning` appear only for MCMC runs.
 
 ### Monte Carlo Variable Statistics and Correlations (Proposal Samples)
 
 !!! warning "Statistics describe the proposal samples"
-    As with any importance sampling run, these statistics describe the samples drawn from the proposal distribution, not the original input distributions. The histograms in **Figures 7 and 8** also show the proposal samples.
+    As with any importance sampling run, these statistics describe the samples drawn from the proposal distribution, not the original input distributions. The histograms in **Figures 9 and 10** also show the proposal samples.
 
 | var_name | mean | std | %_oob | cor_x | X1 | X2 |
 |---|---:|---:|---:|---|---:|---:|
-| X1 | −0.5700 | 2.4356 | 0 | X1 | 1.0000 | −0.3394 |
-| X2 | 0.03108 | 2.5057 | 0 | X2 | −0.3394 | 1.0000 |
+| X1 | −0.1289 | 2.4131 | 0 | X1 | 1.0000 | −0.1085 |
+| X2 | −0.03760 | 2.5136 | 0 | X2 | −0.1085 | 1.0000 |
 
 ### MCMC Diagnostics
 
@@ -132,85 +132,97 @@ This table appears in the worksheet under **Importance sampling method-specific 
 
 | mean | sd | eti89_lb | eti89_ub | ess_bulk | ess_tail | r_hat | mcse_mean | mcse_sd |
 |---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| 3.5171 | 0.2810 | 3.0627 | 3.9295 | 14.16 | 42.06 | 1.550 | 0.08175 | 0.01749 |
+| 3.4590 | 0.2876 | 3.0481 | 3.9170 | 13.81 | 70.51 | 1.583 | 0.08392 | 0.005841 |
 
 For what each column means and how to use it, see [MCMC Diagnostics](../results-tables.md#mcmc-diagnostics).
 
 ### Notes Reported by Brinkpy
 
 1. Validation: Stochastic variables definition and limit state function validation required 2 function calls.
-2. Monte Carlo: Creation of importance sampling proposal distribution required 13,671 calls to the limit state function.
+2. Monte Carlo: Creation of importance sampling proposal distribution required 13,703 calls to the limit state function.
 3. Monte Carlo: Completed 3 cycles with `2.00e+03` samples per cycle.
 4. Monte Carlo: Load and resistance histograms are not available since the limit state function does not return load and resistance values.
 
 ## Interpretation Snapshot
 
-- The probability of failure is `pf ≈ 2.25 × 10⁻³` (`beta ≈ 2.84`), and `cv = 0.0248` is well below `max_cv = 0.05`. A classic Monte Carlo simulation of the same function with 10⁸ samples gives `pf ≈ 2.22 × 10⁻³`, within the precision that `cv` reports.
-- `r_hat = 1.550` is far above the 1.01 often recommended in the MCMC literature, and `ess_bulk` is only 14. Both come from the four parts of the failure region, which lie at two distances from the origin (**Figure 5**). Chains 3, 4, and 7 sample the curved parts and stay near 3. Chains 0, 1, 2, 5, and 6 sample the straight bands and stay near 3.5 (**Figures 1 to 3**). In the rank plot of **Figure 4**, chains 3, 4, and 7 hold all the low ranks and the other chains all the high ranks.
+- The probability of failure is `pf ≈ 2.21 × 10⁻³` (`beta ≈ 2.85`), and `cv = 0.0168` is well below `max_cv = 0.05`. A classic Monte Carlo simulation of the same function with 10⁸ samples gives `pf ≈ 2.22 × 10⁻³`, within the precision that `cv` reports.
+- **Figure 5** shows where each chain went. Every part of the failure region has two chains: chains 2 and 4 in the lower-left curved part, chains 3 and 5 in the upper-right curved part, chains 0 and 6 in the lower-right band, and chains 1 and 7 in the upper-left band.
+- `r_hat = 1.583` is far above the 1.01 often recommended in the MCMC literature, and `ess_bulk` is only 14. Both come from the two distances: the chains in the curved parts stay near 3, and those in the bands near 3.5 (**Figures 1 to 3**). In the rank plot of **Figure 4**, chains 2 to 5 hold all the low ranks and the other chains all the high ranks.
 - Each chain mixes well within its part: its trace moves around a stable level without trends, and its autocorrelation decays quickly (**Figure 4**). Longer chains would not lower `r_hat`, because the chains would still sample different parts.
 - A high `r_hat` from separate parts does not make the result wrong. The MCMC samples only build the proposal distribution, and `cv` measures the precision of the probability of failure (see [MCMC Diagnostics](../results-tables.md#mcmc-diagnostics)).
-- The proposal distribution weights the samples of every chain equally. The curved parts hold about 80% of the probability of failure, but only three of the eight chains sampled them, so the proposal places most of its samples in the straight bands. The importance sampling weights correct for this, at some cost in precision.
-- **Figures 5 and 6** show that the chains found all four parts of the failure region.
+- The proposal distribution weights the samples of every chain equally, so each part gets a share of the proposal in proportion to its number of chains. The curved parts hold about 80% of the probability of failure, and here they have half of the chains. In runs where fewer chains reach them, the proposal places fewer samples there and `cv` tends to be larger. The importance sampling weights keep the estimate correct either way.
 
 ## Generated Figures
 
-The PDF result file for this run is saved as `results/2026-11-18/15-23-33/Dai_1-16964.pdf`.
+The PDF result file for this run is saved as `results/2026-11-18/19-28-40/Dai_1-c9a73.pdf`.
 
 ### Figures 1 to 3: Trace of Sample Norms in u-space
 
 Each row shows one chain. The left plot traces the norm of the chain's samples at each MCMC step, with the burn-in steps shaded gray. The right plot shows the distribution of the norms after burn-in. Well-mixed chains move up and down around a stable level, without long trends.
 
-![Dai 1 MCMC trace plots for chains 0 to 2](../images/dai1-16964-01-mcmc-trace-chains-0-2.png)
+![Dai 1 MCMC trace plots for chains 0 to 2](../images/dai1-c9a73-01-mcmc-trace-chains-0-2.png)
 
-![Dai 1 MCMC trace plots for chains 3 to 5](../images/dai1-16964-02-mcmc-trace-chains-3-5.png)
+![Dai 1 MCMC trace plots for chains 3 to 5](../images/dai1-c9a73-02-mcmc-trace-chains-3-5.png)
 
-![Dai 1 MCMC trace plots for chains 6 and 7](../images/dai1-16964-03-mcmc-trace-chains-6-7.png)
+![Dai 1 MCMC trace plots for chains 6 and 7](../images/dai1-c9a73-03-mcmc-trace-chains-6-7.png)
 
 ### Figure 4: Chain Convergence Diagnostics
 
 The rank plot shows, for each chain, how its samples rank among the samples of all chains. When the chains sample the same distribution, the bars of every chain are roughly level. The autocorrelation plot shows how strongly each sample depends on earlier samples in the same chain. Faster decay toward zero means more independent information per sample, which gives a larger effective sample size (`ess_bulk`, `ess_tail`).
 
-![Dai 1 MCMC chain convergence diagnostics](../images/dai1-16964-04-mcmc-convergence.png)
+![Dai 1 MCMC chain convergence diagnostics](../images/dai1-c9a73-04-mcmc-convergence.png)
 
-### Figure 5: IS Proposal Diagnostics (u-space)
+### Figure 5: MCMC Samples by Chain (u-space)
 
-The proposal samples in standard normal space, colored by the proposal probability density. The red curve is the limit state surface.
+The MCMC samples kept after burn-in and thinning, in standard normal space, with one color per chain (the same colors as in Figure 4). The red curve is the limit state surface, and the dash-dot curves are contours of the standard normal probability density.
 
-![Dai 1 MCMC-KDE proposal diagnostics u-space](../images/dai1-16964-05-is-proposal-u-space.png)
+![Dai 1 MCMC samples by chain u-space](../images/dai1-c9a73-05-mcmc-chains-u-space.png)
 
-### Figure 6: IS Proposal Diagnostics (x-space)
+### Figure 6: MCMC Samples by Chain (x-space)
 
-The same proposal samples in the original variable space (`X1`, `X2`). Because both variables are standard normal, this figure matches Figure 5.
+The same samples in the original variable space (`X1`, `X2`). Because both variables are standard normal, this figure matches Figure 5.
 
-![Dai 1 MCMC-KDE proposal diagnostics x-space](../images/dai1-16964-06-is-proposal-x-space.png)
+![Dai 1 MCMC samples by chain x-space](../images/dai1-c9a73-06-mcmc-chains-x-space.png)
 
-### Figure 7: IS Histogram — `X1`
+### Figure 7: IS Proposal Diagnostics (u-space)
 
-![Dai 1 MCMC IS histogram for X1](../images/dai1-16964-07-X1-histogram.png)
+The same MCMC samples, colored by the density of the proposal distribution fitted to them.
 
-### Figure 8: IS Histogram — `X2`
+![Dai 1 MCMC-KDE proposal diagnostics u-space](../images/dai1-c9a73-07-is-proposal-u-space.png)
 
-![Dai 1 MCMC IS histogram for X2](../images/dai1-16964-08-X2-histogram.png)
+### Figure 8: IS Proposal Diagnostics (x-space)
 
-### Figure 9: Limit State Function Histogram (Importance Sampling)
+The same as Figure 7, in the original variable space.
 
-![Dai 1 MCMC limit state function histogram with IS](../images/dai1-16964-09-lsf-histogram.png)
+![Dai 1 MCMC-KDE proposal diagnostics x-space](../images/dai1-c9a73-08-is-proposal-x-space.png)
+
+### Figure 9: IS Histogram — `X1`
+
+![Dai 1 MCMC IS histogram for X1](../images/dai1-c9a73-09-X1-histogram.png)
+
+### Figure 10: IS Histogram — `X2`
+
+![Dai 1 MCMC IS histogram for X2](../images/dai1-c9a73-10-X2-histogram.png)
+
+### Figure 11: Limit State Function Histogram (Importance Sampling)
+
+![Dai 1 MCMC limit state function histogram with IS](../images/dai1-c9a73-11-lsf-histogram.png)
 
 ## Parts at the Same Distance: AU2
 
-The `AU2` problem from the [Importance Sampling](importance-sampling.md) example shows the opposite case. Its failure region has three parts, all about 5 from the origin (**Figure 10**). A run with `is_method: mcmc` and the default MCMC settings (`results/2026-11-02/18-50-21/AU2-b5cb6.xlsx`) gave:
+The `AU2` problem from the [Importance Sampling](importance-sampling.md) example shows the opposite case. Its failure region has three parts, all about 5 from the origin (**Figure 12**). A run with `is_method: mcmc` and the default MCMC settings (`results/2026-11-18/19-28-30/AU2-57473.xlsx`) gave:
 
 | beta | pf | cv | r_hat | ess_bulk | ess_tail |
 |---:|---:|---:|---:|---:|---:|
-| 4.7741 | 9.026e−7 | 0.01948 | 1.024 | 170.4 | 426.4 |
+| 4.7876 | 8.439e−7 | 0.02441 | 1.023 | 410.9 | 660.8 |
 
-- Chains in different parts have similar norms, so the parts don't raise `r_hat`. The value of 1.024 comes from one chain whose norms stayed higher for a few hundred steps after burn-in. To bring it down, increase `is_mcmc_chain_length`, `is_mcmc_burnin`, or `is_mcmc_chains` in the profile and run again.
-- For the same reason, `r_hat` can't show whether the chains found every part. **Figure 10** shows that they did: the arc along the top (component 1) and the two branches in the upper-right and lower-left corners (component 2).
-- The KDE run on the [Importance Sampling](importance-sampling.md) page gives nearly the same probability of failure, `9.201e−7`. Building the proposal with MCMC took 8,660 limit state function calls, about 13 times fewer than with KDE. That matters most when each call is expensive.
+- **Figure 12** shows that the chains split over the three parts: chains 0 and 3 in the lower-left corner, chains 1 and 4 on the arc along the top (component 1), and chain 2 on the arc and in the upper-right corner (component 2). The arc and the upper-right branch meet, so a chain can move from one to the other, as chain 2 did.
+- `r_hat = 1.023` is still close to 1. Chains in different parts have similar norms, so the parts don't raise it, and `r_hat` alone can't show whether the chains found every part. **Figure 12** shows that.
+- The KDE run on the [Importance Sampling](importance-sampling.md) page gives a similar probability of failure, `9.201e−7`, with `cv = 0.031`. Building the proposal with MCMC took 8,587 limit state function calls, about 13 times fewer than with KDE. That matters most when each call is expensive.
 
 !!! note "Comparison with the paper"
-    Au and Beck (1999) build the proposal distribution with MCMC. Brinkpy's estimate, `pf = 9.026e−7`, is larger than the `6.97e−7` published in the paper. Brinkpy's MCMC chains find a part of the failure region that the published solution does not include (see **Figure 10**). When the variables are bounded to the region used in the paper, Brinkpy's estimate matches the published one within the variation expected from random sampling. See [Verification](../../why-brinkpy.md#verification).
+    Au and Beck (1999) build the proposal distribution with MCMC. Brinkpy's estimate, `pf = 8.439e−7`, is larger than the `6.97e−7` published in the paper. Brinkpy's MCMC chains find a part of the failure region that the published solution does not include (see **Figure 12**). When the variables are bounded to the region used in the paper, Brinkpy's estimate matches the published one within the variation expected from random sampling. See [Verification](../../why-brinkpy.md#verification).
 
-### Figure 10: AU2 IS Proposal Diagnostics (u-space)
+### Figure 12: AU2 MCMC Samples by Chain (u-space)
 
-![AU2 MCMC-KDE proposal diagnostics u-space](../images/au2-b5cb6-04-is-proposal-u-space.png)
+![AU2 MCMC samples by chain u-space](../images/au2-57473-01-mcmc-chains-u-space.png)

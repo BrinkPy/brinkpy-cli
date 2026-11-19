@@ -605,7 +605,7 @@ Here `S[0]` is Y, `S[1]` is Z, and `S[2]` is M. As Brinkpy sweeps `mean(Y)` and 
 
 ### `ISplot`
 
-`ISplot` defines the axis variables and plot extents used for importance sampling (IS) proposal diagnostics when running `brinkpy simulate -i` or `brinkpy analyze -i` (in `analyze`, `-i` automatically enables Monte Carlo). If `ISplot` is omitted, IS proposal diagnostic figures are not generated.
+`ISplot` defines the axis variables and plot extents used for importance sampling (IS) proposal diagnostics when running `brinkpy simulate -i` or `brinkpy analyze -i` (in `analyze`, `-i` automatically enables Monte Carlo). With `is_method: mcmc`, it also sets the axes of the **MCMC: Samples by Chain** figures, which show the samples of each chain in a different color. If `ISplot` is omitted, none of these figures are generated.
 
 | Key | Required if `ISplot` exists | Meaning |
 |---|---|---|

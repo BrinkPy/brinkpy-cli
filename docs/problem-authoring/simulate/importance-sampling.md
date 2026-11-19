@@ -71,7 +71,7 @@ This example uses the `default` profile. Importance sampling and Monte Carlo beh
 - `ISplot` key defined — required for IS diagnostics plots
 
 !!! note "`ISplot` key"
-    The `ISplot` key works like `LSFplot` and `RFADplot`: it specifies the axis variables and plot extents used to render the IS proposal distribution diagnostics. When running with `-i`, Brinkpy uses `ISplot` to produce the **IS Proposal Diagnostics** figures (both u-space and x-space views). If `ISplot` is absent, the diagnostics plots will not be generated.
+    The `ISplot` key works like `LSFplot` and `RFADplot`: it specifies the axis variables and plot extents used to render the IS proposal distribution diagnostics. When running with `-i`, Brinkpy uses `ISplot` to produce the **IS Proposal Diagnostics** figures (both u-space and x-space views), and with `is_method: mcmc` also the **MCMC: Samples by Chain** figures. If `ISplot` is absent, the diagnostics plots will not be generated.
     
     **Important:** If samples from the proposal distribution fall outside the specified plot limits, the axis ranges will be automatically expanded to include all samples. This ensures the entire sampled region is visible in the diagnostics plots.
 
@@ -153,13 +153,13 @@ The PDF result file for this run is saved as `results/2026-11-02/18-45-31/AU2-15
 
 ### Figure 1: IS Proposal Diagnostics (u-space)
 
-The KDE proposal distribution in standard-normal space. Contour lines show the proposal PDF; the failure region boundary is visible.
+The samples in the failure region that the KDE proposal distribution was fitted to, in standard normal space, colored by the proposal density. The red curve is the limit state surface, and the dash-dot curves are contours of the standard normal probability density.
 
 ![AU2 IS proposal diagnostics u-space](../images/au2-15fc9-01-is-proposal-u-space.png)
 
 ### Figure 2: IS Proposal Diagnostics (x-space)
 
-The same proposal distribution plotted in original variable space (`T1`, `T2`).
+The same samples in the original variable space (`T1`, `T2`).
 
 ![AU2 IS proposal diagnostics x-space](../images/au2-15fc9-02-is-proposal-x-space.png)
 
