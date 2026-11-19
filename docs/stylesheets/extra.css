@@ -53,8 +53,11 @@
   background-color: transparent;
 }
 /* Paper can't scroll, so in print a wide table fits the page width instead:
-   a smaller font, and long names and numbers wrap. Without this, the columns
-   past the page edge are cut off. */
+   a smaller font, and cells wrap between words. Without this, the columns
+   past the page edge are cut off. Only tables with 8 or more columns (results
+   tables with short cells) may break inside names and numbers; in tables with
+   a long description column, that would squeeze the other columns to a few
+   letters. */
 @media print {
   .md-typeset__scrollwrap {
     overflow: visible;
@@ -73,6 +76,14 @@
     min-width: 0; /* Material gives headers 5rem, too wide for 12 columns */
     padding: 0.4em 0.5em;
     white-space: normal;
+    overflow-wrap: break-word;
+  }
+  /* Material lets inline code break anywhere, which also lets the table
+     squeeze a column of code names */
+  .md-typeset table:not([class]) code {
+    word-break: normal;
+  }
+  .md-typeset table:not([class]):has(th:nth-child(8)) :is(th, td) {
     overflow-wrap: anywhere;
   }
 }
