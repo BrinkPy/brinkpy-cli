@@ -73,15 +73,7 @@ Replace `myprofile` with the name of a profile you created. See [Profile Managem
 
 The command first prints the profile it uses and a table of the command options of the run. With `brinkpy analyze default -s -r`:
 
-```text
-ℹ️  Using default profile. Specify a profile name to use a custom profile.
-🚀 Running reliability analysis with 'default' profile
-+--------------+------------+------------+-----------+----------+-----------+--------------+
-| include_sorm | include_mc | mc_with_is | plot_rfad | plot_lsf | plot_pdfs | open_results |
-+--------------+------------+------------+-----------+----------+-----------+--------------+
-| True         | False      | False      | True      | False    | False     | False        |
-+--------------+------------+------------+-----------+----------+-----------+--------------+
-```
+![Terminal output of brinkpy analyze default -s -r: the default profile notice, the line naming the command and profile, and the options table with include_sorm and plot_rfad set to True](images/analyze-terminal.svg)
 
 Each column is one of the options above, named without the leading `--` and with underscores: `include_sorm` is `--include-sorm`, and so on. With `--mc-with-is` alone, the command prints `Warning: 'mc_with_is' is set to True but 'include_mc' is False. Enabling 'include_mc'.` and the table shows both as `True`.
 

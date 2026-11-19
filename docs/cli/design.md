@@ -57,15 +57,7 @@ Replace `myprofile` with the name of a profile you created. See [Profile Managem
 
 The command first prints the profile it uses and a table of the command options of the run. With `brinkpy design default -s`:
 
-```text
-ℹ️  Using default profile. Specify a profile name to use a custom profile.
-🚀 Running design optimization with 'default' profile
-+----------+--------------+
-| use_sorm | open_results |
-+----------+--------------+
-| True     | False        |
-+----------+--------------+
-```
+![Terminal output of brinkpy design default -s: the default profile notice, the line naming the command and profile, and the options table with use_sorm set to True](images/design-terminal.svg)
 
 `use_sorm` is `--use-sorm`, and `open_results` is `--open-results`. The same line and table appear for calibration with Inverse FORM or Inverse SORM and for objective optimization.
 

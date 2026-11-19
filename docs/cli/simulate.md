@@ -77,16 +77,7 @@ Replace `myprofile` with the name of a profile you created. See [Profile Managem
 
 The command first prints the profile it uses and a table of the command options of the run. With `brinkpy simulate default -i -s`:
 
-```text
-ℹ️  Using default profile. Specify a profile name to use a custom profile.
-Warning: 'include_sorm' is set to True but 'include_form' is False. Enabling 'include_form'.
-🚀 Running Monte Carlo simulation with 'default' profile
-+------------+--------------+--------------+----------+-----------+--------------+
-| mc_with_is | include_form | include_sorm | plot_lsf | plot_pdfs | open_results |
-+------------+--------------+--------------+----------+-----------+--------------+
-| True       | True         | True         | False    | False     | False        |
-+------------+--------------+--------------+----------+-----------+--------------+
-```
+![Terminal output of brinkpy simulate default -i -s: the default profile notice, the warning that include_form was turned on, the line naming the command and profile, and the options table with mc_with_is, include_form, and include_sorm set to True](images/simulate-terminal.svg)
 
 Each column is one of the options above, named without the leading `--` and with underscores: `include_form` is `--include-form`, and so on. In this example `--include-sorm` needs FORM, so the command turned on `include_form` and printed a warning. The cases in the Notes below print a similar warning.
 
