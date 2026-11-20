@@ -50,10 +50,10 @@ brinkpy analyze default --include-sorm --plot-rfad
     brinkpy --help
     ```
 
-4. Copy packaged example problems:
+4. Copy the packaged example problems:
 
     ```bash
-    brinkpy examples cp
+    brinkpy examples copy
     ```
 
 5. Run a first analysis and select one of the example problems from the file picker:

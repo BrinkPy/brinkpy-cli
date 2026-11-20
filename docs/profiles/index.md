@@ -18,7 +18,7 @@ For detailed documentation of all available profile options, see the [Profile Op
     brinkpy profile new myprofile
     ```
 
-2. Edit `profiles/myprofile.yaml` in your IDE, or with `brinkpy profile nano myprofile`.
+2. Edit `profiles/myprofile.yaml` in your IDE, or in a terminal text editor (see [Editing Profiles](#editing-profiles)).
 
 3. Check the profile for errors:
 

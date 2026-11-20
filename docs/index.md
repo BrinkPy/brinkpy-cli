@@ -59,29 +59,40 @@ If you are new to terminal-based tools, start with [CLI Basics for Brinkpy Users
 
 ## Quick Start
 
-1. Install the CLI (and required dependencies) from PyPI:
+1. Create a project folder and move into it:
+
+    ```bash
+    mkdir brinkpy-work
+    cd brinkpy-work
+    ```
+
+2. Install Brinkpy:
 
     ```bash
     pip install brinkpy
     ```
 
-2. View available commands:
+3. Confirm the CLI is available:
 
     ```bash
     brinkpy --help
     ```
 
-3. Copy example problems:
+4. Copy the packaged example problems:
 
     ```bash
-    brinkpy examples cp
+    brinkpy examples copy
     ```
 
-4. Run an analysis with the default profile:
+5. Run a first analysis and select one of the example problems from the file picker:
 
     ```bash
     brinkpy analyze
     ```
+
+    The first time you run an analysis, Brinkpy asks you to sign in through your browser.
+
+For more on each step, see [CLI Basics for Brinkpy Users](cli/index.md). To choose among the examples, see [Packaged Example Problems](examples.md).
 
 ## Execution Model
 

@@ -29,7 +29,7 @@ Options for reliability calculations and related numerical settings. This sectio
 |--------|------|---------|--------|-------------|
 | `alpha_direction` | str | `"outward"` | `"outward"`, `"inward"` | Direction convention for the alpha vector |
 | `use_nearest_correlation` | bool | `false` | - | Controls fallback behavior when Cholesky decomposition of the correlation matrix fails. If `false`, the run stops with an error. If `true`, Brinkpy attempts to replace the matrix with a nearest positive semidefinite (PSD) correlation matrix using the methodology in [Rebonato and Jaeckel (2011)](https://ssrn.com/abstract=1969689) ([DOI](http://dx.doi.org/10.2139/ssrn.1969689)). |
-| `max_minimize_attempts` | int | `8` | [1, 12] | Maximum number of attempts for each FORM, Inverse FORM, and design optimization. An attempt that fails is followed by a new one from a random starting point, and a result that is not yet accurate enough is refined by a restart. Both count as attempts (see `min_tries` in [FORM Results](../problem-authoring/results-tables.md#form-results)). |
+| `max_minimize_attempts` | int | `8` | [1, 12] | Maximum number of attempts for each FORM, Inverse FORM, and design optimization. An attempt that fails is followed by a new one from a random starting point, and a result that is not yet accurate enough is refined by a restart. Both count as attempts. The FORM, Inverse FORM, and design results report the attempts used as [`min_tries`](../problem-authoring/results-tables.md#form-results). |
 
 ### FORM and Inverse FORM Settings
 
@@ -44,7 +44,7 @@ Used by: `analyze`, `design`, and `simulate` when FORM runs.
 |--------|------|---------|-------|-------------|
 | `form_xtol` | float | `0.0001` | [1e-8, 1e-2] | Tolerance for FORM termination (variable changes) |
 | `form_gtol` | float | `0.0001` | [1e-8, 1e-2] | Tolerance for FORM termination (Lagrangian gradient norm changes) |
-| `form_maxiter` | int | `1000` | [1, ∞) | Maximum iterations for FORM |
+| `form_maxiter` | int | `1000` | [1, 10000] | Maximum iterations for FORM |
 | `form_random_start` | bool | `false` | - | Use a random starting point for FORM |
 | `form_seed` | int or null | `null` | - | Random seed for FORM/Inverse FORM random starts |
 
@@ -56,7 +56,7 @@ Used by: `design` when the problem defines an objective function.
 |--------|------|---------|-------|-------------|
 | `design_xtol` | float | `0.001` | [1e-8, 1e-2] | Tolerance for design optimization termination (variable changes) |
 | `design_gtol` | float | `0.001` | [1e-8, 1e-2] | Tolerance for design optimization termination (Lagrangian gradient norm changes) |
-| `design_maxiter` | int | `1000` | [1, ∞) | Maximum iterations for design optimization |
+| `design_maxiter` | int | `1000` | [1, 10000] | Maximum iterations for design optimization |
 | `design_random_start` | bool | `false` | - | Use a random starting point for design optimization |
 | `design_seed` | int or null | `null` | - | Random seed for design optimization random starts |
 
@@ -72,7 +72,7 @@ Used by: `analyze --include-sorm`, `simulate --include-sorm`, and `design --use-
 | `sor_fit_delta_factor` | float | `1.0` | [0.1, 10.0] | Factor used to scale the method-recommended delta when numerically estimating SORM fit parameters for ZhaoPF and Kiureghian methods |
 | `sor_fdm` | str | `"forward"` | `"central"`, `"forward"`, `"backward"` | Finite-difference method for gradient and Hessian (used when `sor_fit_method` is `FiniteDiff`) |
 | `sor_fdm_hess_form` | str | `"full"` | `"full"`, `"diagonal"` | Hessian form for finite-difference approximation (used when `sor_fit_method` is `FiniteDiff`) |
-| `force_curvatures` | bool | `false` | - | Force curvature computations even if not strictly required by selected SORM options |
+| `force_curvatures` | bool | `false` | - | Force curvature computations even if not strictly required by selected SORM options, for example with `ZhaoEmpirical`. Set it to `true` to have the curvatures and the minimum and maximum radii of curvature reported in the Excel file. |
 | `qn_epsilon` | float | `1e-8` | [1e-8, 1e-2] | Tolerance used by the quasi-Newton SR1 (Symmetric Rank 1) update when `sor_fit_method` is set to `SR1` |
 
 #### SORM References
@@ -89,7 +89,7 @@ Use these references as starting points for method details and derivation nuance
 - `"SOSPA_L"`, `"SOSPA_H"`:
     - Hu, Z., and Du, X. (2018). "Saddlepoint approximation reliability method for quadratic functions in normal variables." *Structural Safety*, 71, 24–32. [→](https://www.sciencedirect.com/science/article/pii/S0167473017301169)
     - Du, X., and Sudjianto, A. (2004). "A saddlepoint approximation method for uncertainty analysis." *Proc. ASME IDETC/CIE 2004*, Paper DETC2004-57269, pp. 445–452. [→](https://asmedigitalcollection.asme.org/IDETC-CIE/proceedings-abstract/IDETC-CIE2004/46946/445/308224)
-    - [Additional SOSPA reference](https://doi.org/10.1080/03610910701730141)
+    - Chen, Q., and Giles, D. E. (2008). "General saddlepoint approximations: Application to the Anderson-Darling test statistic." *Communications in Statistics – Simulation and Computation*, 37(4), 789–804. [→](https://doi.org/10.1080/03610910701730141)
 - `"IFFT"`:
     - Zhao, Y.-G., and Ono, T. (1999b). "New approximations for SORM: Part 2." *J. Eng. Mech.*, ASCE, 125(1), 86–93. [→](https://ascelibrary.org/doi/10.1061/%28ASCE%290733-9399%281999%29125%3A1%2886%29)
     - Tvedt, L. (1990). "Distribution of quadratic forms in normal space—application to structural reliability." *J. Eng. Mech.*, ASCE, 116(6), 1183–1197. [→](https://ascelibrary.org/doi/10.1061/%28ASCE%290733-9399%281990%29116%3A6%281183%29)
@@ -99,13 +99,13 @@ Use these references as starting points for method details and derivation nuance
 
 - `Paraboloid`: Local quadratic fit of the failure surface at the design point, using principal curvatures.
 - `Taylor2`: Second-order Taylor expansion of the limit-state function at the design point.
-- Reference: Tvedt, L. (1990). "Distribution of quadratic forms in normal space: application to structural reliability." *J. Eng. Mech.*, ASCE, 116(6), 1183-1197. [→](https://ascelibrary.org/doi/10.1061/%28ASCE%290733-9399%281990%29116%3A6%281183%29)
+- Reference: Tvedt, L. (1990). "Distribution of quadratic forms in normal space—application to structural reliability." *J. Eng. Mech.*, ASCE, 116(6), 1183–1197. [→](https://ascelibrary.org/doi/10.1061/%28ASCE%290733-9399%281990%29116%3A6%281183%29)
 
 **`sor_fit_method`**
 
 - `FiniteDiff`: numerical differentiation tooling — [numdifftools](https://pypi.org/project/numdifftools/)
 - `SR1`: quasi-Newton symmetric rank-one update — [Wikipedia: Symmetric rank-one](https://en.wikipedia.org/wiki/Symmetric_rank-one)
-- `Kiureghian`: point-fitting procedure following Der Kiureghian, A. (2022). *Structural and System Reliability*. Cambridge University Press.
+- `Kiureghian`: point-fitting procedure following Der Kiureghian, A. (2022). *Structural and System Reliability*. Cambridge University Press. [→](https://doi.org/10.1017/9781108991889)
 - `ZhaoPF`: point-fitting procedure — Zhao and Ono (1999a) above.
 - `AnalyticAll`: uses user-provided analytic gradient and Hessian from the problem definition.
 - `null` (auto): Brinkpy uses `AnalyticAll` if the limit state function returns both its gradient and Hessian, because exact derivatives give the most accurate fit. Otherwise it uses the most accurate of the remaining methods for the chosen approximation: `Kiureghian` for `Paraboloid` and `ZhaoPF` for `Taylor2`. A validation note in the results reports which method was used.
@@ -143,12 +143,12 @@ Used by: `analyze --include-mc` and `simulate`.
 | `mc_seed` | int or null | `null` | - | Random seed for Monte Carlo simulations. Set a value for repeatable results, or leave as `null` to allow small run-to-run differences |
 | `mc_remove_oob` | bool | `true` | - | Remove out-of-bounds samples during Monte Carlo simulation (bounds or constraint violations) |
 
-When `mc_n` is `null`, Brinkpy chooses the number of samples from `mc_max_cv`:
+When `mc_n` is `null`, Brinkpy sizes the run to reach a CV of at most `mc_max_cv`:
 
-- With an estimate of the probability of failure from FORM or SORM, as in `analyze -m`, it computes the number of samples needed and spreads them over three cycles.
-- Without one, as in `simulate`, it starts with 10,000 samples and sizes each next cycle from the probability of failure estimated so far.
+- `analyze --include-mc` runs FORM, and SORM with `--include-sorm`, before Monte Carlo. From their estimate of the probability of failure, Brinkpy computes the number of samples needed and spreads them over at least three cycles.
+- `simulate` runs Monte Carlo first, even with `--include-form`, so there's no estimate yet. Brinkpy sizes the cycles as the run goes. The first cycle has 10,000 samples. After each cycle, Brinkpy uses the probability of failure estimated so far to compute how many more samples are needed, and runs them all in the next cycle. While no sample has failed yet, each next cycle is 10 times larger than the last.
 
-In both cases the run continues with more cycles until the CV is at most `mc_max_cv`. The memory available on the server also limits the size of each cycle. Importance sampling chooses its sample sizes differently (see [Importance Sampling Settings](#importance-sampling-settings)).
+In both cases the run continues until at least three cycles have run and the CV is at most `mc_max_cv`. The memory available on the server also limits the size of each cycle. Importance sampling chooses its sample sizes differently (see [Importance Sampling Settings](#importance-sampling-settings)).
 
 ### Importance Sampling Settings
 

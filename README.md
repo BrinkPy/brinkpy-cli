@@ -20,16 +20,20 @@ Run outputs are designed for engineering decisions and reporting, including reli
 On first use, Brinkpy will prompt you to authenticate. If you do not already have an account, you can create one during the sign-in flow.
 
 ```zsh
-# Install from PyPI
+# Create a project folder and move into it
+mkdir brinkpy-work
+cd brinkpy-work
+
+# Install Brinkpy
 pip install brinkpy
 
-# Show help
+# Confirm the CLI is available
 brinkpy --help
 
-# Copy packaged example problems
+# Copy the packaged example problems
 brinkpy examples copy
 
-# Run an analysis with the default profile
+# Run a first analysis and select one of the example problems from the file picker
 brinkpy analyze
 ```
 
