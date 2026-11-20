@@ -218,7 +218,7 @@ class ReliabilityOptions(BaseEnumModel):
     - form_gtol: float
         Tolerance for FORM termination (Lagrangian gradient norm changes). Range: [1e-8, 1e-2]. Default: 1e-4.
     - form_maxiter: int
-        Maximum iterations for FORM. Range: [1, ∞). Default: 1000.
+        Maximum iterations for FORM. Range: [1, 10000]. Default: 1000.
     - form_random_start: bool
         Use a random starting point for FORM/Inverse FORM. Default: False.
     - form_seed: int | None
@@ -228,7 +228,7 @@ class ReliabilityOptions(BaseEnumModel):
     - design_gtol: float
         Tolerance for design optimization termination (Lagrangian gradient norm changes). Range: [1e-8, 1e-2]. Default: 1e-3.
     - design_maxiter: int
-        Maximum iterations for design optimization. Range: [1, ∞). Default: 1000.
+        Maximum iterations for design optimization. Range: [1, 10000]. Default: 1000.
     - design_random_start: bool
         Use a random starting point for design optimization. Default: False.
     - design_seed: int | None
@@ -398,12 +398,12 @@ class ReliabilityOptions(BaseEnumModel):
 
     form_xtol: float = Field(default=1e-4, ge=1e-8, le=1e-2)
     form_gtol: float = Field(default=1e-4, ge=1e-8, le=1e-2)
-    form_maxiter: int = Field(default=1000, ge=1)
+    form_maxiter: int = Field(default=1000, ge=1, le=10000)
     form_random_start: bool = Field(default=False)
     form_seed: int | None = Field(default=None)
     design_xtol: float = Field(default=1e-3, ge=1e-8, le=1e-2)
     design_gtol: float = Field(default=1e-3, ge=1e-8, le=1e-2)
-    design_maxiter: int = Field(default=1000, ge=1)
+    design_maxiter: int = Field(default=1000, ge=1, le=10000)
     design_random_start: bool = Field(default=False)
     design_seed: int | None = Field(default=None)
     design_reliability_method: DesignReliabilityMethodEnum = Field(default=DesignReliabilityMethodEnum.PMA, exclude=True)
