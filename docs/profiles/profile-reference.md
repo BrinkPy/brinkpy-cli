@@ -28,7 +28,7 @@ Options for reliability calculations and related numerical settings. This sectio
 | Option | Type | Default | Values | Description |
 |--------|------|---------|--------|-------------|
 | `alpha_direction` | str | `"outward"` | `"outward"`, `"inward"` | Direction convention for the alpha vector |
-| `use_nearest_correlation` | bool | `false` | - | Controls fallback behavior when Cholesky decomposition of the correlation matrix fails. If `false`, the run stops with an error. If `true`, Brinkpy attempts to replace the matrix with a nearest positive semidefinite (PSD) correlation matrix using the methodology in [Rebonato and Jaeckel (2011)](https://ssrn.com/abstract=1969689) ([DOI](http://dx.doi.org/10.2139/ssrn.1969689)). |
+| `use_nearest_correlation` | bool | `false` | - | Controls fallback behavior when Cholesky decomposition of the correlation matrix fails. If `false`, the run stops with an error. If `true`, Brinkpy replaces the matrix with a nearby positive definite correlation matrix, using the spectral method of [Rebonato and Jäckel (2000)](https://doi.org/10.21314/JOR.2000.023). See also [Correlation Matrix Conditioning](../problem-authoring/recommended-texts.md#correlation-matrix-conditioning). |
 | `max_minimize_attempts` | int | `8` | [1, 12] | Maximum number of attempts for each FORM, Inverse FORM, and design optimization. An attempt that fails is followed by a new one from a random starting point, and a result that is not yet accurate enough is refined by a restart. Both count as attempts. The FORM, Inverse FORM, and design results report the attempts used as [`min_tries`](../problem-authoring/results-tables.md#form-results). |
 
 ### FORM and Inverse FORM Settings

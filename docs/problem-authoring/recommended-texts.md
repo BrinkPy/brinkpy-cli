@@ -62,6 +62,8 @@ The packaged example problems come from these sources. [Packaged Example Problem
 
 ### Correlation Matrix Conditioning
 
-- Rebonato, R., and Jaeckel, P. (2011). The most general methodology to create a valid correlation matrix for risk management and option pricing purposes. SSRN. [→](https://ssrn.com/abstract=1969689) ([DOI](http://dx.doi.org/10.2139/ssrn.1969689))
+- Ghosh, S., and Henderson, S. G. (2003). Behavior of the NORTA method for correlated random vector generation as the dimension increases. *ACM Transactions on Modeling and Computer Simulation*, 13(3), 276–294. [→](https://doi.org/10.1145/937332.937336)
+- Higham, N. J. (2002). Computing the nearest correlation matrix: A problem from finance. *IMA Journal of Numerical Analysis*, 22(3), 329–343. [→](https://doi.org/10.1093/imanum/22.3.329)
+- Rebonato, R., and Jäckel, P. (2000). The most general methodology for creating a valid correlation matrix for risk management and option pricing purposes. *Journal of Risk*, 2(2), 17–27. [→](https://doi.org/10.21314/JOR.2000.023)
 
 For software package citations and dependency-level references, see [Software and Library References](../software-references/index.md).
