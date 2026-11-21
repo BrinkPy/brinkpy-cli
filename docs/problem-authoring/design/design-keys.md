@@ -135,6 +135,8 @@ Expected shape behavior:
 - With `DOFisVectorized=False`, Brinkpy evaluates one point at a time, so `d` always has shape `(n_design,)`.
 - `D` follows the deterministic-variable ordering from `DeterministicVariables.name`, with the design variables removed.
 
+Read each design variable from its row of `d`, for example `d[0]` for the first one. This works for a single point and for a batch of points. See [Limit State Function Contract](../index.md#limit-state-function-contract) for the same rule for `X`, with links to NumPy's guides on indexing.
+
 ### Required return values
 
 The function always returns three values, in this order: `return f, g, h`. Two flags tell Brinkpy which of them hold results. When a flag is `False`, return `[]` in place of the matching value:

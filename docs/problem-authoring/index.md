@@ -99,6 +99,8 @@ Expected shape behavior:
 - With `LSFisVectorized=False`, Brinkpy evaluates one point at a time, so `X` always has shape `(n_var,)`.
 - `D` follows the deterministic-variable ordering from `DeterministicVariables.name`.
 
+Read each variable from its row of `X`, either by unpacking, as in `Y, Z, M = X` in the worked example below, or by indexing, as in `X[0]` for the first variable. Both work for a single point and for a batch of points. To learn how indexing works, see NumPy's [Indexing on ndarrays](https://numpy.org/doc/stable/user/basics.indexing.html#basic-indexing), or start with the beginner's guide, [NumPy: the absolute basics for beginners](https://numpy.org/doc/stable/user/absolute_beginners.html#indexing-and-slicing).
+
 ### Required return values
 
 The function always returns five values, in this order: `return g, gg, gh, L, R`. Three flags tell Brinkpy which of them hold results. When a flag is `False`, return `[]` in place of the matching values:
