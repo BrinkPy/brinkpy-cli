@@ -197,9 +197,12 @@ The flag changes the following:
 | Lagrange multipliers (`bnds_mult`, `constr_mult`) | Reported | Empty |
 | Restarts to refine a result (counted in `min_tries`) | Can happen when there are bounds or constraints | None |
 | `min_method` in the results | `trust-constr` | `COBYQA` |
+| SORM with `sor_fit_method: "SR1"` | Allowed | Not allowed: the run stops with an error |
 
 !!! warning "SORM assumes a smooth limit state function"
-    SORM approximates the limit state surface at the most probable point (MPP) with its curvatures, which assumes the function is smooth there. With `LSFisSmooth = False`, SORM still runs, but if the MPP lies on a kink, the curvatures do not describe the surface and the SORM result can be wrong. Check it with Monte Carlo or importance sampling.
+    SORM approximates the limit state surface at the most probable point (MPP) with its curvatures, which assumes the function is smooth there. With `LSFisSmooth = False`, SORM still runs and adds a note to the results, but if the MPP lies on a kink, the curvatures do not describe the surface and the SORM result can be wrong. Check it with Monte Carlo or importance sampling.
+
+    The `SR1` fit method can't be used then. It builds the Hessian from the gradients that `trust-constr` computes during FORM, so it needs no extra function calls. COBYQA computes no gradients.
 
 ## Series and Parallel Systems
 

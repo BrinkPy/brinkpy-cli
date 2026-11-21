@@ -70,7 +70,7 @@ Used by: `analyze --include-sorm`, `simulate --include-sorm`, and `design --use-
 | `sor_approximation` | str | `"Paraboloid"` | `"Paraboloid"`, `"Taylor2"` | SORM approximation type |
 | `sor_fit_method` | str or null | `null` | `"FiniteDiff"`, `"ZhaoPF"`, `"Kiureghian"`, `"SR1"`, `"AnalyticAll"`, `null` (auto) | Method for SORM limit state function fitting |
 | `sor_fit_delta_factor` | float | `1.0` | [0.1, 10.0] | Factor used to scale the method-recommended delta when numerically estimating SORM fit parameters for ZhaoPF and Kiureghian methods |
-| `sor_fdm` | str | `"forward"` | `"central"`, `"forward"`, `"backward"` | Finite-difference method for gradient and Hessian (used when `sor_fit_method` is `FiniteDiff`) |
+| `sor_fdm` | str | `"forward"` | `"central"`, `"forward"`, `"backward"` | Finite-difference method for gradient and Hessian (used when `sor_fit_method` is `FiniteDiff` and `LSFisVectorized` is `False`) |
 | `sor_fdm_hess_form` | str | `"full"` | `"full"`, `"diagonal"` | Hessian form for finite-difference approximation (used when `sor_fit_method` is `FiniteDiff`) |
 | `force_curvatures` | bool | `false` | - | Force curvature computations even if not strictly required by selected SORM options, for example with `ZhaoEmpirical`. Set it to `true` to have the curvatures and the minimum and maximum radii of curvature reported in the Excel file. |
 | `qn_epsilon` | float | `1e-8` | [1e-8, 1e-2] | Tolerance used by the quasi-Newton SR1 (Symmetric Rank 1) update when `sor_fit_method` is set to `SR1` |
@@ -103,8 +103,8 @@ Use these references as starting points for method details and derivation nuance
 
 **`sor_fit_method`**
 
-- `FiniteDiff`: numerical differentiation tooling — [numdifftools](https://pypi.org/project/numdifftools/)
-- `SR1`: quasi-Newton symmetric rank-one update — [Wikipedia: Symmetric rank-one](https://en.wikipedia.org/wiki/Symmetric_rank-one)
+- `FiniteDiff`: numerical gradient and Hessian from [`scipy.differentiate`](https://docs.scipy.org/doc/scipy/reference/differentiate.html) when `LSFisVectorized` is `True`, and from [numdifftools](https://pypi.org/project/numdifftools/) otherwise. `scipy.differentiate` chooses its own step sizes, so `sor_fdm` applies only to numdifftools.
+- `SR1`: quasi-Newton symmetric rank-one update — [Wikipedia: Symmetric rank-one](https://en.wikipedia.org/wiki/Symmetric_rank-one). It builds the Hessian from the gradients computed during FORM, so it needs no extra limit state function calls. It requires `LSFisSmooth = True` (see [Smooth and Non-Smooth Functions](../problem-authoring/index.md#smooth-and-non-smooth-functions)).
 - `Kiureghian`: point-fitting procedure following Der Kiureghian, A. (2022). *Structural and System Reliability*. Cambridge University Press. [→](https://doi.org/10.1017/9781108991889)
 - `ZhaoPF`: point-fitting procedure — Zhao and Ono (1999a) above.
 - `AnalyticAll`: uses user-provided analytic gradient and Hessian from the problem definition.
@@ -204,6 +204,8 @@ Use these references as starting points for method details and implementation ba
 These options validate user-provided derivatives against numerical finite differences.
 
 Used by: any run where the problem file provides analytic derivatives.
+
+The numerical derivatives of a vectorized limit state function or design objective function (`LSFisVectorized` or `DOFisVectorized` set to `True`) come from [`scipy.differentiate`](https://docs.scipy.org/doc/scipy/reference/differentiate.html), which chooses its own step sizes. If it fails, Brinkpy computes them with [numdifftools](https://pypi.org/project/numdifftools/) instead. The derivatives of other functions, and those of constraint functions, always come from numdifftools. The `*_diffs_check_method` options below choose the numdifftools method, so they normally have no effect on a vectorized function.
 
 | Option | Type | Default | Values | Description |
 |--------|------|---------|--------|-------------|
