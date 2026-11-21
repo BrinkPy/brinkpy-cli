@@ -19,49 +19,40 @@ The authors of these packages publish a preferred way to cite them, either a pap
 - Pydantic: Colvin, S., et al. *Pydantic Validation* (software). Citation metadata: <https://github.com/pydantic/pydantic/blob/main/CITATION.cff>
 - scikit-learn: Pedregosa, F., Varoquaux, G., Gramfort, A., et al. (2011). *Scikit-learn: Machine Learning in Python*. *Journal of Machine Learning Research*, 12, 2825-2830. <https://jmlr.csail.mit.edu/papers/v12/pedregosa11a.html>
 - ArviZ: Kumar, R., Carroll, C., Hartikainen, A., and Martin, O. (2019). *ArviZ a unified library for exploratory analysis of Bayesian models in Python*. *Journal of Open Source Software*, 4(33), 1143. <https://doi.org/10.21105/joss.01143>
-- statsmodels: Seabold, S., and Perktold, J. (2010). *statsmodels: Econometric and statistical modeling with python*. In *Proceedings of the 9th Python in Science Conference*. <https://proceedings.scipy.org/articles/Majora-92bf1922-011>
+- xarray: Hoyer, S., and Hamman, J. (2017). *xarray: N-D labeled arrays and datasets in Python*. *Journal of Open Research Software*, 5(1), 10. <https://doi.org/10.5334/jors.148>
 
 ## Main API Libraries (Top-Level)
 
 The Brinkpy API needs every package below to run, including those listed above. To cite a package without a published citation, give its name, the version, and its project page.
 
-- `algopy`: https://pypi.org/project/algopy/
 - `arviz`: https://www.arviz.org/en/latest/support.html#cite
+- `arviz-base`: https://pypi.org/project/arviz-base/
 - `arviz-plots`: https://pypi.org/project/arviz-plots/
+- `arviz-stats`: https://pypi.org/project/arviz-stats/
+- `asyncpg`: https://magicstack.github.io/asyncpg/
 - `auth0-api-python`: https://pypi.org/project/auth0-api-python/
 - `auth0-fastapi-api`: https://pypi.org/project/auth0-fastapi-api/
+- `authlib`: https://docs.authlib.org/
 - `autograd`: https://pypi.org/project/autograd/
-- `bandit`: https://pypi.org/project/bandit/
+- `email-validator`: https://pypi.org/project/email-validator/
 - `fastapi`: https://fastapi.tiangolo.com/
-- `fastapi-cli`: https://pypi.org/project/fastapi-cli/
-- `gitpython`: https://pypi.org/project/gitpython/
 - `gunicorn`: https://pypi.org/project/gunicorn/
-- `jinja2`: https://jinja.palletsprojects.com/
 - `joblib`: https://joblib.readthedocs.io/
 - `matplotlib`: https://matplotlib.org/stable/users/project/citing.html
+- `more-itertools`: https://more-itertools.readthedocs.io/
 - `numdifftools`: https://numdifftools.readthedocs.io/
 - `numpy`: https://numpy.org/citing-numpy/
-- `orjson`: https://pypi.org/project/orjson/
 - `pandas`: https://pandas.pydata.org/about/citing.html
-- `pip-chill`: https://pypi.org/project/pip-chill/
-- `platformdirs`: https://pypi.org/project/platformdirs/
 - `psutil`: https://pypi.org/project/psutil/
 - `pydantic`: https://docs.pydantic.dev/
-- `pytest`: https://docs.pytest.org/
 - `python-dotenv`: https://pypi.org/project/python-dotenv/
 - `python-multipart`: https://pypi.org/project/python-multipart/
 - `redis`: https://redis.readthedocs.io/
-- `requests`: https://requests.readthedocs.io/
 - `scikit-learn`: https://scikit-learn.org/stable/about.html#citing-scikit-learn
 - `scipy`: https://scipy.org/citing-scipy/
 - `slowapi`: https://pypi.org/project/slowapi/
-- `statsmodels`: https://www.statsmodels.org/stable/#citation
+- `starlette`: https://www.starlette.io/
 - `stripe`: https://pypi.org/project/stripe/
-- `tornado`: https://pypi.org/project/tornado/
-- `tqdm`: https://tqdm.github.io/
-- `typer`: https://typer.tiangolo.com/
-- `typer-slim`: https://pypi.org/project/typer-slim/
-- `uvloop`: https://pypi.org/project/uvloop/
-- `watchfiles`: https://pypi.org/project/watchfiles/
-- `websockets`: https://pypi.org/project/websockets/
+- `uvicorn`: https://www.uvicorn.org/
+- `xarray`: https://docs.xarray.dev/
 - `xlsxwriter`: https://pypi.org/project/xlsxwriter/

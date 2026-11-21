@@ -285,7 +285,7 @@ These tables appear when `DesignProblem` defines a `DesignObjectiveFunction`.
 | `use_sorm` | Whether SORM was used for the reliability constraint (`--use-sorm`) |
 | `dof_count` | Number of design objective function calls |
 | `beta_count`, `nit`, `min_tries`, `min_method` | Same as in [FORM Results](#form-results) |
-| `br_mult` | Lagrange multiplier for the reliability constraint. By default, Brinkpy uses the performance measure approach: for each design, Inverse FORM finds the smallest value of the limit state function at a distance `target_beta` from the mean in standard normal space, and the optimizer drives that value to zero. Brinkpy scales the value so that, for a linear limit state function, it equals `beta` − `target_beta`. With `--use-sorm`, the constraint is `beta` − `target_beta`, with `beta` from SORM. |
+| `br_mult` | Lagrange multiplier for the reliability constraint. By default, Brinkpy uses the performance measure approach ([Tu, Choi, and Park, 1999](recommended-texts.md#reliability-based-design)): for each design, Inverse FORM finds the smallest value of the limit state function at a distance `target_beta` from the mean in standard normal space, and the optimizer drives that value to zero. Brinkpy scales the value so that, for a linear limit state function, it equals `beta` − `target_beta`. With `--use-sorm`, the constraint is `beta` − `target_beta`, with `beta` from SORM. |
 
 ### Objective Optimization: Design Variables Result
 

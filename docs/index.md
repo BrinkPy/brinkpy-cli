@@ -25,8 +25,6 @@ Typical use cases include:
 - Courses on risk and reliability methods, structural reliability, probabilistic analysis of failure, and advanced probability and statistics.
 - Research at universities and research centers focused on reliability methods, failure analysis, code calibration and development, and related uncertainty-quantification workflows.
 
-Recommended background readings are listed at [Recommended Texts and References](problem-authoring/recommended-texts.md).
-
 For what Brinkpy adds over general scientific libraries and your own code, see [Why Use Brinkpy](why-brinkpy.md).
 
 ## Core Workflows

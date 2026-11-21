@@ -6,6 +6,10 @@ description: "Recommended textbooks and references on structural reliability, th
 
 This page lists commonly used references for reliability methods and probabilistic analysis.
 
+## General References
+
+These textbooks and papers cover the methods Brinkpy uses: FORM, SORM, reliability-based design, and Monte Carlo simulation.
+
 - Ang, A. H.-S., and Tang, W. H. (2007). *Probability Concepts in Engineering: Emphasis on Applications to Civil and Environmental Engineering* (2nd ed.). John Wiley and Sons.
 - Der Kiureghian, A. (2022). *Structural and System Reliability*. Cambridge University Press.
 - Hu, Z., and Du, X. (2019). Efficient reliability-based design with second order approximations. *Engineering Optimization*, 51(1), 101–119. [→](https://doi.org/10.1080/0305215X.2018.1440292)
@@ -16,15 +20,25 @@ This page lists commonly used references for reliability methods and probabilist
 
 These references are cited in worked examples, method notes, and profile options across the documentation.
 
-### Worked Examples
+### Sources of the Packaged Examples
+
+The packaged example problems come from these sources. [Packaged Example Problems](../examples.md) lists the source of each example.
 
 - Ang, A. H.-S., and Tang, W. H. (1990). *Probability Concepts in Engineering Planning and Design, Vol. II*. John Wiley and Sons.
 - Au, S. K., and Beck, J. L. (1999). A new adaptive importance sampling scheme for reliability calculations. *Structural Safety*, 21(2), 135–158. [→](https://people.duke.edu/~hpgavin/risk/Au-1999.pdf)
+- Bhardwaj, U., Teixeira, A. P., and Guedes Soares, C. (2023). Uncertainty in the estimation of partial safety factors for different steel-grade corroded pipelines. *Journal of Marine Science and Engineering*, 11(1), 177. [→](https://doi.org/10.3390/jmse11010177)
 - Chan, C. L., and Low, B. K. (2012). Practical second-order reliability analysis applied to foundation engineering. *International Journal for Numerical and Analytical Methods in Geomechanics*, 36(11), 1387–1409. [→](https://doi.org/10.1002/nag.1057)
+- Dai, H., Zhang, H., Rasmussen, K. J. R., and Wang, W. (2015). Wavelet density-based adaptive importance sampling method. *Structural Safety*, 52, 161–169. [→](https://doi.org/10.1016/j.strusafe.2014.02.003)
+- Hu, Z., and Du, X. (2019). Efficient reliability-based design with second order approximations. *Engineering Optimization*, 51(1), 101–119. [→](https://doi.org/10.1080/0305215X.2018.1440292)
+- Ji, J., Wang, Z., Zhang, Z., and Liao, W. (2023). Robust reliability-based design approach by inverse FORM with adaptive conjugate search algorithm. *International Journal for Numerical and Analytical Methods in Geomechanics*, 47(8), 1481–1495. [→](https://doi.org/10.1002/nag.3524)
+- Netto, T. A., Ferraz, U. S., and Estefen, S. F. (2005). The effect of corrosion defects on the burst pressure of pipelines. *Journal of Constructional Steel Research*, 61(8), 1185–1204. [→](https://doi.org/10.1016/j.jcsr.2005.02.010)
+- Sørensen, J. D. (2004). *Notes in Structural Reliability Theory and Risk Analysis*. Aalborg University. [→](https://filelist.tudelft.nl/TBM/Over%20faculteit/Afdelingen/Values%2C%20Technology%20and%20Innovation/People/Full%20Professors/Pieter%20van%20Gelder/Citations/citatie215.pdf)
 
 ### Reliability-Based Design
 
+- Hu, Z., and Du, X. (2019). Efficient reliability-based design with second order approximations. *Engineering Optimization*, 51(1), 101–119. [→](https://doi.org/10.1080/0305215X.2018.1440292)
 - Sørensen, J. D. (2004). *Notes in Structural Reliability Theory and Risk Analysis*. Aalborg University. [→](https://filelist.tudelft.nl/TBM/Over%20faculteit/Afdelingen/Values%2C%20Technology%20and%20Innovation/People/Full%20Professors/Pieter%20van%20Gelder/Citations/citatie215.pdf)
+- Tu, J., Choi, K. K., and Park, Y. H. (1999). A new study on reliability-based design optimization. *Journal of Mechanical Design*, 121(4), 557–564. [→](https://doi.org/10.1115/1.2829499)
 
 ### SORM and Approximation Methods
 
