@@ -106,7 +106,7 @@ Use these references as starting points for method details and derivation nuance
 - `FiniteDiff`: numerical gradient and Hessian from [`scipy.differentiate`](https://docs.scipy.org/doc/scipy/reference/differentiate.html) when `LSFisVectorized` is `True`, and from [numdifftools](https://pypi.org/project/numdifftools/) otherwise. `scipy.differentiate` chooses its own step sizes, so `sor_fdm` applies only to numdifftools.
 - `SR1`: quasi-Newton symmetric rank-one update — [Wikipedia: Symmetric rank-one](https://en.wikipedia.org/wiki/Symmetric_rank-one). It builds the Hessian from the gradients computed during FORM, so it needs no extra limit state function calls. It requires `LSFisSmooth = True` (see [Smooth and Non-Smooth Functions](../problem-authoring/index.md#smooth-and-non-smooth-functions)).
 - `Kiureghian`: point-fitting procedure following Der Kiureghian, A. (2022). *Structural and System Reliability*. Cambridge University Press. [→](https://doi.org/10.1017/9781108991889)
-- `ZhaoPF`: point-fitting procedure — Zhao and Ono (1999a) above.
+- `ZhaoPF`: point-fitting procedure — Zhao and Ono (1999b) above.
 - `AnalyticAll`: uses user-provided analytic gradient and Hessian from the problem definition.
 - `null` (auto): Brinkpy uses `AnalyticAll` if the limit state function returns both its gradient and Hessian, because exact derivatives give the most accurate fit. Otherwise it uses the most accurate of the remaining methods for the chosen approximation: `Kiureghian` for `Paraboloid` and `ZhaoPF` for `Taylor2`. A validation note in the results reports which method was used.
 

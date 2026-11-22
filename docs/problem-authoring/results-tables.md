@@ -127,9 +127,28 @@ This table appears when `StochasticVariables` defines `constraints` (see [Constr
 | `sor_approximation` | SORM approximation used (profile option `sor_approximation`) |
 | `sor_fit_method` | Fit method used (profile option `sor_fit_method`) |
 | `fit_radius` | Distance from the most probable point to the sampled points, in every direction, when fitting the limit state surface by points. Used when `sor_fit_method` is `Kiureghian` or `ZhaoPF`. |
+| `ifft_n` | Number of points used in the inverse fast Fourier transform (IFFT). Used when `sor_method` is `IFFT`. It can be larger than the profile option `ifft_n`, because Brinkpy increases the number of points (up to 2^16) when the characteristic function has not decayed enough at its tail for an accurate probability of failure. |
 | `lsf_count` | Number of limit state function calls during SORM |
 
-The worksheet also includes a table titled `SORM limit state function fit parameters:`. It holds intermediate values that depend on the SORM method (profile option `sor_method`), for users who want to examine a method in detail. They are not described on this page. See the references in [SORM References](../profiles/profile-reference.md#sorm-references) for their meaning.
+The worksheet also includes a table titled `SORM limit state function fit parameters:`. Its columns depend on the SORM options. The most common ones are:
+
+| Column | Meaning |
+|---|---|
+| `a0` | Constant term of the second-order Taylor expansion of the limit state function at the design point |
+| `gamma` | Linear terms of the expansion, one per stochastic variable |
+| `lambda` | Second-order terms of the expansion, one per stochastic variable |
+| `k` | Principal curvatures of the limit state surface at the design point, one fewer than the number of stochastic variables. When `sor_approximation` is `Taylor2`, they appear only if the profile option `force_curvatures` is `true`. |
+
+The expansion has no cross terms, G ≈ a0 + Σ γᵢ yᵢ + Σ λᵢ yᵢ², where the yᵢ are standard normal variables. `a0`, `gamma`, and `lambda` appear when `sor_fit_method` is `ZhaoPF`, or when `sor_method` is `IFFT` and `sor_approximation` is `Taylor2`. With `ZhaoPF`, the yᵢ are the independent standard normal variables and the terms are fitted through points around the design point, as in Zhao and Ono (1999b). Otherwise, the yᵢ are rotated so that the second-order terms have no cross products, and the expansion is scaled by the length of the gradient at the design point, as in Tvedt (1990), Appendix I. See [SORM References](../profiles/profile-reference.md#sorm-references) for both papers.
+
+When `sor_method` is `SOSPA_L` or `SOSPA_H`, the table also includes the saddlepoint approximation values:
+
+| Column | Shown for | Meaning |
+|---|---|---|
+| `at_mean` | `SOSPA_L`, `SOSPA_H` | `true` when `ts` is 0.0, and `false` otherwise |
+| `ts` | `SOSPA_L`, `SOSPA_H` | Solution of the saddlepoint equation |
+| `wh`, `uh` | `SOSPA_L`, `SOSPA_H` | Terms of the equation that gives the probability of failure |
+| `E3`, `E4`, `E5` | `SOSPA_H` | Ratios of derivatives of the cumulant generating function, used only by the higher-order approximation. Equation 5 of Chen and Giles (2008) shows how they are calculated. |
 
 ## Monte Carlo
 
