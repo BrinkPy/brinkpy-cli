@@ -89,6 +89,7 @@ Use these references as starting points for method details and derivation nuance
 - `"SOSPA_L"`, `"SOSPA_H"`:
     - Hu, Z., and Du, X. (2018). "Saddlepoint approximation reliability method for quadratic functions in normal variables." *Structural Safety*, 71, 24–32. [→](https://www.sciencedirect.com/science/article/pii/S0167473017301169)
     - Du, X., and Sudjianto, A. (2004). "A saddlepoint approximation method for uncertainty analysis." *Proc. ASME IDETC/CIE 2004*, Paper DETC2004-57269, pp. 445–452. [→](https://asmedigitalcollection.asme.org/IDETC-CIE/proceedings-abstract/IDETC-CIE2004/46946/445/308224)
+    - Daniels, H. E. (1987). "Tail probability approximations." *International Statistical Review*, 55(1), 37–48. [→](https://doi.org/10.2307/1403269)
     - Chen, Q., and Giles, D. E. (2008). "General saddlepoint approximations: Application to the Anderson-Darling test statistic." *Communications in Statistics – Simulation and Computation*, 37(4), 789–804. [→](https://doi.org/10.1080/03610910701730141)
 - `"IFFT"`:
     - Zhao, Y.-G., and Ono, T. (1999b). "New approximations for SORM: Part 2." *J. Eng. Mech.*, ASCE, 125(1), 86–93. [→](https://ascelibrary.org/doi/10.1061/%28ASCE%290733-9399%281999%29125%3A1%2886%29)

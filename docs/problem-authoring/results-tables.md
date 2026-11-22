@@ -145,10 +145,12 @@ When `sor_method` is `SOSPA_L` or `SOSPA_H`, the table also includes the saddlep
 
 | Column | Shown for | Meaning |
 |---|---|---|
-| `at_mean` | `SOSPA_L`, `SOSPA_H` | `true` when `ts` is 0.0, and `false` otherwise |
-| `ts` | `SOSPA_L`, `SOSPA_H` | Solution of the saddlepoint equation |
-| `wh`, `uh` | `SOSPA_L`, `SOSPA_H` | Terms of the equation that gives the probability of failure |
-| `E3`, `E4`, `E5` | `SOSPA_H` | Ratios of derivatives of the cumulant generating function, used only by the higher-order approximation. Equation 5 of Chen and Giles (2008) shows how they are calculated. |
+| `at_mean` | `SOSPA_L`, `SOSPA_H` | `true` when the saddlepoint `ts` is zero, which happens when the mean of the second-order approximation of the limit state function is at the failure limit. The formula below for the probability of failure then divides by zero, so Brinkpy uses its limit instead, equation 5 of Chen and Giles (2008) for `SOSPA_L` and equation 16 for `SOSPA_H`. Brinkpy treats `ts`, `wh`, or `uh` as zero when its absolute value is below about 1.5 × 10⁻⁸. |
+| `ts` | `SOSPA_L`, `SOSPA_H` | Saddlepoint t̂, the solution of the saddlepoint equation K′(t) = y (Chen and Giles 2008, equation 4). K is the cumulant generating function of the second-order approximation of the limit state function, and y is the failure limit. |
+| `wh` | `SOSPA_L`, `SOSPA_H` | ŵ = sgn(t̂) √(2 [t̂ y − K(t̂)]) (equation 2). With `uh`, it gives the Lugannani–Rice probability of failure, pf ≈ Φ(ŵ) + φ(ŵ) (1/ŵ − 1/û) (equation 1), where Φ and φ are the standard normal cumulative distribution function and probability density function. |
+| `uh` | `SOSPA_L`, `SOSPA_H` | û = t̂ √K″(t̂) (equation 3) |
+| `E3`, `E4` | `SOSPA_H` | Standardized derivatives of the cumulant generating function at the saddlepoint, Eᵣ = K⁽ʳ⁾(t̂) / [K″(t̂)]^(r/2) (equation 5). `SOSPA_H` adds the higher-order correction of Daniels (1987) to the Lugannani–Rice formula, which uses `E3` and `E4` (equation 15). When `at_mean` is `true`, they are evaluated at t = 0 instead, where they are the skewness and excess kurtosis of the approximation. |
+| `E5` | `SOSPA_H` when `at_mean` is `true` | E₅ at t = 0, used with `E3` and `E4` in the formula at the mean (equation 16) |
 
 ## Monte Carlo
 
