@@ -198,7 +198,7 @@ The flag changes the following:
 | `keep_feasible` on bounds and constraints | Used | No effect |
 | Lagrange multipliers (`bnds_mult`, `constr_mult`) | Reported | Empty |
 | Restarts to refine a result (counted in `min_tries`) | Can happen when there are bounds or constraints | None |
-| `min_method` in the results | `trust-constr` | `COBYQA` |
+| `min_method` in the results | The `trust-constr` algorithm used: `equality_constrained_sqp` or `tr_interior_point` (see [`min_method`](results-tables.md#form-results)) | `COBYQA` |
 | SORM with `sor_fit_method: "SR1"` | Allowed | Not allowed: the run stops with an error |
 
 !!! warning "SORM assumes a smooth limit state function"
@@ -409,7 +409,7 @@ A nonlinear constraint uses these keys:
 | `fun` | Yes | Constraint function `fun(X, D)`, with `X` the stochastic variables in the order of `name` and `D` the deterministic variables, as in the limit state function. It returns one value per output. |
 | `lb`, `ub` | At least one | Lists with the lower and upper limit of each output. A missing `lb` means no lower limits (`-np.inf`) and a missing `ub` means no upper limits (`np.inf`). Inside a list, use `-np.inf` or `np.inf` for an output with no limit on that side, and the same value in `lb` and `ub` for an equality. |
 | `jac` | No | Function `jac(X, D)` that returns the gradient of each output with respect to `X`, one row per output. Without it, SciPy approximates the gradient with finite differences. |
-| `hess` | No | Function `hess(X, v, D)` that returns the Hessian of the sum of the outputs weighted by `v`, as an `n x n` matrix. Without it, SciPy approximates the Hessian with a quasi-Newton (BFGS) update. |
+| `hess` | No | Function `hess(X, v, D)` that returns the Hessian with respect to `X` of `np.dot(fun(X, D), v)`, the sum of the outputs weighted by `v`, as an `n x n` matrix, with `n` the number of stochastic variables. `v` is an array with one weight per output, chosen by SciPy during the search, also when there is a single output. With a single output, return `v[0]` times the Hessian of that output, or `v` times it, as in the [cantilever beam example](design/design-constraints.md). Without `hess`, SciPy approximates the Hessian with a quasi-Newton (BFGS) update. This follows SciPy's [`NonlinearConstraint`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.NonlinearConstraint.html). |
 | `keep_feasible` | No | Whether the optimizer must keep every iterate inside the limits, either one `bool` for all outputs or a list with one `bool` per output. Values for outputs that are equalities are ignored. The default is `False`. See the warning below. |
 
 A linear constraint limits weighted sums of the stochastic variables, such as `Y - 2 Po >= 0`. It uses these keys:
@@ -420,11 +420,9 @@ A linear constraint limits weighted sums of the stochastic variables, such as `Y
 | `lb`, `ub` | At least one | Same as for a nonlinear constraint |
 | `keep_feasible` | No | Same as for a nonlinear constraint, with one value per row of `A` when it is a list |
 
-A sum that is linear in real space is not linear in standard normal space, where FORM and Inverse FORM search. Brinkpy therefore turns each linear constraint into a nonlinear one, with `fun` returning `A @ X` and `jac` returning `A`. The results name it `linear_k`, where k is its position in the `constraints` list, starting at 1, and each row of `A` is one of its outputs. To limit a single variable, use the variable's `lb` and `ub` instead (see [Bounds and Truncation](#bounds-and-truncation)).
+Both kinds of constraint are written in terms of the stochastic variables in real space. FORM and Inverse FORM search in standard normal space, so Brinkpy transforms each point of the search to real space before it evaluates the constraints. That transformation is nonlinear for non-normal variables, so a linear constraint is in general not linear in standard normal space. Brinkpy therefore passes it to SciPy as a nonlinear constraint, with `fun` returning `A @ X` and `jac` returning `A`. To limit a single variable, use the variable's `lb` and `ub` instead (see [Bounds and Truncation](#bounds-and-truncation)).
 
-A constraint function can return several outputs, with one entry per output in `lb` and `ub`. The results number the outputs from 1, so the two outputs of `ratios` above are output 1 and output 2.
-
-Both kinds of constraint are defined on the stochastic variables in real space. FORM and Inverse FORM search in standard normal space, so Brinkpy transforms each point of the search to real space before it evaluates the constraints.
+A constraint can have several outputs, with one entry per output in `lb` and `ub`: a nonlinear constraint function returns one value per output, and a linear constraint has one row of `A` per output. The results number the outputs from 1, so the two outputs of `ratios` above are output 1 and output 2. A linear constraint is named `linear_k` in the results, where k is its position in the `constraints` list, starting at 1.
 
 When `jac` or `hess` is provided, Brinkpy checks it against finite differences before the analysis and reports the number of function calls in a note. The profile options `check_varscf_diffs_wrtx`, `check_varscf_diffs_wrtu`, and `varscf_diffs_check_method` control the check (see [Derivative Checking](../profiles/profile-reference.md#derivative-checking)).
 
@@ -476,30 +474,28 @@ Example pattern (`None` marks the unused pair for that variable):
 
 | Brinkpy `type` | `scipy.stats` equivalent | `mean` | `std` | `param1` | `param2` | `lb`/`ub` |
 |---|---|---|---|---|---|---|
-| `normal` | `norm` | Yes | Yes | `μ` | `σ` | Optional |
-| `lognormal` | `lognorm` | Yes | Yes | `μ_ln` | `σ_ln` | Optional |
-| `gumbelmax` | `gumbel_r` | Yes | Yes | `μ` | `β` | Optional |
-| `gumbelmin` | `gumbel_l` | Yes | Yes | `μ` | `β` | Optional |
-| `exponential` | `expon` | Yes | No | `λ` | `None` | Optional |
-| `gamma` | `gamma` | Yes | Yes | `θ` | `κ` | Optional |
-| `weibull` | `weibull_min` | Yes | Yes | `λ` | `κ` | Optional |
-| `beta` | `beta` | Yes | Yes | `α` | `β` | Required |
-| `triangular` | `triang` | Yes | No | `Mo` (mode) | `None` | Required |
+| `normal` | `norm` | Yes | Yes | `μ` (mean) | `σ` (standard deviation) | Optional |
+| `lognormal` | `lognorm` | Yes | Yes | `μ_ln` (mean of ln X) | `σ_ln` (standard deviation of ln X) | Optional |
+| `gumbelmax` | `gumbel_r` | Yes | Yes | `μ` (location) | `β` (scale) | Optional |
+| `gumbelmin` | `gumbel_l` | Yes | Yes | `μ` (location) | `β` (scale) | Optional |
+| `exponential` | `expon` | Yes | `None` | `λ` (rate, 1/mean) | `None` | Optional |
+| `gamma` | `gamma` | Yes | Yes | `θ` (scale) | `α` (shape) | Optional |
+| `weibull` | `weibull_min` | Yes | Yes | `λ` (scale) | `κ` (shape) | Optional |
+| `beta` | `beta` | Yes | Yes | `α` (shape) | `β` (shape) | Required |
+| `triangular` | `triang` | Yes | `None` | `Mo` (mode, in the units of the variable) | `None` | Required |
 | `uniform` | `uniform` | Yes | Yes | `None` | `None` | `*` |
-| `frechet` | `invweibull` | Yes | Yes | `s` | `α` | Optional |
-| `pareto` | `pareto` | Yes | Yes | `xm` | `α` | Optional |
-| `rayleigh` | `rayleigh` | Yes | No | `σ` | `None` | Optional |
+| `frechet` | `invweibull` | Yes | Yes | `s` (scale) | `α` (shape) | Optional |
+| `pareto` | `pareto` | Yes | Yes | `xm` (scale, the minimum value) | `α` (shape) | Optional |
+| `rayleigh` | `rayleigh` | Yes | `None` | `σ` (scale) | `None` | Optional |
 
-The `mean` and `std` columns show whether the distribution requires that value when it is defined by moments. The exponential, triangular, and Rayleigh distributions are fully defined by their mean, so they do not take `std`.
+The `mean` and `std` columns apply to a variable defined by its moments, and the `param1` and `param2` columns to one defined by its natural parameters. In all four columns, `None` marks a value the distribution does not take: set it to `None`, or Brinkpy stops with an error. The exponential and Rayleigh distributions are defined by a single value, their `mean` or `param1`, and the triangular distribution by a single value together with its bounds `lb` and `ub`. So for these three, `std` (or `cv`) and `param2` are always `None`.
 
 `*` A uniform distribution does not take `param1` and `param2`, so set both to `None`. Define it in one of two ways:
 
 - By `mean` and `std`. Set `lb` and `ub` to `None`.
 - By `lb` and `ub`, which are the lower and upper limits of the distribution. Set `mean` and `std` to `None`.
 
-Greek symbols shown for `param1` and `param2` follow the standard notation used in the linked Wikipedia references (where applicable).
-
-Parameterizations can differ across sources; Brinkpy follows the parameter definitions documented by the linked SciPy distributions.
+`param1` and `param2` are the parameters as the linked Wikipedia pages define them, which is the usual textbook definition. Brinkpy converts them to the arguments of the SciPy distribution, which do not always have the same meaning. For example, SciPy's `lognorm` takes `s = σ_ln` and `scale = exp(μ_ln)`, `expon` takes `scale = 1/λ`, and `triang` takes the mode as a fraction of the interval from `lb` to `ub`. Enter the parameters as in the table, not as SciPy's arguments. The beta distribution is the standard one stretched from [0, 1] to [`lb`, `ub`].
 
 For correlated non-normal variables, Brinkpy uses an isoprobabilistic transformation (Nataf) to map variables into standard normal space during reliability computations.
 
@@ -539,8 +535,8 @@ These blocks are optional for computation but needed for plot commands and riche
 | `y_lim` | `list[float]` | Yes | Plot window `[min, max]` for y axis |
 | `x_func` | `callable` or omitted | No | Transformation function `lambda S, D: ...` for x axis. If omitted, x axis displays `x_var` directly. |
 | `y_func` | `callable` or omitted | No | Transformation function `lambda S, D: ...` for y axis. If omitted, y axis displays `y_var` directly. |
-| `x_label` | `str` or omitted | No | Custom label for x axis (can include LaTeX). If omitted, defaults to variable name. |
-| `y_label` | `str` or omitted | No | Custom label for y axis (can include LaTeX). If omitted, defaults to variable name. |
+| `x_label` | `str` or omitted | No | Custom label for the x axis, which can include math symbols (see [Axis Labels](#axis-labels)). If omitted, defaults to the variable name. |
+| `y_label` | `str` or omitted | No | Custom label for the y axis, which can include math symbols (see [Axis Labels](#axis-labels)). If omitted, defaults to the variable name. |
 | `z_var` | `str` | No | Stochastic variable for the z axis. If omitted, the z axis shows the limit state function value (see below). |
 
 **The z axis:**
@@ -589,8 +585,8 @@ Here, stochastic variables are indexed as `S[0]` for Y, `S[1]` for Z, and `S[2]`
 | `y_lim` | `list[float]` | Yes | Sweep range `[min, max]` for the y parameter |
 | `x_func` | `callable` or omitted | No | Transformation `lambda S, D: ...` mapping the swept stochastic values to the plotted x quantity. If omitted, the swept parameter value is plotted directly. |
 | `y_func` | `callable` or omitted | No | Transformation `lambda S, D: ...` mapping the swept stochastic values to the plotted y quantity. If omitted, the swept parameter value is plotted directly. |
-| `x_label` | `str` or omitted | No | Custom label for x axis (can include LaTeX). If omitted, defaults to variable name. |
-| `y_label` | `str` or omitted | No | Custom label for y axis (can include LaTeX). If omitted, defaults to variable name. |
+| `x_label` | `str` or omitted | No | Custom label for the x axis, which can include math symbols (see [Axis Labels](#axis-labels)). If omitted, defaults to the variable name. |
+| `y_label` | `str` or omitted | No | Custom label for the y axis, which can include math symbols (see [Axis Labels](#axis-labels)). If omitted, defaults to the variable name. |
 
 `x_func` and `y_func` follow the same signature as in `LSFplot`: they receive `S` (stochastic variable values array in `StochasticVariables.name` order) and `D` (deterministic variable values array) and return the quantity to plot.
 
@@ -612,6 +608,14 @@ Here, stochastic variables are indexed as `S[0]` for Y, `S[1]` for Z, and `S[2]`
 ```
 
 Here `S[0]` is Y, `S[1]` is Z, and `S[2]` is M. As Brinkpy sweeps `mean(Y)` and `mean(M)`, `x_func` converts the current Y mean into ` μ(Y)·μ(Z)` (resistance) and `y_func` passes `mean(M)` through as the load axis. The RFAD plots are included in the PDF result file. For a worked example, see [Failure Assessment Diagram](plots/rfad.md).
+
+### Axis Labels
+
+The `x_label` and `y_label` of `LSFplot` and `RFADplot` can include math symbols. Brinkpy shows a label in matplotlib's math mode, in bold, so a backslash command such as `\\mu` appears as μ. The RFAD example above shows `Resistance: \\mu(Y)*\\mu(Z)` as **Resistance: μ(Y)\*μ(Z)**. In a normal Python string, write two backslashes, as in `"\\mu"`. In a raw string, one is enough, as in `r"\mu"`.
+
+Math mode drops ordinary spaces. To keep one, write a backslash followed by a space, for example `"Load:\\ \\mu(M)"`.
+
+To format a label yourself, include `$` in it. Brinkpy then shows the label exactly as written, and only the parts between `$` signs are math, for example `"Load (kN): $\\mu(M)$"`. For the symbols and commands available, see matplotlib's [Writing mathematical expressions](https://matplotlib.org/stable/users/explain/text/mathtext.html).
 
 ### `ISplot`
 

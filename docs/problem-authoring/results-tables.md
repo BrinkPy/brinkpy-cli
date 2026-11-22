@@ -56,7 +56,7 @@ The `bnds_mult` and `constr_mult` columns appear in several tables, with a diffe
 | `hlsf_count` | Number of limit state function Hessian calculations |
 | `nit` | Number of iterations used by SciPy's `minimize` function |
 | `min_tries` | Number of attempts to find a solution. When an attempt fails, Brinkpy tries again from a new random starting point. For a smooth function with bounds or constraints, an attempt can also succeed with a result that Brinkpy judges not yet accurate enough. Brinkpy then restarts the optimizer from that result, as many times as needed, and each restart counts as an attempt. So a `min_tries` above 1 doesn't by itself mean an attempt failed. The profile option `max_minimize_attempts` limits the total number of attempts (see [General Reliability Settings](../profiles/profile-reference.md#general-reliability-settings)). |
-| `min_method` | Optimizer used: `trust-constr` for a smooth function or `COBYQA` for a non-smooth one (see [Smooth and Non-Smooth Functions](index.md#smooth-and-non-smooth-functions)) |
+| `min_method` | Optimizer used. For a non-smooth function it is `COBYQA`. For a smooth function, Brinkpy uses SciPy's [`trust-constr`](https://docs.scipy.org/doc/scipy/reference/optimize.minimize-trustconstr.html), and the column shows the algorithm `trust-constr` chose: `equality_constrained_sqp` when the problem has only equality constraints, such as the `g = 0` constraint of FORM, or `tr_interior_point` when it also has bounds or inequality constraints. See [Smooth and Non-Smooth Functions](index.md#smooth-and-non-smooth-functions). |
 | `lsf_mult` | Lagrange multiplier for the limit state function |
 
 ### Stochastic Variable Inputs and FORM Failure Point Outputs
