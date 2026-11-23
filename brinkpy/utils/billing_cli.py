@@ -135,7 +135,9 @@ def _date(value: str | None) -> str:
     if not value:
         return "-"
     try:
-        d = datetime.fromisoformat(value.replace("Z", "+00:00"))
+        # In the user's time zone, as Stripe's pages show it: a period ending at 05:56 UTC ends the evening before
+        # in the Americas
+        d = datetime.fromisoformat(value.replace("Z", "+00:00")).astimezone()
         return f"{d:%B} {d.day}, {d.year}"  # %-d doesn't work on Windows
     except ValueError:
         return value

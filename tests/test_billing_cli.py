@@ -1,4 +1,5 @@
 import json
+import os
 import unittest
 from unittest.mock import patch
 
@@ -81,7 +82,7 @@ class StatusTableTests(unittest.TestCase):
         rows = table_rows(billing_cli.status_table({
             "enforced": True, "access": True, "access_reason": "subscription", "plan_offered": "academic",
             "subscription_status": "active", "plan": "academic", "interval": "year",
-            "current_period_end": "2027-11-23T05:00:00Z", "cancel_at_period_end": False,
+            "current_period_end": "2027-11-23T18:00:00Z", "cancel_at_period_end": False,
         }))
         self.assertEqual(rows["Plan"], "Academic, billed yearly")
         self.assertEqual(rows["Renews on"], "November 23, 2027")
@@ -89,16 +90,30 @@ class StatusTableTests(unittest.TestCase):
     def test_canceled_at_period_end_and_trial_ended(self):
         rows = table_rows(billing_cli.status_table({
             "enforced": True, "access": True, "access_reason": "subscription", "subscription_status": "active",
-            "plan": "professional", "interval": "month", "current_period_end": "2027-01-05T00:00:00+00:00",
+            "plan": "professional", "interval": "month", "current_period_end": "2027-01-05T18:00:00+00:00",
             "cancel_at_period_end": True,
         }))
         self.assertEqual(rows["Ends on"], "January 5, 2027")
         rows = table_rows(billing_cli.status_table({
             "enforced": True, "access": False, "access_reason": "trial_ended", "plan_offered": "academic",
-            "trial_ends_at": "2027-03-01T00:00:00Z",
+            "trial_ends_at": "2027-03-01T18:00:00Z",
         }))
         self.assertEqual(rows["Free trial"], "ended on March 1, 2027")
         self.assertEqual(rows["Can run problems"], "No")
+
+
+class LocalDateTests(unittest.TestCase):
+    def test_dates_are_shown_in_the_local_time_zone(self):
+        # 05:56 UTC on December 23 is December 22 in El Paso, as Stripe's portal shows it
+        with patch.dict("os.environ", {"TZ": "America/Denver"}):
+            import time
+
+            time.tzset()
+            try:
+                self.assertEqual(billing_cli._date("2026-12-23T05:56:43+00:00"), "December 22, 2026")
+            finally:
+                del os.environ["TZ"]
+                time.tzset()
 
 
 class RunRefusedTests(unittest.TestCase):
