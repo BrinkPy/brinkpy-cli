@@ -32,7 +32,7 @@ from typing_extensions import Annotated
 
 from brinkpy.config.data_models import IsMethodEnum, RunTypeEnum
 from brinkpy.utils.api_utils import get_pickle_file_name, run_app, show_figures_from_pickle
-from brinkpy.utils.auth_cli import get_token, get_user_id
+from brinkpy.utils.auth_cli import device_login_flow, get_token, get_user_id
 from brinkpy.utils.icons import ICON_ASK, ICON_ERR, ICON_INFO, ICON_OK, ICON_RUN, ICON_WARN
 from brinkpy.utils.path_helpers import (
     copy_examples_to_working_dir,
@@ -761,9 +761,19 @@ profiles.command(name="rm", help="Alias for delete", hidden=True)(delete)
 
 
 @user.command(help="[bold green]Authenticate[/bold green] user and obtain token")
-def auth():
+def auth(
+    force: Annotated[
+        bool,
+        typer.Option(
+            "--force",
+            "-f",
+            help="Sign in again even if you are signed in, for example to switch accounts or after verifying your email",
+            rich_help_panel="General",
+        ),
+    ] = False,
+):
     """Authenticate user and obtain token."""
-    if get_token():
+    if (device_login_flow() is not None) if force else get_token():
         console.print(f"{ICON_OK} User authenticated successfully.")
     else:
         console.print(f"{ICON_ERR} Failed to authenticate user.")

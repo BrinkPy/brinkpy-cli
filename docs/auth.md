@@ -32,6 +32,14 @@ The sign-in flow works as follows:
 
 The sign-in link already includes the user code, so you do not need to type it.
 
+If you are already signed in, `brinkpy user auth` keeps your current sign-in. To sign in again, for example with a different account, add `--force`:
+
+```bash
+brinkpy user auth --force
+```
+
+If your browser is still signed in to the previous account at `auth.brinkpy.app`, it may sign you in to that account again. To choose a different account, open the sign-in link in a private browser window. Your previous sign-in stays in place until the new one completes.
+
 ## Check Authentication Status
 
 Show the user ID of the account you are signed in with:

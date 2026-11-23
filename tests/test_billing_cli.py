@@ -139,5 +139,22 @@ class RunRefusedTests(unittest.TestCase):
         self.assertIn("brinkpy user billing", " ".join(str(c.args[0]) for c in printed.call_args_list))
 
 
+
+class AuthForceTests(unittest.TestCase):
+    def test_force_signs_in_again_even_when_signed_in(self):
+        from typer.testing import CliRunner
+
+        from brinkpy import brinkpy as cli
+
+        runner = CliRunner()
+        with patch.object(cli, "get_token", return_value="token") as get_token, \
+                patch.object(cli, "device_login_flow", return_value={"access_token": "new"}) as login:
+            runner.invoke(cli.app, ["user", "auth"])
+            login.assert_not_called()
+            result = runner.invoke(cli.app, ["user", "auth", "--force"])
+        login.assert_called_once()
+        self.assertEqual(get_token.call_count, 1)
+        self.assertIn("authenticated successfully", result.output)
+
 if __name__ == "__main__":
     unittest.main()
