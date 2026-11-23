@@ -63,12 +63,22 @@ The problem file follows Hu and Du (2019), the source of the variables, the targ
 
 **Source:** Hu, Z. and Du, X., "Efficient reliability-based design with second order approximations," *Engineering Optimization*, vol. 51, no. 1, 2019, pp. 101–119. [→](https://doi.org/10.1080/0305215X.2018.1440292)
 
-The stochastic variables are the deviations `b` and `h` of the width and height from their means (in), the loads `Px` and `Py` (lb), the modulus of elasticity `E` (psi), and the yield strength `Sy` (psi). All are normal and uncorrelated. Hu and Du (2019) give `b` and `h` a standard deviation of 0.01 in around the design values, so the problem file models them as deviations with a mean of 0 and adds them to `mb` and `mh`. The length `L` is 100 in and the allowed deflection `Do` is 2.25 in. With the actual width `mb + b` and height `mh + h`, written `B` and `H`, the limit state functions are:
+The stochastic variables are the deviations `b` and `h` of the width and height from their means (in), the loads `Px` and `Py` (lb), the modulus of elasticity `E` (psi), and the yield strength `Sy` (psi). All are normal and uncorrelated. Hu and Du (2019) give `b` and `h` a standard deviation of 0.01 in around the design values, so the problem file models them as deviations with a mean of 0 and adds them to `mb` and `mh`. The length `L` is 100 in and the allowed deflection `Do` is 2.25 in. The limit state function computes the actual width and height, the two normalized limit states, and the smaller of the two with `np.minimum`:
 
-```text
-g1 = (Sy - (6 L / (B H)) (Px / B + Py / H)) / Sy
-g2 = (Do - (4 L^3 / E) sqrt((Px / (B^3 H))^2 + (Py / (B H^3))^2)) / Do
-g  = min(g1, g2)
+```python
+b, h, Px, Py, E, Sy = X
+mb, mh, L, Do = D
+
+b = mb + b  # b is the deviation from the design mean mb
+h = mh + h
+
+# Two limit states:
+# 1) Maximum bending stress at the fixed end of the cantilever beam < Sy (normalized)
+# 2) Maximum deflection at the free end of the cantilever beam < Do (normalized)
+g1 = (Sy - (6 * L) / (b * h) * (Px / b + Py / h)) / Sy
+g2 = (Do - (4 * L**3 / E) * ((Px / (b**3 * h)) ** 2 + (Py / (b * h**3)) ** 2) ** 0.5) / Do
+
+g = np.minimum(g1, g2)
 ```
 
 ### Design Keys
