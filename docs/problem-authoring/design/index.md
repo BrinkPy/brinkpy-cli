@@ -5,22 +5,19 @@ description: "How to define a Brinkpy design problem, for partial factor calibra
 
 # Design Problem Definition
 
-This section covers problem definition for the `design` command. Design problems extend the base problem dictionary with `DesignProblem` keys and can follow two distinct workflows:
+This section covers problem definition for the `design` command. Design problems extend the base problem dictionary with `DesignProblem` keys. The `design` command has two workflows, and Brinkpy chooses one automatically from the `DesignProblem` keys. See [Design Keys Reference](design-keys.md) for the keys each workflow requires.
 
-1. Inverse FORM (or Inverse SORM with `--use-sorm`): compute partial factors and design point values that satisfy a target reliability (`TargetBeta` or `TargetPf`).
-2. Objective optimization: compute design variable values that minimize an objective while satisfying reliability constraints.
+| | Calibration with Inverse FORM or Inverse SORM | Objective optimization |
+|---|---|---|
+| Brinkpy runs it when | `DesignProblem` has no `DesignObjectiveFunction` | `DesignProblem` defines a `DesignObjectiveFunction` |
+| Computes | Partial factors and design point values that reach the target reliability | Design variable values that minimize the objective while reaching the target reliability |
+| Use it for | Code calibration, load and resistance factor calibration, or back-calculating characteristic values | Minimizing cost, weight, or another performance measure, with reliability as a constraint |
+| Target reliability | `TargetBeta` or `TargetPf` | `TargetBeta` or `TargetPf`, as a constraint |
+| With `--use-sorm` | Inverse SORM instead of Inverse FORM | SORM instead of FORM for the reliability constraint |
+| Packaged examples | `AT624Problem`, `AT625Problem` | `AT622Problem`, `CantileverBeamProblem`, `Ji1Problem`, `Ji2Problem`, `PipecorrProblem`, `Sorensen81Problem` |
+| Worked example | [Inverse FORM Examples](inverse-form.md) | [Objective Optimization Example](optimization.md) |
 
-Brinkpy chooses the workflow automatically. If `DesignProblem` defines a `DesignObjectiveFunction`, it runs objective optimization. Otherwise, it runs Inverse FORM, or Inverse SORM when `--use-sorm` is used. See [Design Keys Reference](design-keys.md) for the keys each workflow requires.
-
-## When To Use Which Design Type
-
-- Use Inverse FORM when code calibration, load/resistance factor calibration, or characteristic-value back-calculation is the goal.
-- Use objective optimization when the goal is to minimize cost, weight, or another performance metric and reliability is one of the constraints.
-
-Packaged examples for each workflow (see [Packaged Examples](../../examples.md)):
-
-- Inverse FORM: `AT624Problem`, `AT625Problem`
-- Objective optimization: `AT622Problem`, `CantileverBeamProblem`, `Ji1Problem`, `Ji2Problem`, `PipecorrProblem`, `Sorensen81Problem`
+See [Packaged Examples](../../examples.md) for how to copy the examples into your project folder.
 
 ## Design Documentation Layout
 

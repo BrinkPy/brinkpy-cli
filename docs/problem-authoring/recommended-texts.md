@@ -43,6 +43,8 @@ The packaged example problems come from these sources. [Packaged Example Problem
 ### SORM and Approximation Methods
 
 - Breitung, K. (1984). Asymptotic approximations for multinormal integrals. *Journal of Engineering Mechanics*, 110(3), 357–366. [→](https://ascelibrary.org/doi/10.1061/%28ASCE%290733-9399%281984%29110%3A3%28357%29)
+- Chen, Q., and Giles, D. E. (2008). General saddlepoint approximations: Application to the Anderson-Darling test statistic. *Communications in Statistics – Simulation and Computation*, 37(4), 789–804. [→](https://doi.org/10.1080/03610910701730141)
+- Daniels, H. E. (1987). Tail probability approximations. *International Statistical Review*, 55(1), 37–48. [→](https://doi.org/10.2307/1403269)
 - Der Kiureghian, A., Lin, H.-Z., and Hwang, S.-J. (1987). Second-order reliability approximations. *Journal of Engineering Mechanics*, 113(8), 1208–1225. [→](https://ascelibrary.org/doi/10.1061/%28ASCE%290733-9399%281987%29113%3A8%281208%29)
 - Du, X., and Sudjianto, A. (2004). A saddlepoint approximation method for uncertainty analysis. In *Proceedings of the ASME 2004 International Design Engineering Technical Conferences and Computers and Information in Engineering Conference* (Paper DETC2004-57269), 445–452. [→](https://asmedigitalcollection.asme.org/IDETC-CIE/proceedings-abstract/IDETC-CIE2004/46946/445/308224)
 - Hohenbichler, M., and Rackwitz, R. (1988). Improvement of second-order reliability estimates by importance sampling. *Journal of Engineering Mechanics*, 114(12), 2195–2199. [→](https://ascelibrary.org/doi/10.1061/%28ASCE%290733-9399%281988%29114%3A12%282195%29)

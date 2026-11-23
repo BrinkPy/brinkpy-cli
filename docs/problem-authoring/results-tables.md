@@ -150,7 +150,7 @@ When `sor_method` is `SOSPA_L` or `SOSPA_H`, the table also includes the saddlep
 | `wh` | `SOSPA_L`, `SOSPA_H` | ŵ = sgn(t̂) √(2 [t̂ y − K(t̂)]) (equation 2). With `uh`, it gives the Lugannani–Rice probability of failure, pf ≈ Φ(ŵ) + φ(ŵ) (1/ŵ − 1/û) (equation 1), where Φ and φ are the standard normal cumulative distribution function and probability density function. |
 | `uh` | `SOSPA_L`, `SOSPA_H` | û = t̂ √K″(t̂) (equation 3) |
 | `E3`, `E4` | `SOSPA_H` | Standardized derivatives of the cumulant generating function at the saddlepoint, Eᵣ = K⁽ʳ⁾(t̂) / [K″(t̂)]^(r/2) (equation 5). `SOSPA_H` adds the higher-order correction of Daniels (1987) to the Lugannani–Rice formula, which uses `E3` and `E4` (equation 15). When `at_mean` is `true`, they are evaluated at t = 0 instead, where they are the skewness and excess kurtosis of the approximation. |
-| `E5` | `SOSPA_H` when `at_mean` is `true` | E₅ at t = 0, used with `E3` and `E4` in the formula at the mean (equation 16) |
+| `E5` | `SOSPA_H` when `at_mean` is `true` | E₅ at t = 0, used with `E3` and `E4` in the formula at the mean (equation 16). Equation 16 as printed has two errors: it divides by 2π instead of √(2π), and its last term has E₃² instead of E₃³. Brinkpy uses the corrected form, which follows from the Edgeworth expansion at the mean and matches the √(2π) of equation 5. |
 
 ## Monte Carlo
 
