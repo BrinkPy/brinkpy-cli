@@ -5,7 +5,7 @@ repo_url: https://github.com/BrinkPy/brinkpy-cli
 repo_name: !ENV [BRINKPY_DOCS_REPO_NAME, GitHub]
 hooks:
   - docs/hooks.py
-copyright: Copyright &copy; 2026 Brinkpy. All rights reserved. Copyright registration pending.
+copyright: Copyright &copy; 2026 Brinkpy. All rights reserved. Copyright registration pending. <a href="/legal/terms/">Terms</a> &middot; <a href="/legal/privacy/">Privacy</a> &middot; <a href="/legal/refunds/">Refunds</a>
 theme:
   name: material
   custom_dir: overrides
@@ -77,6 +77,10 @@ nav:
     - CLI Dependencies and Citations: software-references/cli.md
     - API Library Credits: software-references/api.md
   - User Authentication: auth.md
+  - Legal:
+    - Terms of Service: legal/terms.md
+    - Privacy Policy: legal/privacy.md
+    - Refund Policy: legal/refunds.md
 markdown_extensions:
   - admonition
   - tables
@@ -90,6 +94,8 @@ markdown_extensions:
       alternate_style: true
 plugins:
   - search
+  # Downloads the Google Fonts at build time and serves them from brinkpy.app, so visitors' browsers don't contact Google
+  - privacy
 extra_css:
   - stylesheets/extra.css
 extra_javascript:
