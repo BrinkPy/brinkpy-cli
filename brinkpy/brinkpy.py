@@ -22,18 +22,16 @@ load_dotenv()
 import os
 import subprocess
 import sys
-import webbrowser
 from pathlib import Path
 from pprint import pprint
 
-import requests
 import typer
 from rich.console import Console
 from rich.table import Table
 from typing_extensions import Annotated
 
 from brinkpy.config.data_models import IsMethodEnum, RunTypeEnum
-from brinkpy.utils.api_utils import get_api_url, get_pickle_file_name, run_app, show_figures_from_pickle
+from brinkpy.utils.api_utils import get_pickle_file_name, run_app, show_figures_from_pickle
 from brinkpy.utils.auth_cli import get_token, get_user_id
 from brinkpy.utils.icons import ICON_ASK, ICON_ERR, ICON_INFO, ICON_OK, ICON_RUN, ICON_WARN
 from brinkpy.utils.path_helpers import (
@@ -51,6 +49,7 @@ from brinkpy.utils.profile_management import (
     show_profile_rich,
 )
 from brinkpy.utils.utilities import is_gnu_nano
+from brinkpy.utils import billing_cli
 
 os.environ["PYDANTIC_ERRORS_INCLUDE_URL"] = "false"  # Disable Pydantic error URLs in CLI output
 
@@ -785,81 +784,65 @@ def id():
 @user.command(
     name="subscribe",
     hidden=not ENABLE_STRIPE_REGISTRATION,
-    help="[bold green]Start[/bold green] Stripe subscription checkout",
+    help="[bold green]Subscribe[/bold green] to Brinkpy (opens the payment page)",
 )
 def subscribe(
+    yearly: Annotated[
+        bool,
+        typer.Option("--yearly", "-y", help="Bill yearly instead of monthly", rich_help_panel="General"),
+    ] = False,
     open_browser: Annotated[
         bool,
         typer.Option(
             "--open-browser/--no-open-browser",
-            help="Open checkout URL in default browser",
+            help="Open the payment page in your web browser",
             rich_help_panel="General",
         ),
     ] = True,
 ):
-    """Create a Stripe checkout session for subscription enrollment.
+    """Shows the plan and price for your account, then opens the Stripe payment page.
 
-    This command is feature-flagged and hidden by default.
-    Enable it with BRINKPY_ENABLE_STRIPE_REGISTRATION=1.
+    Hidden until subscriptions go live. Enable it with BRINKPY_ENABLE_STRIPE_REGISTRATION=1.
     """
-    if not ENABLE_STRIPE_REGISTRATION:
-        console.print(
-            f"{ICON_INFO} Subscription registration is currently disabled.",
-        )
-        console.print(
-            f"{ICON_INFO} This command will be enabled when Stripe registration goes live.",
-        )
-        console.print()
-        raise typer.Exit(code=1)
-
-    access_token = get_token()
-    if not access_token:
-        console.print(f"{ICON_ERR} Authentication failed. Please run 'brinkpy user auth' and try again.")
-        console.print()
-        raise typer.Exit(code=1)
-
-    api_base = get_api_url()
-    endpoint = f"{api_base}/billing/checkout-session"
-
-    try:
-        resp = requests.post(endpoint, headers={"Authorization": f"Bearer {access_token}"}, timeout=30)
-    except requests.RequestException as exc:
-        console.print(f"{ICON_ERR} Failed to reach billing endpoint: {exc}")
-        console.print()
-        raise typer.Exit(code=1)
-
-    if resp.status_code >= 400:
-        try:
-            detail = resp.json().get("detail", resp.text)
-        except ValueError:
-            detail = resp.text
-        console.print(f"{ICON_ERR} Could not create checkout session ({resp.status_code}): {detail}")
-        console.print()
-        raise typer.Exit(code=1)
-
-    try:
-        payload = resp.json()
-    except ValueError:
-        console.print(f"{ICON_ERR} Billing endpoint returned invalid JSON.")
-        console.print()
-        raise typer.Exit(code=1)
-
-    checkout_url = payload.get("checkout_url")
-    if not checkout_url:
-        console.print(f"{ICON_ERR} Billing endpoint did not return a checkout URL.")
-        console.print()
-        raise typer.Exit(code=1)
-
-    console.print(f"{ICON_OK} Checkout session created successfully.")
-    console.print(f"{ICON_INFO} URL: {checkout_url}")
-
-    if open_browser:
-        opened = webbrowser.open(checkout_url)
-        if opened:
-            console.print(f"{ICON_OK} Opened checkout URL in your default browser.")
-        else:
-            console.print(f"{ICON_WARN} Could not auto-open browser. Use the URL above.")
+    ok = billing_cli.subscribe(yearly=yearly, open_browser=open_browser)
     console.print()
+    if not ok:
+        raise typer.Exit(code=1)
+
+
+@user.command(
+    name="billing",
+    hidden=not ENABLE_STRIPE_REGISTRATION,
+    help="[bold green]Manage[/bold green] your subscription: payment method, receipts, or cancel",
+)
+def billing(
+    open_browser: Annotated[
+        bool,
+        typer.Option(
+            "--open-browser/--no-open-browser",
+            help="Open the subscription management page in your web browser",
+            rich_help_panel="General",
+        ),
+    ] = True,
+):
+    """Opens the Stripe page where you manage your subscription."""
+    ok = billing_cli.manage(open_browser=open_browser)
+    console.print()
+    if not ok:
+        raise typer.Exit(code=1)
+
+
+@user.command(
+    name="status",
+    hidden=not ENABLE_STRIPE_REGISTRATION,
+    help="[bold green]Show[/bold green] your subscription and free trial status",
+)
+def status():
+    """Shows your plan, subscription status, renewal date, and free trial."""
+    ok = billing_cli.show_status()
+    console.print()
+    if not ok:
+        raise typer.Exit(code=1)
 
 
 if __name__ == "__main__":
