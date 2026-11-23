@@ -77,6 +77,7 @@ nav:
     - CLI Dependencies and Citations: software-references/cli.md
     - API Library Credits: software-references/api.md
   - User Authentication: auth.md
+  - Plans and Subscription: subscription.md
   - Legal:
     - Terms of Service: legal/terms.md
     - Privacy Policy: legal/privacy.md

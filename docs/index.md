@@ -104,9 +104,12 @@ Brinkpy CLI runs computations through the hosted Brinkpy API. The CLI handles lo
 !!! info "Pricing and Sustainability Notice"
     Brinkpy CLI is **free to use** at this time. The CLI communicates with a hosted API, and the associated computation and infrastructure costs are currently funded by the developer during this early phase of operation.
 
-    To support ongoing maintenance and service delivery as usage grows, a monthly subscription of approximately **$8/month** is planned for a future release.
+    To support ongoing maintenance and service delivery as usage grows, two paid plans are planned, each with a 14-day free trial:
 
-    Any transition from free access to a paid subscription model will be communicated in advance. Existing users will receive clear notice before any pricing changes take effect.
+    - **Academic**, for students and teachers with a university email address: **$8/month** or **$80/year**, tax included.
+    - **Professional**: **$25/month** or **$250/year**, plus tax where it applies.
+
+    The start of paid plans will be announced at least 30 days in advance, and existing users will receive clear notice before any charge applies. See [Plans and Subscription](subscription.md) for details.
 
 ## Commands and Help
 
