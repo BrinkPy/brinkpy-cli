@@ -49,3 +49,6 @@ profiles/*.yaml
 
 # Claude Code personal settings
 .claude/settings.local.json
+
+# MkDocs Material privacy plugin downloads (fonts, scripts)
+.cache/
