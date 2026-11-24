@@ -8,7 +8,15 @@ version = "0.2.0"
 description = "Brinkpy CLI for reliability analysis, design optimization, and simulation."
 readme = { file = "README.md", content-type = "text/markdown" }
 authors = [{name = "Cesar Carrasco"}]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+]
 dependencies = [
   "typer>=0.9.0",
   "rich>=13.0.0",

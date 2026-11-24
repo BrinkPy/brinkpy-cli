@@ -9,7 +9,7 @@ Brinkpy CLI includes packaged example problems to help you get started with reli
 The examples are meant to be opened and modified. Use them as templates for your own problems, and see [Problem Definition](problem-authoring/index.md) for a full description of the problem file format.
 
 !!! info "Before you start"
-    - Install Brinkpy with `pip install brinkpy` (Python 3.10 or newer).
+    - Install Brinkpy with `pip install brinkpy` (Python 3.11 or newer).
     - Open a terminal in your project folder. Brinkpy reads and writes its `problems/`, `profiles/`, and `results/` folders in the folder you run it from.
     - The first time you run `analyze`, `design`, or `simulate`, Brinkpy asks you to sign in through your browser.
 

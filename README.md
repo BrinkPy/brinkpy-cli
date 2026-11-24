@@ -63,7 +63,7 @@ Read the full documentation at:
 
 ## Requirements
 
-- Python 3.10+
+- Python 3.11+
 - Internet connection for API access and authentication
 
 ## Testing and Validation
