@@ -17,7 +17,7 @@ Brinkpy is free to use at this time. This page describes the paid plans that wil
 | Academic | Students and teachers, with a verified university email address | $8 | $80 | Included in the price |
 | Professional | Everyone else | $25 | $250 | Added at checkout where it applies |
 
-Prices are in US dollars. The payment page may show them in your local currency. Both plans include the same features. A yearly subscription costs less than 12 monthly payments.
+Prices are in US dollars. The payment page may show them in your local currency. If you pay in another currency, the amount can vary slightly between renewals with the exchange rate. Both plans include the same features. A yearly subscription costs less than 12 monthly payments.
 
 ## Free Trial
 

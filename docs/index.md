@@ -109,6 +109,8 @@ Brinkpy CLI runs computations through the hosted Brinkpy API. The CLI handles lo
     - **Academic**, for students and teachers with a university email address: **$8/month** or **$80/year**, tax included.
     - **Professional**: **$25/month** or **$250/year**, plus tax where it applies.
 
+    Prices are in US dollars. The payment page may show them in your local currency.
+
     The start of paid plans will be announced at least 30 days in advance, and existing users will receive clear notice before any charge applies. See [Plans and Subscription](subscription.md) for details.
 
 ## Commands and Help

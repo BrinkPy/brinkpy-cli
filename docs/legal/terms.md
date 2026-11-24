@@ -5,13 +5,15 @@ description: "The terms that apply to using Brinkpy CLI and the Brinkpy API, inc
 
 # Terms of Service
 
-Last updated: November 22, 2026
+Last updated: November 23, 2026
 
 These terms apply to Brinkpy CLI, the Brinkpy API that the CLI sends problems to, and the website at brinkpy.app (together, "Brinkpy"). Brinkpy is developed and operated by Cesar Carrasco ("we", "us"). By creating an account or using Brinkpy, you agree to these terms. If you do not agree, do not use Brinkpy.
 
 ## Accounts
 
 You need an account to run analyses, designs, and simulations. You sign in through Auth0, as described in [User Authentication](../auth.md).
+
+You must be at least 13 years old to use Brinkpy, or older if the law where you live requires it. If you are under 18, a parent or guardian must agree to these terms for you.
 
 - Give an email address you can receive mail at, and keep it current.
 - Keep your sign-in private. Each account is for one person. Do not share it.
