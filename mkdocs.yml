@@ -101,3 +101,4 @@ extra_css:
   - stylesheets/extra.css
 extra_javascript:
   - javascripts/table-scroll.js
+  - javascripts/search-highlight.js
