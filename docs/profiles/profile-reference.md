@@ -146,7 +146,7 @@ Used by: `analyze --include-mc` and `simulate`.
 
 When `mc_n` is `null`, Brinkpy sizes the run to reach a CV of at most `mc_max_cv`:
 
-- `analyze --include-mc` runs FORM, and SORM with `--include-sorm`, before Monte Carlo. From their estimate of the probability of failure, Brinkpy computes the number of samples needed and spreads them over at least three cycles.
+- `analyze --include-mc` runs FORM, and SORM with `--include-sorm`, before Monte Carlo. From their estimate of the probability of failure, Brinkpy computes the number of samples needed, adds a margin because the estimate is approximate, and spreads them over at least three cycles. Each cycle size is rounded down to its leading digit, for example from 1,433 to 1,000 samples.
 - `simulate` runs Monte Carlo first, even with `--include-form`, so there's no estimate yet. Brinkpy sizes the cycles as the run goes. The first cycle has 10,000 samples. After each cycle, Brinkpy uses the probability of failure estimated so far to compute how many more samples are needed, and runs them all in the next cycle. While no sample has failed yet, each next cycle is 10 times larger than the last.
 
 In both cases the run continues until at least three cycles have run and the CV is at most `mc_max_cv`. The memory available on the server also limits the size of each cycle. Importance sampling chooses its sample sizes differently (see [Importance Sampling Settings](#importance-sampling-settings)).

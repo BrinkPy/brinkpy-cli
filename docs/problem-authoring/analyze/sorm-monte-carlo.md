@@ -121,7 +121,7 @@ The tables below are transcribed from the `Results` worksheet in `Chan3-26e7a.xl
 
 - FORM gives `beta = 0.9543` (`pf ≈ 0.1700`). SORM and Monte Carlo give a larger reliability index (`beta = 1.167` and `1.175`) and therefore a smaller probability of failure (`pf ≈ 0.12`). A larger β always means a smaller probability of failure, since `pf = Φ(-β)`.
 - Monte Carlo (`pf = 0.1200` with `cv = 0.0494`, so a standard error of about 0.006) agrees with SORM (`pf = 0.1216`) within its sampling error, while FORM (`pf = 0.1700`) lies far outside it. The SORM estimate is more accurate than FORM for this problem.
-- Brinkpy sized the Monte Carlo run from the SORM probability of failure, which needs about 4,300 samples for `cv ≤ 0.05`, including a safety factor of 1.5. Spread over three cycles and rounded down to 1,000 samples per cycle, the run used 3,000 samples and still reached `cv = 0.0494`, below the target, so it stopped after three cycles. See [Precision of the default settings](../simulate/classic-monte-carlo.md#interpretation-snapshot) for a more precise run.
+- With `mc_n` set to `null`, Brinkpy chose the number of samples from the SORM probability of failure (see [Monte Carlo Settings](../../profiles/profile-reference.md#monte-carlo-settings)). The run used 3,000 samples in three cycles and reached `cv = 0.0494`, below the target of 0.05, so it stopped. See [Precision of the default settings](../simulate/classic-monte-carlo.md#interpretation-snapshot) for a more precise run.
 
 ## Generated Figures
 

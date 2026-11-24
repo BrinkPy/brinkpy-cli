@@ -150,6 +150,8 @@ Set `LSFreturnsGradient` and `LSFreturnsHessian` to match what your function ret
 
 There is no mode that returns the Hessian without the gradient. A user-provided Hessian is defined in real space, and Brinkpy needs the gradient to transform it into the standard normal space used by FORM and SORM. In practice, if you can derive the Hessian analytically, the gradient is usually straightforward.
 
+Brinkpy checks a provided gradient or Hessian against finite differences before using it (see [Derivative Checking](../profiles/profile-reference.md#derivative-checking)).
+
 ## Vectorized and Parallel Evaluation
 
 Monte Carlo simulation and importance sampling evaluate the limit state function at many samples. `LSFisVectorized` and `LSFisParallelizable` decide how:
@@ -364,7 +366,7 @@ Correlations (`cor` or `cor_list`) refer to the variables after truncation.
 Bounds without truncation are useful to keep the MPP inside values that make physical sense without changing the probability model. On the way to the MPP, the search may still try points outside the bounds unless `keep_feasible` is `True` (see [Keeping the Search Inside the Bounds](#keeping-the-search-inside-the-bounds)).
 
 !!! warning "When the MPP lies on a bound"
-    With `truncated[i] = False`, the bounds restrict only where FORM and Inverse FORM search. If the MPP ends up on a bound, the result describes the constrained search, not the full distribution, so the reliability index (from FORM or SORM) or the design point (from Inverse FORM) may not reflect the actual probability of failure. Brinkpy reports this in a note that lists each active bound, whether it is the lower or upper bound, and about how much it affects the result. A bound counts as active when the MPP lies within 1% of it, or within 0.01 when the bound is between −1 and 1. The same values appear in the `bnds_mult` column of the results (see [Lagrange Multipliers for Bounds and Constraints](results-tables.md#lagrange-multipliers-for-bounds-and-constraints)). When a bound is active, decide whether values of the variable outside the bounds are physically possible:
+    With `truncated[i] = False`, the bounds restrict only where FORM and Inverse FORM search. If the MPP ends up on a bound, the result describes the constrained search, not the full distribution, so the reliability index (from FORM or SORM) or the design point (from Inverse FORM) may not reflect the actual probability of failure. Brinkpy reports this in a note that lists each active bound, whether it is the lower or upper bound, and about how much it affects the result. The same values appear in the `bnds_mult` column of the results (see [Lagrange Multipliers for Bounds and Constraints](results-tables.md#lagrange-multipliers-for-bounds-and-constraints)). When a bound is active, decide whether values of the variable outside the bounds are physically possible:
 
     - If they are not, set `truncated[i] = True` so the distribution itself excludes them.
     - If they are, widen or remove the bounds.
@@ -424,7 +426,7 @@ Both kinds of constraint are written in terms of the stochastic variables in rea
 
 A constraint can have several outputs, with one entry per output in `lb` and `ub`: a nonlinear constraint function returns one value per output, and a linear constraint has one row of `A` per output. The results number the outputs from 1, so the two outputs of `ratios` above are output 1 and output 2. A linear constraint is named `linear_k` in the results, where k is its position in the `constraints` list, starting at 1.
 
-When `jac` or `hess` is provided, Brinkpy checks it against finite differences before the analysis and reports the number of function calls in a note. The profile options `check_varscf_diffs_wrtx`, `check_varscf_diffs_wrtu`, and `varscf_diffs_check_method` control the check (see [Derivative Checking](../profiles/profile-reference.md#derivative-checking)).
+When `jac` or `hess` is provided, Brinkpy checks it against finite differences before the analysis and reports the number of function calls in a note (see [Derivative Checking](../profiles/profile-reference.md#derivative-checking)).
 
 Constraints affect each method as follows:
 
@@ -437,7 +439,7 @@ Constraints affect each method as follows:
 The results include a table of the constraint values at the MPP (see [Stochastic Variables Constraints](results-tables.md#stochastic-variables-constraints)).
 
 !!! warning "When the MPP lies on a constraint limit"
-    As with bounds, if the MPP ends up on a constraint limit, the result describes the constrained search, not the full distribution. Brinkpy reports this in a note that lists each active limit, whether it is the lower or upper limit, and about how much it affects the result, in the units of the constraint's output. A limit counts as active when the constraint's value lies within 1% of it, or within 0.01 when the limit is between −1 and 1. Equalities are not listed. Decide whether values beyond the limit are physically possible, and if they are, widen the limit.
+    As with bounds, if the MPP ends up on a constraint limit, the result describes the constrained search, not the full distribution. Brinkpy reports this in a note that lists each active limit, whether it is the lower or upper limit, and about how much it affects the result, in the units of the constraint's output (see [Lagrange Multipliers for Bounds and Constraints](results-tables.md#lagrange-multipliers-for-bounds-and-constraints)). Equalities are not listed. Decide whether values beyond the limit are physically possible, and if they are, widen the limit.
 
 !!! warning "Setting `keep_feasible` to `True`"
     With `keep_feasible` set to `True`, the starting point of the search must already satisfy the constraint, or SciPy stops with an error and the run fails. Every step of the search must then stay inside the limits, which can slow the search or stop it short of a solution that lies on a limit. Set it to `True` only when the problem's functions cannot be evaluated outside the limits, for example when a value inside a square root or logarithm would become negative. `keep_feasible` has no effect on equalities, and no effect when the function is not smooth (see [Smooth and Non-Smooth Functions](#smooth-and-non-smooth-functions)).
@@ -488,12 +490,12 @@ Example pattern (`None` marks the unused pair for that variable):
 | `pareto` | `pareto` | Yes | Yes | `xm` (scale, the minimum value) | `α` (shape) | Optional |
 | `rayleigh` | `rayleigh` | Yes | `None` | `σ` (scale) | `None` | Optional |
 
-The `mean` and `std` columns apply to a variable defined by its moments, and the `param1` and `param2` columns to one defined by its natural parameters. In all four columns, `None` marks a value the distribution does not take: set it to `None`, or Brinkpy stops with an error. The exponential and Rayleigh distributions are defined by a single value, their `mean` or `param1`, and the triangular distribution by a single value together with its bounds `lb` and `ub`. So for these three, `std` (or `cv`) and `param2` are always `None`.
-
 `*` A uniform distribution does not take `param1` and `param2`, so set both to `None`. Define it in one of two ways:
 
 - By `mean` and `std`. Set `lb` and `ub` to `None`.
 - By `lb` and `ub`, which are the lower and upper limits of the distribution. Set `mean` and `std` to `None`.
+
+The `mean` and `std` columns apply to a variable defined by its moments, and the `param1` and `param2` columns to one defined by its natural parameters. In all four columns, `None` marks a value the distribution does not take: set it to `None`, or Brinkpy stops with an error. The exponential and Rayleigh distributions are defined by a single value, their `mean` or `param1`, and the triangular distribution by a single value together with its bounds `lb` and `ub`. So for these three, `std` (or `cv`) and `param2` are always `None`.
 
 `param1` and `param2` are the parameters as the linked Wikipedia pages define them, which is the usual textbook definition. Brinkpy converts them to the arguments of the SciPy distribution, which do not always have the same meaning. For example, SciPy's `lognorm` takes `s = σ_ln` and `scale = exp(μ_ln)`, `expon` takes `scale = 1/λ`, and `triang` takes the mode as a fraction of the interval from `lb` to `ub`. Enter the parameters as in the table, not as SciPy's arguments. The beta distribution is the standard one stretched from [0, 1] to [`lb`, `ub`].
 
