@@ -139,7 +139,7 @@ The worksheet also includes a table titled `SORM limit state function fit parame
 | `lambda` | Second-order terms of the expansion, one per stochastic variable |
 | `k` | Principal curvatures of the limit state surface at the design point, one fewer than the number of stochastic variables. When `sor_approximation` is `Taylor2`, they appear only if the profile option `force_curvatures` is `true`. |
 
-The expansion has no cross terms, G ≈ a0 + Σ γᵢ yᵢ + Σ λᵢ yᵢ², where the yᵢ are standard normal variables. `a0`, `gamma`, and `lambda` appear when `sor_fit_method` is `ZhaoPF`, or when `sor_method` is `IFFT` and `sor_approximation` is `Taylor2`. With `ZhaoPF`, the yᵢ are the independent standard normal variables and the terms are fitted through points around the design point, as in Zhao and Ono (1999b). Otherwise, the yᵢ are rotated so that the second-order terms have no cross products, and the expansion is scaled by the length of the gradient at the design point, as in Tvedt (1990), Appendix I. See [SORM References](../profiles/profile-reference.md#sorm-references) for both papers.
+The expansion has no cross terms, G ≈ a0 + Σ γᵢ yᵢ + Σ λᵢ yᵢ², where the yᵢ are standard normal variables. `a0`, `gamma`, and `lambda` appear when `sor_fit_method` is `ZhaoPF`, or when `sor_method` is `IFFT` and `sor_approximation` is `Taylor2`. With `ZhaoPF`, the yᵢ are the independent standard normal variables and the terms are fitted through points around the design point, as in Zhao and Ono (1999b). Otherwise, the yᵢ are rotated so that the second-order terms have no cross products, and the expansion is scaled by the length of the gradient at the design point, as in Tvedt (1990), Appendix I.
 
 When `sor_method` is `SOSPA_L` or `SOSPA_H`, the table also includes the saddlepoint approximation values:
 
@@ -151,6 +151,13 @@ When `sor_method` is `SOSPA_L` or `SOSPA_H`, the table also includes the saddlep
 | `uh` | `SOSPA_L`, `SOSPA_H` | û = t̂ √K″(t̂) (equation 3) |
 | `E3`, `E4` | `SOSPA_H` | Standardized derivatives of the cumulant generating function at the saddlepoint, Eᵣ = K⁽ʳ⁾(t̂) / [K″(t̂)]^(r/2) (equation 5). `SOSPA_H` adds the higher-order correction of Daniels (1987) to the Lugannani–Rice formula, which uses `E3` and `E4` (equation 15). When `at_mean` is `true`, they are evaluated at t = 0 instead, where they are the skewness and excess kurtosis of the approximation. |
 | `E5` | `SOSPA_H` when `at_mean` is `true` | E₅ at t = 0, used with `E3` and `E4` in the formula at the mean (equation 16). Equation 16 as printed has two errors: it divides by 2π instead of √(2π), and its last term has E₃² instead of E₃³. Brinkpy uses the corrected form, which follows from the Edgeworth expansion at the mean and matches the √(2π) of equation 5. |
+
+References for the SORM tables:
+
+- Zhao, Y.-G., and Ono, T. (1999b). "New approximations for SORM: Part 2." *J. Eng. Mech.*, ASCE, 125(1), 86–93. [→](https://ascelibrary.org/doi/10.1061/%28ASCE%290733-9399%281999%29125%3A1%2886%29)
+- Tvedt, L. (1990). "Distribution of quadratic forms in normal space—application to structural reliability." *J. Eng. Mech.*, ASCE, 116(6), 1183–1197. [→](https://ascelibrary.org/doi/10.1061/%28ASCE%290733-9399%281990%29116%3A6%281183%29)
+- Chen, Q., and Giles, D. E. (2008). "General saddlepoint approximations: Application to the Anderson-Darling test statistic." *Communications in Statistics – Simulation and Computation*, 37(4), 789–804. [→](https://doi.org/10.1080/03610910701730141)
+- Daniels, H. E. (1987). "Tail probability approximations." *International Statistical Review*, 55(1), 37–48. [→](https://doi.org/10.2307/1403269)
 
 ## Monte Carlo
 

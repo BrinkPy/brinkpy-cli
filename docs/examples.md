@@ -79,6 +79,8 @@ Every example works with `analyze` and `simulate`. Examples marked in the **Desi
 | `PipecorrProblem` | [Netto et al. (2005)](https://www.sciencedirect.com/science/article/pii/S0143974X05000453) | ✓ | [Stochastic Variable Constraints](problem-authoring/design/stochastic-constraints.md) |
 | `Sorensen81Problem` | [Sørensen (2004)](https://filelist.tudelft.nl/TBM/Over%20faculteit/Afdelingen/Values%2C%20Technology%20and%20Innovation/People/Full%20Professors/Pieter%20van%20Gelder/Citations/citatie215.pdf), Chapter 8, Problem 1 | ✓ | [Optimization](problem-authoring/design/optimization.md) |
 
+Ang and Tang (1990): Ang, A. H.-S., and Tang, W. H. (1990). *Probability Concepts in Engineering Planning and Design, Vol. II*. John Wiley and Sons.
+
 Each example file also lists its source at the top.
 
 ## Using Example Problems

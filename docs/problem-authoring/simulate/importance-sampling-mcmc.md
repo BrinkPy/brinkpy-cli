@@ -228,6 +228,8 @@ The `AU2` problem from the [Importance Sampling](importance-sampling.md) example
 !!! note "Comparison with the paper"
     Au and Beck (1999) build the proposal distribution with MCMC. Brinkpy's estimate, `pf = 8.439e−7`, is larger than the `6.97e−7` published in the paper. Brinkpy's MCMC chains find a part of the failure region that the published solution does not include (see **Figure 12**). When the variables are bounded to the region used in the paper, Brinkpy's estimate matches the published one within the variation expected from random sampling. See [Verification](../../why-brinkpy.md#verification).
 
+    **Source:** Au, S. K. and Beck, J. L., "A new adaptive importance sampling scheme for reliability calculations," *Structural Safety*, vol. 21, no. 2, 1999, pp. 135–158. [→](https://people.duke.edu/~hpgavin/risk/Au-1999.pdf)
+
 ### Figure 12: AU2 MCMC Samples by Chain (u-space)
 
 ![AU2 MCMC samples by chain u-space](../images/au2-57473-01-mcmc-chains-u-space.png)
