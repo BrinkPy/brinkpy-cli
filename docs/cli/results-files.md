@@ -89,7 +89,10 @@ for fig in figures:
 plt.show()
 ```
 
-Replace the path with the one for your run. Once loaded, the figures can be edited like any other Matplotlib figure. Run the script in the same Python environment where Brinkpy is installed. A pickled figure may fail to load with a different version of Matplotlib.
+Replace the path with the one for your run. Once loaded, the figures can be edited like any other Matplotlib figure. Run the script in the same Python environment where Brinkpy is installed.
+
+!!! note "Matplotlib and NumPy versions"
+    A pickle file opens only with the same Matplotlib minor version that created it (for example 3.11.x) and with NumPy 2. Brinkpy installs those versions. If you install Brinkpy into an environment that already has another Matplotlib version, or upgrade Matplotlib later, the plots may not open. `brinkpy plots` then says which version the file needs. To open the plots, install that version, for example `pip install "matplotlib==3.11.*"`, or open the PDF file of the run, which shows the same plots with any software.
 
 ## Design Runs
 

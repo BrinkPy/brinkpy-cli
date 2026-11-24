@@ -11,6 +11,7 @@ import os
 import pathlib
 import pickle
 import platform
+import re
 import shutil
 import subprocess
 import sys
@@ -585,21 +586,80 @@ def show_pickle_plots(
     ):
         return
 
-    show_figures_from_pickle(file_paths[2])
+    show_figures_from_pickle(file_paths[2], problem)
 
 
-def show_figures_from_pickle(pickle_path: Path) -> bool:
+def recorded_plot_versions(pickle_path: Path, problem: Dict | None = None) -> Dict | None:
+    """
+    The library versions the API used to write the pickle ("PlotVersions"): from the run's results, or for a saved run
+    from the .json file next to the pickle. None for runs from before the API recorded them.
+    """
+    if problem and isinstance(problem.get("PlotVersions"), dict):
+        return problem["PlotVersions"]
+    json_path = pickle_path.with_suffix(".json")
+    try:
+        with open(json_path, encoding="utf-8") as f:
+            versions = json.load(f).get("PlotVersions")
+        return versions if isinstance(versions, dict) else None
+    except (OSError, ValueError, AttributeError):
+        return None
+
+
+def _major_minor(version: str) -> tuple[int, ...]:
+    return tuple(int(part) for part in re.findall(r"\d+", version)[:2])
+
+
+def plot_version_advice(recorded: Dict | None) -> list[str]:
+    """
+    Instructions when the local Matplotlib or NumPy can't be expected to open the pickle. A pickle opens reliably only
+    with the same Matplotlib minor version (for example 3.11.x) and, for pickles written with NumPy 2, NumPy 2.
+    """
+    if not recorded:
+        return []
+    import matplotlib
+
+    advice = []
+    mpl_saved = str(recorded.get("matplotlib", ""))
+    if mpl_saved and _major_minor(mpl_saved) != _major_minor(matplotlib.__version__):
+        series = ".".join(str(n) for n in _major_minor(mpl_saved))
+        advice.append(
+            f"These plots were saved with Matplotlib {mpl_saved}, and you have {matplotlib.__version__}. "
+            f'To open them, install the same series: pip install "matplotlib=={series}.*"'
+        )
+    np_saved = str(recorded.get("numpy", ""))
+    if np_saved and _major_minor(np_saved)[:1] != _major_minor(np.__version__)[:1]:
+        major = _major_minor(np_saved)[0]
+        advice.append(
+            f"These plots were saved with NumPy {np_saved}, and you have {np.__version__}. "
+            f'To open them, install NumPy {major}: pip install "numpy>={major},<{major + 1}"'
+        )
+    return advice
+
+
+def show_figures_from_pickle(pickle_path: Path, problem: Dict | None = None) -> bool:
     """
     Load the matplotlib figures pickled by the API, display them non-blocking,
     and wait for the user to hit return before closing.
     Returns True if the figures were displayed.
     """
+    advice = plot_version_advice(recorded_plot_versions(pickle_path, problem))
+    pdf_path = pickle_path.with_suffix(".pdf")
+    pdf_hint = f"The same plots are in the PDF file: {pdf_path}" if pdf_path.exists() else None
+    for line in advice:
+        console.print(f"{ICON_WARN} {line}")
+
     try:
         with open(pickle_path, "rb") as f:
             figs_to_show = pickle.load(f)
     except Exception as e:
-        console.print(f"{ICON_ERR} Failed to load pickle file: {e}")
-        traceback.print_exc()
+        console.print(f"{ICON_ERR} Could not open the plots in {pickle_path.name} ({type(e).__name__}: {e}).")
+        if not advice:
+            console.print(
+                f"{ICON_INFO} Pickled plots open only with the Matplotlib and NumPy versions they were saved with, "
+                "which is normally the version Brinkpy installs. Run 'pip install --upgrade brinkpy' to get it."
+            )
+        if pdf_hint:
+            console.print(f"{ICON_INFO} {pdf_hint}")
         return False
 
     # API always pickles a list of Figure objects
