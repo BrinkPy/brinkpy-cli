@@ -61,7 +61,7 @@ This example uses the `default` profile. FORM behavior can be adjusted in a cust
   - `g = R - L`
 
 !!! note "Comparison with the book"
-    Brinkpy's results differ slightly from the book's. The book applies the correlation coefficient directly in standard normal space, while Brinkpy adjusts it with the Nataf transformation, which is more accurate for correlated non-normal variables. See [Verification](../../why-brinkpy.md#verification).
+    Brinkpy's results agree with the book's. The book stops after four iterations with β = 2.658, slightly below the converged value of 2.6644. The alpha values of `Y` and `Z` look different because the book gives them for uncorrelated variables obtained from the eigenvectors of the correlation matrix, while Brinkpy uses the Cholesky decomposition. Expressed in the book's variables, Brinkpy's alpha values match the book's to three decimals: 0.491 and 0.137 against 0.492 and 0.138.
 
 ## Extracted Results Worksheet Tables
 

@@ -27,9 +27,23 @@ Options for reliability calculations and related numerical settings. This sectio
 
 | Option | Type | Default | Values | Description |
 |--------|------|---------|--------|-------------|
-| `alpha_direction` | str | `"outward"` | `"outward"`, `"inward"` | Direction convention for the alpha vector |
+| `alpha_direction` | str | `"outward"` | `"outward"`, `"inward"` | Sign convention for the alpha vector (see [Alpha Direction](#alpha-direction)) |
 | `use_nearest_correlation` | bool | `false` | - | Controls fallback behavior when Cholesky decomposition of the correlation matrix fails. If `false`, the run stops with an error. If `true`, Brinkpy replaces the matrix with a nearby positive definite correlation matrix, using the spectral method of [Rebonato and Jäckel (2000)](https://doi.org/10.21314/JOR.2000.023). See also [Correlation Matrix Conditioning](../problem-authoring/recommended-texts.md#correlation-matrix-conditioning). |
 | `max_minimize_attempts` | int | `8` | [1, 12] | Maximum number of attempts for each FORM, Inverse FORM, and design optimization. An attempt that fails is followed by a new one from a random starting point, and a result that is not yet accurate enough is refined by a restart. Both count as attempts. The FORM, Inverse FORM, and design results report the attempts used as [`min_tries`](../problem-authoring/results-tables.md#form-results). |
+
+#### Alpha Direction
+
+The alpha vector is the unit vector normal to the limit state surface at the failure point in standard normal space (see [FORM Results](../problem-authoring/results-tables.md#form-results)). Authors define it with either sign. The choice is a convention and does not depend on how the limit state function is written.
+
+- `"outward"`: alpha is the negative gradient of the limit state function divided by its length. It points from the origin toward the failure point, so the failure point is β times alpha. Tvedt (1990, Equation 6) uses this definition.
+- `"inward"`: alpha is the gradient divided by its length. It points from the failure point back toward the origin, so the failure point is −β times alpha. Ang and Tang (1990, Equation 6.16b) use this definition.
+
+The setting changes the signs of the alpha values and the importance factors only. It does not change β, the probability of failure, or the failure point.
+
+References:
+
+- Ang, A. H.-S., and Tang, W. H. (1990). *Probability Concepts in Engineering Planning and Design, Vol. II*. John Wiley and Sons.
+- Tvedt, L. (1990). "Distribution of quadratic forms in normal space—application to structural reliability." *J. Eng. Mech.*, ASCE, 116(6), 1183–1197. [→](https://ascelibrary.org/doi/10.1061/%28ASCE%290733-9399%281990%29116%3A6%281183%29)
 
 ### FORM and Inverse FORM Settings
 

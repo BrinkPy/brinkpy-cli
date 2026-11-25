@@ -34,14 +34,12 @@ Comparing methods on the same problem, for example FORM against several SORM app
 
 Brinkpy is verified against published results. Every [packaged example](examples.md), and a larger set of problems from the literature, was checked against the results in the paper or book it comes from, and the results agree. These problems are part of the test suite of the Brinkpy API, which runs every time the API changes, so a change that breaks a known answer is caught before it is released.
 
-The few differences from published results have a known cause, and in each case Brinkpy's result is the more accurate one:
+One difference from published results has a known cause, and Brinkpy's result is the more accurate one.
 
-- **Correlated variables in Ang and Tang (1990).** In the textbook examples with correlated non-normal variables, such as [`AT610`](problem-authoring/analyze/form-only.md), the book applies the correlation coefficients directly in standard normal space. Brinkpy adjusts them with the Nataf transformation, which accounts for how the correlation changes under the transformation to standard normal space.
-- **The failure region of `AU2`.** In the series system example of Au and Beck (1999), Brinkpy's importance sampling finds a part of the failure region that the published solution does not include, so its probability of failure, between `8.4e−7` and `9.2e−7` in the runs shown in these docs, is larger than the published `6.97e−7` (see [MCMC Importance Sampling](problem-authoring/simulate/importance-sampling-mcmc.md#parts-at-the-same-distance-au2)). When the variables are bounded to the region used in the paper, Brinkpy's estimate matches the published one within the variation expected from random sampling.
+**The failure region of `AU2`.** The series system example of Au and Beck (1999) has three design points at the same distance from the origin, but the paper names two and its figures show only half of the plane. The missing part, where both variables are negative, adds about 29% to the probability of failure. Numerical integration gives `8.98e−7` in total and `6.97e−7` without that part, the published value. Brinkpy's importance sampling finds all three parts, with estimates between `8.4e−7` and `9.2e−7` in the runs shown in these docs (see [MCMC Importance Sampling](problem-authoring/simulate/importance-sampling-mcmc.md#parts-at-the-same-distance-au2)). With `T2` bounded below by 0, the half of the plane shown in the paper, Brinkpy's estimate is `6.98e−7`, which matches the published value.
 
 References:
 
-- Ang, A. H.-S., and Tang, W. H. (1990). *Probability Concepts in Engineering Planning and Design, Vol. II*. John Wiley and Sons.
 - Au, S. K., and Beck, J. L. (1999). A new adaptive importance sampling scheme for reliability calculations. *Structural Safety*, 21(2), 135–158. [→](https://people.duke.edu/~hpgavin/risk/Au-1999.pdf)
 
 ## Reproducible Results
