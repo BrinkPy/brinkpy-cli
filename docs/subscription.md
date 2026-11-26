@@ -8,7 +8,7 @@ description: "Brinkpy's Academic and Professional plans, the 14-day free trial, 
 Brinkpy is free to use at this time. This page describes the paid plans that will start later, and the CLI commands for subscribing and managing a subscription.
 
 !!! info "Paid plans are not active yet"
-    Until paid plans start, every signed-in user can run problems free of charge, and the commands on this page are not shown in the CLI. We will announce the start date at least 30 days in advance. The commands become available in the CLI release that starts the paid plans.
+    Until paid plans start, every signed-in user can run problems free of charge, and `brinkpy user subscribe` answers that Brinkpy is free to use at this time. We will announce the start date at least 30 days in advance.
 
 ## Plans
 

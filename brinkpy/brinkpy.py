@@ -53,12 +53,6 @@ from brinkpy.utils import billing_cli
 
 os.environ["PYDANTIC_ERRORS_INCLUDE_URL"] = "false"  # Disable Pydantic error URLs in CLI output
 
-ENABLE_STRIPE_REGISTRATION = os.getenv("BRINKPY_ENABLE_STRIPE_REGISTRATION", "0").strip().lower() in {
-    "1",
-    "true",
-    "yes",
-    "on",
-}
 
 console = Console()
 # fmt: off
@@ -70,7 +64,7 @@ app.add_typer(examples, name="examples")
 profiles = typer.Typer(help="[green bold]Manage[/green bold] configuration profiles", rich_help_panel="Profile Management")
 app.add_typer(profiles, name="profile")
 
-user = typer.Typer(help="[green bold]Manage[/green bold] user authentication", rich_help_panel="User Authentication")
+user = typer.Typer(help="[green bold]Manage[/green bold] sign-in and subscription", rich_help_panel="User Account")
 app.add_typer(user, name="user")
 
 @app.callback(help=None)
@@ -793,7 +787,6 @@ def id():
 
 @user.command(
     name="subscribe",
-    hidden=not ENABLE_STRIPE_REGISTRATION,
     help="[bold green]Subscribe[/bold green] to Brinkpy (opens the payment page)",
 )
 def subscribe(
@@ -812,7 +805,7 @@ def subscribe(
 ):
     """Shows the plan and price for your account, then opens the Stripe payment page.
 
-    Hidden until subscriptions go live. Enable it with BRINKPY_ENABLE_STRIPE_REGISTRATION=1.
+    Until subscriptions open, the API answers that Brinkpy is free to use and no payment page opens.
     """
     ok = billing_cli.subscribe(yearly=yearly, open_browser=open_browser)
     console.print()
@@ -822,7 +815,6 @@ def subscribe(
 
 @user.command(
     name="billing",
-    hidden=not ENABLE_STRIPE_REGISTRATION,
     help="[bold green]Manage[/bold green] your subscription: payment method, receipts, or cancel",
 )
 def billing(
@@ -844,7 +836,6 @@ def billing(
 
 @user.command(
     name="status",
-    hidden=not ENABLE_STRIPE_REGISTRATION,
     help="[bold green]Show[/bold green] your subscription and free trial status",
 )
 def status():
