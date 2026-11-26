@@ -59,7 +59,7 @@ Used by: `analyze`, `design`, and `simulate` when FORM runs.
 | `form_xtol` | float | `0.0001` | [1e-8, 1e-2] | Tolerance for FORM termination (variable changes) |
 | `form_gtol` | float | `0.0001` | [1e-8, 1e-2] | Tolerance for FORM termination (Lagrangian gradient norm changes) |
 | `form_maxiter` | int | `1000` | [1, 10000] | Maximum iterations for FORM |
-| `form_random_start` | bool | `false` | - | Use a random starting point for FORM |
+| `form_random_start` | bool | `false` | - | Starting point of the first FORM and Inverse FORM attempt. If `false`, the search starts at the median of every variable (u = 0 in standard normal space). If `true`, it starts at a random point drawn from the standard normal distribution. Either way, a start outside the variable bounds is moved just inside them. Later attempts always start from random points (see `max_minimize_attempts`). |
 | `form_seed` | int or null | `null` | - | Random seed for FORM/Inverse FORM random starts |
 
 ### Design Optimization Settings
@@ -71,7 +71,7 @@ Used by: `design` when the problem defines an objective function.
 | `design_xtol` | float | `0.001` | [1e-8, 1e-2] | Tolerance for design optimization termination (variable changes) |
 | `design_gtol` | float | `0.001` | [1e-8, 1e-2] | Tolerance for design optimization termination (Lagrangian gradient norm changes) |
 | `design_maxiter` | int | `1000` | [1, 10000] | Maximum iterations for design optimization |
-| `design_random_start` | bool | `false` | - | Use a random starting point for design optimization |
+| `design_random_start` | bool | `false` | - | Starting point of the first design optimization attempt. If `false`, the optimization starts at the problem's [`InitialGuess`](../problem-authoring/design/design-keys.md). If `true`, Brinkpy adds a small random step to each value of `InitialGuess`, with a standard deviation of 10% of the range between the variable's bounds, or 10% of the value (at least 0.1) when the variable is not bounded on both sides. Either way, the start is moved inside the bounds and, if needed, to a point that satisfies the design constraints. Later attempts always start from random points farther away: anywhere between the bounds, or steps five times larger when the variable is not bounded on both sides (see `max_minimize_attempts`). The option also makes the starting values of the Inverse SORM search random. |
 | `design_seed` | int or null | `null` | - | Random seed for design optimization random starts |
 
 ### SORM Settings

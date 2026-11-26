@@ -57,7 +57,7 @@ To see the files copied into your project folder, open `problems/` directly.
 
 ## Available Examples
 
-Every example works with `analyze` and `simulate`. Examples marked in the **Design** column also define a `DesignProblem` and work with `design`. Eleven examples have a step-by-step walkthrough in the documentation.
+Every example works with `analyze` and `simulate`. Examples marked in the **Design** column also define a `DesignProblem` and work with `design`. Eleven examples have a step-by-step walkthrough in the documentation. Each example file also lists its source at the top.
 
 | Example | Source | Design | Walkthrough |
 |---|---|:-:|---|
@@ -79,9 +79,7 @@ Every example works with `analyze` and `simulate`. Examples marked in the **Desi
 | `PipecorrProblem` | [Netto et al. (2005)](https://www.sciencedirect.com/science/article/pii/S0143974X05000453) | ✓ | [Stochastic Variable Constraints](problem-authoring/design/stochastic-constraints.md) |
 | `Sorensen81Problem` | [Sørensen (2004)](https://filelist.tudelft.nl/TBM/Over%20faculteit/Afdelingen/Values%2C%20Technology%20and%20Innovation/People/Full%20Professors/Pieter%20van%20Gelder/Citations/citatie215.pdf), Chapter 8, Problem 1 | ✓ | [Optimization](problem-authoring/design/optimization.md) |
 
-Ang and Tang (1990): Ang, A. H.-S., and Tang, W. H. (1990). *Probability Concepts in Engineering Planning and Design, Vol. II*. John Wiley and Sons.
-
-Each example file also lists its source at the top.
+The Ang and Tang examples come from *Probability Concepts in Engineering Planning and Design, Vol. II*, by A. H.-S. Ang and W. H. Tang (John Wiley and Sons, 1990).
 
 ## Using Example Problems
 
