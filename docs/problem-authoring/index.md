@@ -65,18 +65,18 @@ The sections below describe each key in detail. The keys of type `bool` are call
 |---|---|---|---|---|
 | `Name` | Yes | `str` | Human-readable problem name used in outputs | `"AT610"` |
 | `LimitStateFunction` | Yes | callable | Function implementing `g(X, D)` that returns `g, gg, gh, L, R` (see [Required Return Values](#required-return-values)) | `LSF` |
-| `LSFisVectorized` | Yes | `bool` | Whether `LSF` can process batched samples (`X` with shape `(n_var, n_samples)`) | `True` |
+| `LSFisVectorized` | Yes | `bool` | Whether `LSF` can process batched samples, with `X` of shape `(n_var, n_samples)` (see [Vectorized and Parallel Evaluation](#vectorized-and-parallel-evaluation)) | `True` |
 | `LSFisSmooth` | Yes | `bool` | Whether the limit state function is smooth. Selects the optimizer for FORM and Inverse FORM (see [Smooth and Non-Smooth Functions](#smooth-and-non-smooth-functions)). | `True` |
 | `LSFisParallelizable` | No (default `False`) | `bool` | Whether simulations may evaluate a function that is not vectorized at several samples at the same time (see [Vectorized and Parallel Evaluation](#vectorized-and-parallel-evaluation)) | `True` |
-| `LSFreturnsGradient` | Yes | `bool` | Whether `LSF` returns the gradient `gg` for a single point. If `False`, Brinkpy ignores `gg`. | `True` |
-| `LSFreturnsHessian` | Yes | `bool` | Whether `LSF` returns the Hessian `gh` for a single point. If `False`, Brinkpy ignores `gh`. | `True` |
-| `LSFreturnsLandR` | Yes | `bool` | Whether `LSF` returns the load `L` and resistance `R`, used for the load and resistance histogram and partial factors. If `False`, Brinkpy ignores `L` and `R`. | `True` |
-| `DeterministicVariables` | Yes | `dict` | Deterministic variables and fixed values | empty in `AT610` |
-| `StochasticVariables` | Yes | `dict` | Random variable definition (names, distributions, moments, correlations) | `Y,Z,M` |
-| `LSFplot` | Optional | `dict` | Axis mapping and limits for limit state function (LSF) plots | present in `AT610` |
-| `RFADplot` | Optional | `dict` | Axis mapping and limits for reliability-based failure assessment diagram (RFAD) plots | present in `AT610` |
-| `ISplot` | Optional | `dict` | Axis mapping for importance sampling (IS) diagnostic plots | present in `AT610` |
-| `DesignProblem` | Required for `design` runs | `dict` | Design-specific definitions (objective, constraints, variables) | not used in `AT610` |
+| `LSFreturnsGradient` | Yes | `bool` | Whether `LSF` returns the gradient `gg` for a single point. If `False`, Brinkpy ignores `gg` (see [LSF Derivative Return Modes](#lsf-derivative-return-modes)). | `True` |
+| `LSFreturnsHessian` | Yes | `bool` | Whether `LSF` returns the Hessian `gh` for a single point. If `False`, Brinkpy ignores `gh` (see [LSF Derivative Return Modes](#lsf-derivative-return-modes)). | `True` |
+| `LSFreturnsLandR` | Yes | `bool` | Whether `LSF` returns the load `L` and resistance `R`, used for the load and resistance histogram and partial factors. If `False`, Brinkpy ignores `L` and `R` (see [Required Return Values](#required-return-values)). | `True` |
+| `DeterministicVariables` | Yes | `dict` | Deterministic variables and fixed values (see [`DeterministicVariables` Keys](#deterministicvariables-keys)) | empty in `AT610` |
+| `StochasticVariables` | Yes | `dict` | Random variable definition: names, distributions, moments, and correlations (see [`StochasticVariables` Keys](#stochasticvariables-keys)) | `Y,Z,M` |
+| `LSFplot` | Optional | `dict` | Axis mapping and limits for limit state function (LSF) plots (see [`LSFplot`](#lsfplot)) | present in `AT610` |
+| `RFADplot` | Optional | `dict` | Axis mapping and limits for reliability-based failure assessment diagram (RFAD) plots (see [`RFADplot`](#rfadplot)) | present in `AT610` |
+| `ISplot` | Optional | `dict` | Axis mapping for importance sampling (IS) diagnostic plots (see [`ISplot`](#isplot)) | present in `AT610` |
+| `DesignProblem` | Required for `design` runs | `dict` | Design-specific definitions: objective, constraints, and variables (see [`DesignProblem` Keys](design/design-keys.md)) | not used in `AT610` |
 
 ## Limit State Function Contract
 
@@ -339,6 +339,7 @@ Rules:
 - Use either `cor_list` or `cor` to define correlation inputs.
 - If defined, `lb`, `ub`, and `truncated` must each have length `n`. `keep_feasible` is either a single `bool` or a list of `bool` values of length `n`. Any other value, such as the string `"False"`, stops the run with an error before it starts.
 - You can set individual bounds to `-np.inf` and `np.inf` to indicate no lower/upper bound for that variable.
+- `lb[i]` must be less than `ub[i]`. If they are equal, the run stops with a message asking you to correct the bounds or to define the variable in `DeterministicVariables` instead (see [`DeterministicVariables` Keys](#deterministicvariables-keys)).
 - If `lb`, `ub`, `keep_feasible`, and/or `truncated` are omitted, defaults are used: no bounds, `keep_feasible=False`, and `truncated=False` for all variables.
 - Bounds and truncation have different effects. See [Bounds and Truncation](#bounds-and-truncation).
 - `constraints`, when provided, is a list of constraint dictionaries. See [Constraints on Stochastic Variables](#constraints-on-stochastic-variables).

@@ -30,18 +30,20 @@ When `DesignProblem` defines a `DesignObjectiveFunction`, Brinkpy runs objective
 | Key | Required | Type | Meaning |
 |---|---|---|---|
 | `DesignObjectiveFunction` | Yes | callable | Objective function that the design optimizer minimizes (see [Design Objective Function Contract](#design-objective-function-contract)) |
-| `DOFisVectorized` | Yes | `bool` | Whether objective can process vectorized design inputs |
+| `DOFisVectorized` | Yes | `bool` | Whether objective can process vectorized design inputs (see [Design Objective Function Contract](#design-objective-function-contract)) |
 | `DOFisSmooth` | Yes | `bool` | Whether the design objective function is smooth. Selects the optimizer for objective optimization (see [Smooth and Non-Smooth Functions](../index.md#smooth-and-non-smooth-functions)). |
-| `DOFreturnsGradient` | Yes | `bool` | If `True`, objective must return gradient in single-point mode |
-| `DOFreturnsHessian` | Yes | `bool` | If `True`, objective must return Hessian in single-point mode |
+| `DOFreturnsGradient` | Yes | `bool` | If `True`, objective must return gradient in single-point mode (see [DOF Derivative Return Modes](#dof-derivative-return-modes)) |
+| `DOFreturnsHessian` | Yes | `bool` | If `True`, objective must return Hessian in single-point mode (see [DOF Derivative Return Modes](#dof-derivative-return-modes)) |
 | `DesignVariables` | Yes | `list[str]` | Names of deterministic design variables to optimize |
-| `InitialGuess` | Yes | `list[float]` | Starting point for optimization |
+| `InitialGuess` | Yes | `list[float]` | Starting point for optimization. The profile option `design_random_start` sets whether Brinkpy starts exactly there (see [Design Optimization Settings](../../profiles/profile-reference.md#design-optimization-settings)). |
 | `lb` | No | `list[float]` | Lower bounds for design variables. If it is missing, the design variables have no lower bounds (`-np.inf`). |
 | `ub` | No | `list[float]` | Upper bounds for design variables. If it is missing, the design variables have no upper bounds (`np.inf`). |
 | `keep_feasible` | No | `bool` or `list[bool]` | Whether the optimizer must keep every point it tries inside `[lb, ub]`, either one `bool` for all design variables or a list with one `bool` per design variable. Any other value stops the run with an error. The default is `False`. |
 | `DesignConstraints` | No | `list[dict]` | Constraints on functions of the design variables (see [Design Constraints](#design-constraints)) |
 
 `DesignVariables` must be selected from `DeterministicVariables.name`.
+
+`lb[i]` must be less than `ub[i]`. If they are equal, the run stops with a message asking you to correct the bounds or to remove the variable from `DesignVariables`, so that it keeps its value in `DeterministicVariables`.
 
 `InitialGuess` must lie within `lb` and `ub`. If it does not satisfy `DesignConstraints`, Brinkpy first moves it to a nearby point that does, and starts the optimization from there.
 
