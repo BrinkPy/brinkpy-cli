@@ -32,15 +32,7 @@ Comparing methods on the same problem, for example FORM against several SORM app
 
 ## Verification
 
-Brinkpy is verified against published results. Every [packaged example](examples.md), and a larger set of problems from the literature, was checked against the results in the paper or book it comes from, and the results agree. These problems are part of the test suite of the Brinkpy API, which runs every time the API changes, so a change that breaks a known answer is caught before it is released.
-
-One difference from published results has a known cause, and Brinkpy's result is the more accurate one.
-
-**The failure region of `AU2`.** The series system example of Au and Beck (1999) has three design points at the same distance from the origin, but the paper names two and its figures show only half of the plane. The missing part, where both variables are negative, adds about 29% to the probability of failure. Numerical integration gives `8.98e−7` in total and `6.97e−7` without that part, the published value. Brinkpy's importance sampling finds all three parts, with estimates between `8.4e−7` and `9.2e−7` in the runs shown in these docs (see [MCMC Importance Sampling](problem-authoring/simulate/importance-sampling-mcmc.md#parts-at-the-same-distance-au2)). With `T2` bounded below by 0, the half of the plane shown in the paper, Brinkpy's estimate is `6.98e−7`, which matches the published value.
-
-References:
-
-- Au, S. K., and Beck, J. L. (1999). A new adaptive importance sampling scheme for reliability calculations. *Structural Safety*, 21(2), 135–158. [→](https://people.duke.edu/~hpgavin/risk/Au-1999.pdf)
+Brinkpy is verified against published results. Every [packaged example](examples.md), and a larger set of problems from the literature, was checked against the results in the paper or book it comes from. The results agree, or the example's page explains the difference. These problems are part of the test suite of the Brinkpy API, which runs every time the API changes, so a change that breaks a known answer is caught before it is released.
 
 ## Reproducible Results
 
