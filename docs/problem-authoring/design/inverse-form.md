@@ -1,16 +1,16 @@
 ---
-description: "Two worked inverse FORM examples, AT625 and AT624, that compute partial factors and design point values for a target reliability index with brinkpy design."
+description: "A worked inverse FORM example, AT624, that computes design point values and partial factors for a target reliability index in four design cases with brinkpy design."
 ---
 
-# Inverse FORM Examples
+# Inverse FORM Example
 
-This page documents two inverse reliability design examples based on saved `design` runs.
+This page documents an inverse reliability design example based on a saved `design` run.
 
 !!! note "About the tables on this page"
     - Table values are rounded to 4 significant figures for readability. Very small/large values use scientific notation. Refer to the Excel/JSON result files for full precision.
     - Advanced solver diagnostics (for example `bsr_mult` and `bnds_mult` Lagrange multipliers) are included in the Excel/JSON result files and are not shown in the tables below.
 
-**Inverse SORM:** Pass `--use-sorm` (or `-s`) to the `design` command to switch the solution algorithm from Inverse FORM to Inverse SORM. All examples on this page were run without this flag (Inverse FORM). The problem file structure is identical for both methods.
+**Inverse SORM:** Pass `--use-sorm` (or `-s`) to the `design` command to switch the solution algorithm from Inverse FORM to Inverse SORM. The example on this page was run without this flag (Inverse FORM). The problem file structure is identical for both methods.
 
 ## Plot Behavior For `design` Runs
 
@@ -21,83 +21,9 @@ If you need plots, use the resulting design parameters in a follow-up `analyze` 
 
 ## Profile Customization
 
-These examples use the `default` profile. Inverse FORM behavior can be adjusted in a custom profile through `reliability_options.form_xtol`, `form_gtol`, `form_maxiter`, and `form_random_start`. See [FORM and Inverse FORM Settings](../../profiles/profile-reference.md#form-and-inverse-form-settings). When using Inverse SORM (`--use-sorm`), the [SORM Settings](../../profiles/profile-reference.md#sorm-settings) also apply.
+This example uses the `default` profile. Inverse FORM behavior can be adjusted in a custom profile through `reliability_options.form_xtol`, `form_gtol`, `form_maxiter`, and `form_random_start`. See [FORM and Inverse FORM Settings](../../profiles/profile-reference.md#form-and-inverse-form-settings). When using Inverse SORM (`--use-sorm`), the [SORM Settings](../../profiles/profile-reference.md#sorm-settings) also apply.
 
-## Example A: `AT625Problem.py` (Single Default Case)
-
-### Run Context
-
-Problem module:
-
-- `problems/AT625Problem.py`
-
-Recorded result set:
-
-- `results/2026-11-04/22-32-14/Ang_and_Tang_6_25-d8ead.xlsx`
-- `results/2026-11-04/22-32-14/Ang_and_Tang_6_25-d8ead.json`
-- `results/2026-11-04/22-32-14/Ang_and_Tang_6_25-d8ead.py`
-- `results/2026-11-04/22-32-14/profile-d8ead.yaml`
-
-Profile and run mode from saved profile:
-
-- Profile used: `default`
-- `run_type: design`
-- `include_sorm: false`
-- `include_mc: false`
-
-For results-folder and filename conventions, see [CLI Result Files](../../cli/results-files.md).
-
-Equivalent command:
-
-```bash
-brinkpy design
-```
-
-### Problem File Used
-
-**Source:** Ang, A. H-S. and Tang, W. H., *Probability Concepts in Engineering Planning and Design, Vol. II*, Wiley, 1990, p. 431, Problem 6.25.
-
-### Extracted Results Worksheet Tables
-
-For the meaning of each column, see [Results Tables Reference](../results-tables.md#design).
-
-Run summary:
-
-| Field | Value |
-|---|---|
-| Request ID | `de52fb190d354e1eae481cbb792d8ead` |
-| Target beta | `1.28` |
-| Target pf | `0.1003` |
-| Cases | `default` |
-
-Default-case inverse FORM result:
-
-| case | beta | pf | lsf_value | lsf_count | glsf_count | hlsf_count | beta_count | hbeta_count | nit | min_tries | min_method |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|
-| default | 1.28 | 0.1003 | −109.5 | 8 | 8 | 8 | 8 | 8 | 8 | 1 | equality_constrained_sqp |
-
-Design point stochastic variables result (`default`):
-
-| var_name | x | fractile | char_value | partial_factor |
-|---|---:|---:|---:|---:|
-| f | 2.52 | 0.5 | 2.46 | 1.024 |
-| N | 10.31 | 0.5 | 11 | 0.9374 |
-| Y | 9.6 | 0.5 | 9.76 | 0.9836 |
-| Q | 1.268e+04 | 0.5 | 9589 | 1.322 |
-
-Load and resistance partial factors (`default`):
-
-| Load | Resistance |
-|---:|---:|
-| 1.322 | 0.9109 |
-
-Notes:
-
-- This is the canonical single-case inverse FORM setup.
-- `lsf_value` is negative (−109.5), so this design falls slightly short of the target. FORM gives β = 1.252 for the same problem.
-- `AT625` also reports load and resistance partial factors in the design output.
-
-## Example B: `AT624Problem.py` (Multi-Case)
+## Example: `AT624Problem.py` (Multiple Cases)
 
 ### Run Context
 
@@ -174,7 +100,7 @@ Design point stochastic variables result (all cases):
 
 Load and resistance partial factors:
 
-- No dedicated "Load and resistance partial factors" table was written in this `AT624` results workbook, because `LSFreturnsLandR = False` and therefore no load/resistance partial factors were calculated or reported.
+- The workbook has no load and resistance partial factors table, because `AT624` sets `LSFreturnsLandR = False`. When the limit state function returns the load and resistance, the design results also include their partial factors (see [Load and Resistance Partial Factors](../results-tables.md#load-and-resistance-partial-factors)).
 
 Notes:
 
@@ -183,5 +109,5 @@ Notes:
 
 ## Recommended Authoring Pattern
 
-1. Start with a single-case definition (`default`) to validate setup and derivatives.
+1. Start with a single case, without `cases`, to validate setup and derivatives. Brinkpy then runs one case named `default`.
 2. Add `cases` when you need scenario sweeps under a common target reliability.

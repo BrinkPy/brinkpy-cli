@@ -14,15 +14,15 @@ This section covers problem definition for the `design` command. Design problems
 | Use it for | Code calibration, load and resistance factor calibration, or back-calculating characteristic values | Minimizing cost, weight, or another performance measure, with reliability as a constraint |
 | Target reliability | `TargetBeta` or `TargetPf` | `TargetBeta` or `TargetPf`, as a constraint |
 | With `--use-sorm` | Inverse SORM instead of Inverse FORM | SORM instead of FORM for the reliability constraint |
-| Packaged examples | `AT624Problem`, `AT625Problem` | `AT622Problem`, `CantileverBeamProblem`, `Ji1Problem`, `Ji2Problem`, `PipecorrProblem`, `Sorensen81Problem` |
-| Worked example | [Inverse FORM Examples](inverse-form.md) | [Objective Optimization Example](optimization.md) |
+| Packaged examples | `AT624Problem` | `AT622Problem`, `CantileverBeamProblem`, `Ji1Problem`, `Ji2Problem`, `PipecorrProblem`, `Sorensen81Problem` |
+| Worked example | [Inverse FORM Example](inverse-form.md) | [Objective Optimization Example](optimization.md) |
 
 See [Packaged Examples](../../examples.md) for how to copy the examples into your project folder.
 
 ## Design Documentation Layout
 
 - [Design Keys Reference](design-keys.md): full `DesignProblem` dictionary reference and validation rules.
-- [Inverse FORM Examples](inverse-form.md): worked Inverse FORM examples (`AT625Problem` single-case and `AT624Problem` multi-case).
+- [Inverse FORM Example](inverse-form.md): a worked Inverse FORM example with multiple design cases (`AT624Problem`).
 - [Objective Optimization Example](optimization.md): worked objective optimization example (`Sorensen81Problem`) including additional optimization keys.
 - [Random Design Parameters Example](random-design-parameters.md): how to model a design parameter that is also a random variable (`Ji1Problem`), with limitations and exceptions.
 - [Stochastic Variable Constraints Example](stochastic-constraints.md): how to keep the search for the design point inside the range where the limit state function is valid, with constraints on the stochastic variables (`PipecorrProblem`), including a Monte Carlo run.

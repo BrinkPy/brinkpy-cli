@@ -36,7 +36,7 @@ Brinkpy CLI provides five core reliability workflows:
 - **SORM**: Curvature-aware reliability refinement at the most probable point (MPP).  
     → [SORM + Monte Carlo Example](problem-authoring/analyze/sorm-monte-carlo.md)
 - **Inverse FORM / Inverse SORM**: Reliability-targeted factor calibration and design-point back-calculation.  
-    → [Design Command](cli/design.md) | [Inverse FORM Examples](problem-authoring/design/inverse-form.md)
+    → [Design Command](cli/design.md) | [Inverse FORM Example](problem-authoring/design/inverse-form.md)
 - **RBDO**: Optimization under reliability constraints.  
     → [Design Command](cli/design.md) | [Optimization Examples](problem-authoring/design/optimization.md)
 - **Monte Carlo + Importance Sampling**: Distribution-level failure-probability validation and tail exploration.  

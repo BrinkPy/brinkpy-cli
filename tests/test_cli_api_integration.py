@@ -109,7 +109,6 @@ class TestCliApiIntegration(unittest.TestCase):
 
     def test_design_examples(self):
         examples = [
-            ["design", "default", "--problem-file", str(PROBLEMS_DIR / "AT625Problem.py")],
             ["design", "default", "--problem-file", str(PROBLEMS_DIR / "AT624Problem.py")],
             ["design", "default", "--problem-file", str(PROBLEMS_DIR / "Sorensen81Problem.py")],
         ]

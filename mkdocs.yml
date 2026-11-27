@@ -58,7 +58,7 @@ nav:
     - Design:
       - Overview: problem-authoring/design/index.md
       - Design Keys Reference: problem-authoring/design/design-keys.md
-      - Inverse FORM Examples: problem-authoring/design/inverse-form.md
+      - Inverse FORM Example: problem-authoring/design/inverse-form.md
       - Objective Optimization Example: problem-authoring/design/optimization.md
       - Random Design Parameters Example: problem-authoring/design/random-design-parameters.md
       - Stochastic Variable Constraints Example: problem-authoring/design/stochastic-constraints.md

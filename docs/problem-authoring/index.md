@@ -675,7 +675,7 @@ For platform safety, Brinkpy checks each problem module before running it and re
 - [SORM and Monte Carlo](analyze/sorm-monte-carlo.md): analyze example using `-s -m` (`Chan3`).
 - [Design Overview](design/index.md): design authoring overview and workflow split (Inverse FORM vs objective optimization).
 - [Design Keys Reference](design/design-keys.md): `DesignProblem` key reference and validation checklist.
-- [Inverse FORM Examples](design/inverse-form.md): worked inverse FORM examples (`AT625` single-case and `AT624` multi-case).
+- [Inverse FORM Example](design/inverse-form.md): a worked inverse FORM example with multiple design cases (`AT624`).
 - [Objective Optimization](design/optimization.md): objective optimization example and checklist.
 - [Classic Monte Carlo](simulate/classic-monte-carlo.md): simulation example using plain Monte Carlo (Chan2).
 - [Importance Sampling](simulate/importance-sampling.md): simulation example using importance sampling (AU2).

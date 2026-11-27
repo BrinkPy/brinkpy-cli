@@ -64,7 +64,6 @@ Every example works with `analyze` and `simulate`. Examples marked in the **Desi
 | `AT610Problem` | Ang and Tang (1990), Vol. II, Problem 6.10 | | [FORM](problem-authoring/analyze/form-only.md) |
 | `AT622Problem` | Ang and Tang (1990), Vol. II, Problem 6.22 | ✓ | |
 | `AT624Problem` | Ang and Tang (1990), Vol. II, Problem 6.24 | ✓ | [Inverse FORM](problem-authoring/design/inverse-form.md) |
-| `AT625Problem` | Ang and Tang (1990), Vol. II, Problem 6.25 | ✓ | [Inverse FORM](problem-authoring/design/inverse-form.md) |
 | `AT68Problem` | Ang and Tang (1990), Vol. II, Problem 6.8 | | |
 | `AU1dProblem` | [Au and Beck (1999)](https://people.duke.edu/~hpgavin/risk/Au-1999.pdf), Example 1 | | |
 | `AU2Problem` | [Au and Beck (1999)](https://people.duke.edu/~hpgavin/risk/Au-1999.pdf), Example 2 | | [Importance Sampling](problem-authoring/simulate/importance-sampling.md), [MCMC Importance Sampling](problem-authoring/simulate/importance-sampling-mcmc.md) |
