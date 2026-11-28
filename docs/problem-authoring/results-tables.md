@@ -18,7 +18,7 @@ The `Results` worksheet starts each table with a heading. Find the heading in th
 
 | Heading in the worksheet | Section on this page |
 |---|---|
-| `Deterministic variables data:` | The names and values of the deterministic variables |
+| `Deterministic variables data:` | [Deterministic Variables](#deterministic-variables) |
 | `FORM results:` | [FORM Results](#form-results), also used for the FORM results at the optimum of a design |
 | `Stochastic variables data and most probable point (failure point) results from FORM:` | [Stochastic Variable Inputs and FORM Failure Point Outputs](#stochastic-variable-inputs-and-form-failure-point-outputs), followed by [Correlations](#correlations) when the problem defines them |
 | `Stochastic variables constraints results from FORM:` | [Stochastic Variables Constraints](#stochastic-variables-constraints) |
@@ -41,6 +41,15 @@ The `Results` worksheet starts each table with a heading. Find the heading in th
 
 The `bnds_mult` and `constr_mult` columns appear in several tables, with a different scaling in each. See [Lagrange Multipliers for Bounds and Constraints](#lagrange-multipliers-for-bounds-and-constraints).
 
+## Deterministic Variables
+
+| Column | Meaning |
+|---|---|
+| `var_name` | Deterministic variable name |
+| `value` | Value from the problem file |
+
+In objective optimization, the table leaves out the design variables, because their values are results of the run (see [Objective Optimization: Design Variables Result](#objective-optimization-design-variables-result)). A note under the table names them. When every deterministic variable is a design variable, the worksheet has no deterministic variables table.
+
 ## FORM
 
 ### FORM Results
@@ -56,7 +65,7 @@ The `bnds_mult` and `constr_mult` columns appear in several tables, with a diffe
 | `hlsf_count` | Number of limit state function Hessian calculations |
 | `nit` | Number of iterations used by SciPy's `minimize` function |
 | `min_tries` | Number of attempts to find a solution. When an attempt fails, Brinkpy tries again from a new random starting point. For a smooth function with bounds or constraints, an attempt can also succeed with a result that Brinkpy judges not yet accurate enough. Brinkpy then restarts the optimizer from that result, as many times as needed, and each restart counts as an attempt. So a `min_tries` above 1 doesn't by itself mean an attempt failed. The profile option `max_minimize_attempts` limits the total number of attempts (see [General Reliability Settings](../profiles/profile-reference.md#general-reliability-settings)). |
-| `min_method` | Optimizer used. For a non-smooth function it is `COBYQA`. For a smooth function, Brinkpy uses SciPy's [`trust-constr`](https://docs.scipy.org/doc/scipy/reference/optimize.minimize-trustconstr.html), and the column shows the algorithm `trust-constr` chose: `equality_constrained_sqp` when the problem has only equality constraints, such as the `g = 0` constraint of FORM, or `tr_interior_point` when it also has bounds or inequality constraints. See [Smooth and Non-Smooth Functions](index.md#smooth-and-non-smooth-functions). |
+| `min_method` | Optimizer used. For a non-smooth function it is SciPy's [`COBYQA`](https://docs.scipy.org/doc/scipy/reference/optimize.minimize-cobyqa.html). For a smooth function, Brinkpy uses SciPy's [`trust-constr`](https://docs.scipy.org/doc/scipy/reference/optimize.minimize-trustconstr.html), and the column shows the algorithm `trust-constr` chose: `equality_constrained_sqp` when the problem has only equality constraints, such as the `g = 0` constraint of FORM, or `tr_interior_point` when it also has bounds or inequality constraints. See [Smooth and Non-Smooth Functions](index.md#smooth-and-non-smooth-functions). |
 | `lsf_mult` | Lagrange multiplier for the limit state function |
 
 ### Stochastic Variable Inputs and FORM Failure Point Outputs

@@ -23,23 +23,23 @@ The authors of these packages publish a preferred way to cite them, either a pap
 
 Brinkpy CLI needs every package below to run, including those listed above. To cite a package without a published citation, give its name, the version you used, and its project page, for example: *Requests* (version 2.34.2), <https://requests.readthedocs.io/>. Run `pip show <package>` to see the installed version.
 
-- `typer`: https://typer.tiangolo.com/
-- `rich`: https://rich.readthedocs.io/
-- `requests`: https://requests.readthedocs.io/
-- `numpy`: https://numpy.org/citing-numpy/
-- `matplotlib`: https://matplotlib.org/stable/users/project/citing.html
-- `pydantic`: https://docs.pydantic.dev/
-- `typing_extensions`: https://pypi.org/project/typing_extensions/
-- `filedialpy`: https://pypi.org/project/filedialpy/
-- `platformdirs`: https://pypi.org/project/platformdirs/
-- `python-dotenv`: https://pypi.org/project/python-dotenv/
-- `PyJWT`: https://pyjwt.readthedocs.io/
-- `pyyaml`: https://pyyaml.org/
+- `typer`: <https://typer.tiangolo.com/>
+- `rich`: <https://rich.readthedocs.io/>
+- `requests`: <https://requests.readthedocs.io/>
+- `numpy`: <https://numpy.org/citing-numpy/>
+- `matplotlib`: <https://matplotlib.org/stable/users/project/citing.html>
+- `pydantic`: <https://docs.pydantic.dev/>
+- `typing_extensions`: <https://pypi.org/project/typing_extensions/>
+- `filedialpy`: <https://pypi.org/project/filedialpy/>
+- `platformdirs`: <https://pypi.org/project/platformdirs/>
+- `python-dotenv`: <https://pypi.org/project/python-dotenv/>
+- `PyJWT`: <https://pyjwt.readthedocs.io/>
+- `pyyaml`: <https://pyyaml.org/>
 
 ## Tools Used to Build This Documentation
 
 These packages build the Brinkpy documentation website. They are not installed with Brinkpy.
 
-- `mkdocs`: https://www.mkdocs.org/
-- `mkdocs-material`: https://squidfunk.github.io/mkdocs-material/
-- `pymdown-extensions`: https://facelessuser.github.io/pymdown-extensions/
+- `mkdocs`: <https://www.mkdocs.org/>
+- `mkdocs-material`: <https://squidfunk.github.io/mkdocs-material/>
+- `pymdown-extensions`: <https://facelessuser.github.io/pymdown-extensions/>

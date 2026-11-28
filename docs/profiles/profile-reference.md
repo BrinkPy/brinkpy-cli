@@ -29,7 +29,7 @@ Options for reliability calculations and related numerical settings. This sectio
 |--------|------|---------|--------|-------------|
 | `alpha_direction` | str | `"outward"` | `"outward"`, `"inward"` | Sign convention for the alpha vector (see [Alpha Direction](#alpha-direction)) |
 | `use_nearest_correlation` | bool | `false` | - | Controls fallback behavior when Cholesky decomposition of the correlation matrix fails. If `false`, the run stops with an error. If `true`, Brinkpy replaces the matrix with a nearby positive definite correlation matrix, using the spectral method of [Rebonato and Jäckel (2000)](https://doi.org/10.21314/JOR.2000.023). See also [Correlation Matrix Conditioning](../problem-authoring/recommended-texts.md#correlation-matrix-conditioning). |
-| `max_minimize_attempts` | int | `8` | [1, 12] | Maximum number of attempts for each FORM, Inverse FORM, and design optimization. An attempt that fails is followed by a new one from a random starting point, and a result that is not yet accurate enough is refined by a restart. Both count as attempts. The FORM, Inverse FORM, and design results report the attempts used as [`min_tries`](../problem-authoring/results-tables.md#form-results). |
+| `max_minimize_attempts` | int | `8` | [1, 12] | Maximum number of attempts for each FORM, Inverse FORM, and design optimization. An attempt that fails is followed by a new one from a random starting point, and a result that is not yet accurate enough is refined by a restart. Both count as attempts. |
 
 #### Alpha Direction
 
@@ -117,7 +117,8 @@ Use these references as starting points for method details and derivation nuance
 
 - `Paraboloid`: Local quadratic fit of the failure surface at the design point, using principal curvatures.
 - `Taylor2`: Second-order Taylor expansion of the limit-state function at the design point.
-- Reference: Tvedt, L. (1990). "Distribution of quadratic forms in normal space—application to structural reliability." *J. Eng. Mech.*, ASCE, 116(6), 1183–1197. [→](https://ascelibrary.org/doi/10.1061/%28ASCE%290733-9399%281990%29116%3A6%281183%29)
+
+Both approximations are described in Tvedt, L. (1990). "Distribution of quadratic forms in normal space—application to structural reliability." *J. Eng. Mech.*, ASCE, 116(6), 1183–1197. [→](https://ascelibrary.org/doi/10.1061/%28ASCE%290733-9399%281990%29116%3A6%281183%29)
 
 **`sor_fit_method`**
 
